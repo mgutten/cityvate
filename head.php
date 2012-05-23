@@ -2,12 +2,12 @@
 
 class Head {
 //class to create the head section of a page (including 
-//stylesheets and scripts
+//stylesheets and scripts)
 	
 	var $script = "jquery.min.1.6";
 	var $title;
 	
-		function __construct($header_type, $title) {
+		function __construct($login_status, $title) {
 				
 				$this->title = $title;
 				
@@ -22,11 +22,12 @@ class Head {
 				//if header is for logged out page, display
 				//appropriate css stylesheet else logged
 				//in stylesheet
-				if($header_type == 'lo') 
-					$header = 'header_lo.css';
+				if($login_status == 'out') 
+					$header = 'header_out';
 				
-				else 
-					$header = 'header_li.css)';
+				else
+					
+					$header = 'header_in';
 					
 				//echo base <meta>, styles, scripts
 				echo "<meta http-equiv='Content-Type' name='description' content='".$meta_desc."'  />\n<meta http-equiv='Content-Type' name='keywords' content='".$meta_key."'  />\n";
@@ -44,12 +45,12 @@ class Head {
 						//loop through array and create stylesheet links
 						foreach($style_array as $value) {
 							
-								echo "<link rel='stylesheet' href='".$value.".css' media='screen' />\n";
+								echo "<link rel='stylesheet' href='css/".$value.".css' media='screen' />\n";
 								
 						}
 				}
 				else
-						echo "<link rel='stylesheet' href='".$style_array.".css' media='screen' />\n";
+						echo "<link rel='stylesheet' href='css/".$style_array.".css' media='screen' />\n";
 				
 		}
 		
@@ -61,12 +62,12 @@ class Head {
 						//loop through array and create script links
 						foreach($script_array as $value) {
 							
-								echo "<script type='text/javascript' src='".$value.".js'></script>\n";
+								echo "<script type='text/javascript' src='js/".$value.".js'></script>\n";
 								
 						}
 				}
 				else
-					echo "<script type='text/javascript' src='".$script_array.".js'></script>\n";
+					echo "<script type='text/javascript' src='js/".$script_array.".js'></script>\n";
 			
 		}
 		
@@ -82,16 +83,6 @@ class Head {
 	
 }
 
-$head = new Head('lo','index');
 
-$style = array('cats', 'dogs');
-$head->style($style);
-$script = array('scripters');
-$head->script($script);
-$head->close();
 
 ?>
-
-<body>
-</body>
-</html>

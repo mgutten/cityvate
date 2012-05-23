@@ -1,0 +1,72 @@
+@charset "utf-8";
+/* CSS Document */
+
+img.bg {
+	/* Set rules to fill background */
+	min-height: 100%;
+	min-width: 1150px;
+
+	/* Set up proportionate scaling */
+	width: 100%;
+	height: auto;
+
+	/* Set up positioning */
+	position: fixed;
+	top: 30px;
+	left: 0;
+	
+	z-index:-1;
+}
+
+@media screen and (max-width: 1024px) { /* Specific to this particular image */
+	img.bg {
+		left: 50%;
+		margin-left: -512px;   /* 50% */
+	}
+}
+
+body {
+	background: url(../images/header_back.jpg) repeat-x;
+}
+
+#body {
+	width:1000px;
+	margin:0px auto;
+}
+
+.header_link {
+	float:left;
+	width:60px;
+	height:22px;
+	text-align: center;
+	margin-left:50px;
+	color:#CCC;
+	font-size:13px;
+	font-family:"Neon 80s";
+	
+}
+
+.header_first {
+	margin-left:580px;
+}
+
+.header_link:hover {
+	color:#FFF;
+}
+
+#logo {
+	background:url(../images/logo.png) no-repeat;
+	width:300px;
+	height:84px;
+	float:left;
+	margin-left:30px;
+}
+
+#body_main {
+	background:url(../images/home_body.png) no-repeat;
+	width:1000px;
+	height:780px;
+	position:fixed;
+	bottom:0;
+}
+	
