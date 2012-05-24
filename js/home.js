@@ -6,6 +6,13 @@ $(document).ready(function() {
 		
 		setTimeout('fade("what")',1500);
 		
+		//mouseover fade
+		//$('#what').mouseover(
+		//	function(){
+		//		fade('what');
+		//	}
+		//	);
+		
 });
 
 //resize bottom body bar on window resize
