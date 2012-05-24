@@ -16,6 +16,7 @@ img.bg {
 	left: 0;
 	
 	z-index:-1;
+	display:inline;
 }
 
 @media screen and (max-width: 1024px) { /* Specific to this particular image */
@@ -59,14 +60,7 @@ body {
 	width:300px;
 	height:84px;
 	float:left;
-	margin-left:30px;
+	margin-left:22px;
 }
 
-#body_main {
-	background:url(../images/home_body.png) no-repeat;
-	width:1000px;
-	height:780px;
-	position:fixed;
-	bottom:0;
-}
 	

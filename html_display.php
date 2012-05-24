@@ -3,12 +3,17 @@ class Head {
 //class to create the head section of a page (including 
 //stylesheets and scripts)
 	
-	var $script = "jquery.min.1.6";
+	var $script = array("jquery-1.6.min");
+	var $style= array();
 	var $title;
 	
 		function __construct($login_status, $title) {
 				
+				//set title for page and add title css and 
+				//stylesheet to respective arrays
 				$this->title = $title;
+				array_push($this->script,strtolower($title));
+				array_push($this->style,strtolower($title));
 				
 				//echo up to <head> of doc
 				echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n";
@@ -22,15 +27,14 @@ class Head {
 				//appropriate css stylesheet else logged
 				//in stylesheet
 				if($login_status == 'out') 
-					$header = 'header_out';
+					array_push($this->style, 'header_out');
 				
 				else
-					
-					$header = 'header_in';
+					array_push($this->style, 'header_in');
 					
 				//echo base <meta>, styles, scripts
 				echo "<meta http-equiv='Content-Type' name='description' content='".$meta_desc."'  />\n<meta http-equiv='Content-Type' name='keywords' content='".$meta_key."'  />\n";
-				$this->style($header);
+				$this->style($this->style);
 				$this->script($this->script);
 				
 				
@@ -98,7 +102,7 @@ class Header {
 			else 
 					$this->drop = array('My Account' => 'myaccount.php');
 					
-			//display components of header
+			//display components of header as well as background img
 			echo "<body>\n<img src='images/city_back.jpg' class='bg'/><div id='body'>\n<div id='header_bar'>";
 			
 			//create links
@@ -153,7 +157,9 @@ class Body {
 	function __destruct() {
 		
 		//close body_main and body divs along with document
-		echo "</div></div></body></html>";
+		//create body_bottom div which connects main body to
+		//bottom of window
+		echo "</div><div id='body_bottom'></div></div></body></html>";
 	
 	//end __destruct	
 	}
@@ -161,17 +167,10 @@ class Body {
 	
 }
 
-$log = 'out';
-$head = new Head($log,'Home');
-$head->style('home');
-$head->close();
-
-$header = new Header($log);
-
-$body = new Body();
-
-				
+			
 ?>
+
+
 
 
 			
