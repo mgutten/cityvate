@@ -153,7 +153,7 @@ class Header {
 			foreach($this->drop as $key=>$value) {
 				
 					
-					echo "<a href='$value'><div class='$class' id='drop'>$key <img src='images/arrow.png' id='arrow'/></div></a>\n</div>\n";
+					echo "<a href='$value'><div class='$class' id='drop'>$key <img src='images/home/arrow.png' id='arrow'/></div></a>\n</div>\n";
 					
 					
 			}
@@ -225,7 +225,7 @@ function how_what($howorwhat) {
 				global $text_num;
 				global $text;
 				
-				$block = "<div class='how_what' id='%s'>\n<img src='images/%s.png' id='%s_img'/>\n";
+				$block = "<div class='how_what' id='%s'>\n<img src='images/home/%s.png' id='%s_img'/>\n";
 							
 				foreach($text[$howorwhat] as $key=>$value){
 					

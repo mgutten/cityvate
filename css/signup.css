@@ -1,0 +1,20 @@
+@charset "utf-8";
+/* Signup CSS */
+
+#body_main {
+	width:1000px;
+	height:690px;
+	background:url(../images/signup_body.png) no-repeat;
+	float:left;
+	clear:both;
+	margin:60px 0px 0px 23px;
+}
+
+#body_bottom {
+	width:954px;
+	float:left;
+	clear:both;
+	margin-left:23px;
+	height:0px;
+	background:url(../images/home_bottom_bar.png) repeat-y;
+}

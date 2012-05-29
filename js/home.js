@@ -1,9 +1,7 @@
 // JavaScript Document
 
-$(document).ready(function() {
+$(function() {
 		
-		//resize body onload
-		body_resize();
 		
 		//delay "fade" on mouseover so do not
 		//accidentally trigger onload
@@ -49,22 +47,6 @@ function delay_fade(div) {
 			}
 			);
 }
-
-//resize bottom body bar on window resize
-$(window).resize(function() {
-	body_resize()
-	});	
-
-//variable height of body bottom bar so
-//it reaches bottom of window
-function body_resize() {
-				
-				var height = $(window).height();
-				var div_height = height - 854;
-				
-				$("#body_bottom").css('height',div_height);
-				
-		}
 
 //startup animation to fade out what/how img
 //and fade in text below		

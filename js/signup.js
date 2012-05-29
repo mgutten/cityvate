@@ -1,0 +1,5 @@
+// Signup js
+
+$(function() {
+	
+})
