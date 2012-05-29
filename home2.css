@@ -1,10 +1,11 @@
 @charset "utf-8";
 /* CSS Document */
 
+
 #body_main {
-	background:url(../images/home_body.png) no-repeat;
+	background:url(../images/home_body_angled.png) no-repeat;
 	width:1000px;
-	height:680px;
+	height:695px;
 	float:left;
 	clear:both;
 	margin-top:60px;
@@ -61,7 +62,7 @@
 	margin: 0px;
 	font-family:'Neon 80s';
 	font-size:13px;
-	color:#DADADA;
+	color:#F5F5F5;
 	opacity:0;
 	width:370px;
 	
@@ -83,28 +84,4 @@
 	filter:alpha(opacity=85);
 	opacity:.85;
 }
-
-.quote {
-	clear:both;
-	opacity:1;
-	width:340px;
-}
 	
-.quote_box {
-	clear:both;
-	float:left;
-	margin:40px 0px 0px 80px;
-	width:340px;
-	height:60px;
-}
-
-#second {
-	clear:none;
-	margin-left:160px;
-}
-
-.quote_name {
-	width:340px;
-	text-align:right;
-	opacity:1;
-}

@@ -2,18 +2,53 @@
 
 $(document).ready(function() {
 		
+		//resize body onload
 		body_resize();
 		
-		setTimeout('fade("what")',1500);
+		//delay "fade" on mouseover so do not
+		//accidentally trigger onload
+		setTimeout('delay_fade("what")',1500);
+		setTimeout('delay_fade("how")',1500);
 		
-		//mouseover fade
-		//$('#what').mouseover(
-		//	function(){
-		//		fade('what');
-		//	}
-		//	);
+		//"fade" onclick
+		click_fade('what');
+		click_fade('how');
 		
+		
+		//set interval for fading and changing quotes
+		//var s = setInterval('quote_fade()',12000);
+					
 });
+
+
+//function to fade out, change, and fade in quotes
+//function quote_fade() {
+//		$(".quote_box").animate({opacity:0},800);
+//		
+//		setTimeout('$("#first").html($("#second").html())',800);
+//		setTimeout('$("#second").html($("#first").html())',800);
+//		
+//		$("#first").animate({opacity:1},800);
+//		$("#second").animate({opacity:1},800);
+//		
+//}
+
+//function to trigger "fade" on click
+function click_fade(div) {
+	
+		$("#"+div).click(function() {
+			fade(div)
+		})
+}
+
+//function to trigger "fade" on mouseover
+function delay_fade(div) {		
+		$('#'+div).mouseover(
+			function(){
+				fade(div);
+			}
+			);
+}
 
 //resize bottom body bar on window resize
 $(window).resize(function() {
@@ -39,12 +74,10 @@ function fade(div) {
 			$('#'+div+'_img').animate({opacity: 0},700,function(){ $(this).css('display','none')});
 			$('#'+div+'_box').delay(800).animate({opacity:1},700);
 			
-			var fade;
 			//loop through text classes and fade in one by one			
 			for(i=1;i<4;i++){
 				$('.'+i+'.'+div).delay(200+(i*600)).animate({opacity: 1},700);
 			}
 			
-			setTimeout('fade("how")',2500);
 			
 }

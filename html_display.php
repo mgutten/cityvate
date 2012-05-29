@@ -24,13 +24,16 @@ class Head {
 				$meta_key = 'cityvate, fun life, exciting life, local activities, san francisco activities, '.$title;
 					
 				//if header is for logged out page, display
-				//appropriate css stylesheet else logged
-				//in stylesheet
-				if($login_status == 'out') 
+				//appropriate css stylesheet/script else logged
+				//in stylesheet/script
+				if($login_status == 'out') {
 					array_push($this->style, 'header_out');
-				
-				else
+					array_push($this->script, 'header_out');
+				}
+				else {
 					array_push($this->style, 'header_in');
+					array_push($this->script, 'header_in');
+				}
 					
 				//echo base <meta>, styles, scripts
 				echo "<meta http-equiv='Content-Type' name='description' content='".$meta_desc."'  />\n<meta http-equiv='Content-Type' name='keywords' content='".$meta_key."'  />\n";
@@ -103,7 +106,7 @@ class Header {
 					$this->drop = array('My Account' => 'myaccount.php');
 					
 			//display components of header as well as background img
-			echo "<body>\n<img src='images/city_back.jpg' class='bg'/><div id='body'>\n<div id='header_bar'>";
+			echo "<body>\n<img src='images/city_back.jpg' class='bg'/><div id='header_back'></div><div id='body'>\n<div id='header_bar'>";
 			
 			//create links
 			$this->link();
@@ -111,6 +114,20 @@ class Header {
 			//display logo
 			echo "<a href='".$this->links['Home']."' alt='Home'><div id='logo'></div></a>";
 			
+			//display dropdown
+			echo "<div id='dropdown'>\n";
+			//if not logged in, display form
+			if($this->drop['Login']) {
+				$form = new Form('login_check.php','POST');
+				$form->input('text','username','','Username/email');
+				$form->input('password','pw','','password');
+				echo "<a href='forgot.php' id='forgot'>Forgot?</p></a>";
+				$form->input('image','login','images/login_button.png');
+				$form->close();
+			}
+			echo "</div>\n";
+			
+				
 
 			
 	//end __construct()
@@ -134,8 +151,10 @@ class Header {
 			
 			//create dropdown menu and close header_bar div
 			foreach($this->drop as $key=>$value) {
+				
 					
-					echo "<a href='$value'><div class='$class' id='drop'>$key</div></a>\n</div>\n";
+					echo "<a href='$value'><div class='$class' id='drop'>$key <img src='images/arrow.png' id='arrow'/></div></a>\n</div>\n";
+					
 					
 			}
 	
@@ -165,6 +184,71 @@ class Body {
 	}
 	
 	
+}
+
+class Form {
+	
+	//create form tag
+	function __construct($action, $method, $onsubmit='') {
+		
+			echo "<form action='$action' method='$method' onsubmit='$onsubmit'>\n";
+			
+	}
+	
+	//create custom input for form
+	function input($type,$name,$src='',$value=''){
+			
+			if(!empty($src))
+					$src = "src='$src'";
+			if(!empty($value))
+					$value = "value='$value'";
+					
+			echo "<input type='$type' name='$name' id='input_$name' class='username' $src $value/>\n";
+					
+	}
+	
+	function close() {
+			echo "</form>";
+	}
+	
+}
+
+
+
+
+
+
+//function to display how/what text blocks
+//on homepage
+function how_what($howorwhat) {
+	
+				global $text_num;
+				global $text;
+				
+				$block = "<div class='how_what' id='%s'>\n<img src='images/%s.png' id='%s_img'/>\n";
+							
+				foreach($text[$howorwhat] as $key=>$value){
+					
+					$block .= "<p class='title text $text_num %s'>$key</p>\n <p class='text $text_num %s'>$value</p>\n";
+					
+					$text_num++;	
+				}
+				$block .= "</div>\n";
+							
+				$block = str_replace('%s',$howorwhat,$block);
+				
+				echo $block;	
+				
+				$text_num=1;	
+
+}
+
+function quote_box($div_number,$text,$name,$city = 'SF') {
+				
+				$block = "<div class='quote_box' id='$div_number'>\n<p class='quote text'>\"$text\"</p>\n<p class='text quote_name'>$name, $city</p>\n</div>\n";
+				
+				echo $block;
+				
 }
 
 			

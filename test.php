@@ -22,31 +22,7 @@ $text=array('what'=>array(
 				"It's not about the money."=>"We don't want you to worry about the cost of fun.  As such, your budget is converted into \"tokens\" which can be used to redeem activites."
 				)
 				);
-				
-				
-//function to display how/what blocks and label
-//appropriately
-function how_what($howorwhat) {
-	
-				global $text_num;
-				global $text;
-				
-				$block = "<div class='how_what' id='%s'>\n<img src='images/%s.png' id='%s_img'/>\n";
-							
-				foreach($text[$howorwhat] as $key=>$value){
 					
-					$block .= "<p class='title text $text_num %s'>$key</p>\n <p class='text $text_num %s'>$value</p>\n";
-					
-					$text_num++;	
-				}
-				$block .= "</div>\n";
-							
-				$block = str_replace('%s',$howorwhat,$block);
-				
-				echo $block;		
-
-}
-		
 		
 ?>
 
@@ -56,6 +32,13 @@ function how_what($howorwhat) {
     <?php 
 		how_what('what');
 
-		$text_num=1; 
 		how_what('how');
+		
 	?>
+<a href="signup.php" alt="Signup"><img src="images/button_pricing.png" id="pricing" /></a>
+
+<?php
+		quote_box('first',"I found myself caught in a rut, sitting around bored out of my mind.  But then I signed up for Cityvate, and now have something to look forward to every week!","John B");
+		quote_box('second',"I work all day and don't have time to find fun things to do in my free time.  Cityvate does the hard work for me and leaves me smiling every time.","Emily S");
+		
+?>
