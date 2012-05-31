@@ -8,6 +8,7 @@ class Head {
 	var $title;
 	
 		function __construct($login_status, $title) {
+				session_start();
 				
 				//set title for page and add title css and 
 				//stylesheet to respective arrays
@@ -119,10 +120,10 @@ class Header {
 			//if not logged in, display form
 			if($this->drop['Login']) {
 				$form = new Form('login_check.php','POST');
-				$form->input('text','username','','Username/email');
-				$form->input('password','pw','','password');
+				$form->input('text','username','username','','Username/email');
+				$form->input('password','pw','username','','password');
 				echo "<a href='forgot.php' id='forgot'>Forgot?</p></a>";
-				$form->input('image','login','images/login_button.png');
+				$form->input('image','login','','images/login_button.png');
 				$form->close();
 			}
 			echo "</div>\n";
@@ -196,14 +197,9 @@ class Form {
 	}
 	
 	//create custom input for form
-	function input($type,$name,$src='',$value=''){
-			
-			if(!empty($src))
-					$src = "src='$src'";
-			if(!empty($value))
-					$value = "value='$value'";
+	function input($type,$name,$class='',$src='',$value=''){
 					
-			echo "<input type='$type' name='$name' id='input_$name' class='username' $src $value/>\n";
+			echo "<input type='$type' name='$name' id='input_$name' class='$class' src='$src' value='$value'/>\n";
 					
 	}
 	
@@ -213,6 +209,31 @@ class Form {
 	
 }
 
+class Alert {
+	
+	function __construct($name,$src) {
+		
+			$darken="<div class='darken $name' onclick='$(\".$name\").toggle()'></div>";
+			$img = "<img class='centered $name' src='images/signup/$src.png' />";
+			$x = "<div class='x $name' onclick='$(\".$name\").toggle()'></div>";
+			echo $darken.$img.$x;
+			
+	}
+	
+}
+
+class Preview_button {
+	
+	function __construct($id) {
+		
+			$url = 'preview/member.php';
+			$block = '<a href="'.$url.'" target="_blank" alt="Preview Cityvate"><img src="images/signup/preview.png" id="'.$id.'"/></a>';
+			
+			echo $block;
+			
+	}
+	
+}
 
 
 

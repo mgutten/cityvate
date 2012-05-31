@@ -13,7 +13,7 @@ $body = new Body();
 $text_num=1;
 $text=array('what'=>array(
 				"Cityvate is your \"activity agent.\""=>'We find awesome local activities just for you. Your free time is valuable, so let us do the research for you and help you balance work and play.',
-				"We save you money."=>"We don't just sell coupons and ship you off to fend for yourself.  We find the local hot spots, reserve them for you, and give you fresh ideas for some easy fun.",
+				"We save you money."=>"Save up to 30% off the hottest local activities, venues, and restaurants your area has to offer. We find the local hot spots, reserve them for you, and give you fresh ideas for some easy fun.",
 				"Make memories worth having."=>"This is your life.  Do you want to look back on it and regret never enjoying it?  You ever want to try bungee jumping? How about cooking classes? Acting? Kayaking?  At Cityvate, the sky's the limit."
 				),
 			'how'=>array(

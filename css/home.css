@@ -7,7 +7,7 @@
 	height:680px;
 	float:left;
 	clear:both;
-	margin-top:60px;
+	margin-top:50px;
 }
 
 #body_bottom {
@@ -25,7 +25,10 @@
 	float:left;
 	margin-left:80px;
 	margin-top:10px;
+}
 
+#how {
+	margin-left:85px;
 }
 
 #what {
@@ -107,4 +110,15 @@
 	width:340px;
 	text-align:right;
 	opacity:1;
+}
+
+.username {
+	float:left;
+	clear:both;
+	margin:7px 0px 0px 9px;
+	width:120px;
+	height:12px;
+	font-family:'Neon 80s';
+	font-size:12px;
+	color:#666;
 }
