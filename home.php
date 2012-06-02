@@ -12,14 +12,14 @@ $body = new Body();
 
 $text_num=1;
 $text=array('what'=>array(
-				"Cityvate is your \"activity agent.\""=>'We find awesome local activities just for you. Your free time is valuable, so let us do the research for you and help you balance work and play.',
-				"We save you money."=>"Save up to 30% off the hottest local activities, venues, and restaurants your area has to offer. We find the local hot spots, reserve them for you, and give you fresh ideas for some easy fun.",
+				"Cityvate is your \"activity agent.\""=>'We find awesome local activities just for you. Spend your free time having fun, not researching where to go or what to do.  That\'s our job: to help you balance work and play.',
+				"We save you money."=>"Save up to 30% off the hottest local activities, venues, and restaurants your area has to offer. We find the local hot spots, reserve them for you, and give you fresh ideas for some cheap and easy fun.",
 				"Make memories worth having."=>"This is your life.  Do you want to look back on it and regret never enjoying it?  You ever want to try bungee jumping? How about cooking classes? Acting? Kayaking?  At Cityvate, the sky's the limit."
 				),
 			'how'=>array(
-				"It's your budget for fun."=>'We reinvest your money in your own life, giving you monthly options of exciting places to go and things to do, all already paid for!',
-				"No commitment."=>"At the beginning of each month you are given a variety of local activities that you can reserve.  If you don't like any, then you get a full refund, no questions asked.",
-				"It's not about the money."=>"We don't want you to worry about the cost of fun.  As such, your budget is converted into \"tokens\" which can be used to redeem activites."
+				"It's your budget for fun."=>'We reinvest your money in your own life, giving you monthly options of exciting places to go and things to do, all already paid for!  Just show up with an ID and you\'re set.',
+				"No commitment."=>"At the beginning of each month you are given a variety of local activities that you can reserve.  If you don't like any, then you get a full refund, no questions asked.  Your money remains your money.",
+				"It's not about the money."=>"Life's a game, and it's time to treat it as such.  Your money is converted into \"tokens\" which can be used to reserve monthly deals.  You work too hard and don't play enough.  Let us help you get out and try something new."
 				)
 				);
 					

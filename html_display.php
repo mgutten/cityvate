@@ -7,14 +7,18 @@ class Head {
 	var $style= array();
 	var $title;
 	
-		function __construct($login_status, $title) {
+		function __construct($login_status, $title, $default_js = 0) {
 				session_start();
 				
 				//set title for page and add title css and 
 				//stylesheet to respective arrays
 				$this->title = $title;
-				array_push($this->script,strtolower($title));
-				array_push($this->style,strtolower($title));
+				
+				//determine if need the titled js or not
+				if($default_js==0){
+					array_push($this->script,strtolower($title));
+					array_push($this->style,strtolower($title));
+				}
 				
 				//echo up to <head> of doc
 				echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n";
@@ -90,10 +94,17 @@ class Head {
 	
 }
 
+class Head_signup extends Head {
+	
+	var $style = array('signup_form');
+	
+	
+}
+
 
 class Header {
 	
-	var $links=array('Home' => 'index.php','About' => 'about.php');
+	var $links=array('Home' => 'home.php','About' => 'about.php');
 	var $drop=array('Login' =>'login.php');
 	
 	function __construct($login_status) {
@@ -187,6 +198,38 @@ class Body {
 	
 }
 
+class Body_signup extends Body {
+	
+	function background($title, $position) {
+			
+			//if at last page for signup,
+			//load large background
+			if($position==4) {
+				$smallorbig = 'big';
+				$id = 'review';
+			}
+			else{
+				$id='';
+				$smallorbig = 'small';
+			}
+				
+			$background = "<div id='background_$smallorbig'>";
+			$status = "<img src='images/signup/signup_$position.png' alt='Step $position of 4' class='position'/>";
+			$header = "<p class='title text' id='$id'>$title</p>";
+			
+			echo $background.$status.$header;
+			
+	}
+	
+	function close(){
+		
+			echo "</div>";
+			
+	}
+	
+}
+	
+
 class Form {
 	
 	//create form tag
@@ -203,10 +246,60 @@ class Form {
 					
 	}
 	
+	//create input with diff name/id
+	function input_diff($type,$name,$id,$class='',$src='',$value=''){
+					
+			echo "<input type='$type' name='$name' id='input_$id' class='$class' src='$src' value='$value'/>\n";
+					
+	}
+	
 	function close() {
 			echo "</form>";
 	}
 	
+}
+
+
+class Form_signup extends Form {
+	
+	var $last;
+	
+	function __construct($pos) {
+			$this->last = $pos-1;
+			$next = $pos+1;
+			echo "<form action='signup_set.php?pos=$next' name='signup_form' method='POST'>\n";
+			
+	}
+	
+	function back() {
+			if($this->last==0) 
+				$loc = '';
+			else
+				$loc = '_'.$this->last;
+			
+			($this->last==3 ? $id='back' : $id='');
+			
+			$back = "<a href='signup".$loc.".php' alt='Back to step ".$this->last."'><p class='back text' id='$id'>Back</p></a>\n";
+			
+			echo $back;
+			
+	}
+	
+	function next_button() {			
+			$this->input('image','next','next_button','images/signup/next_button.png');
+	}
+	
+	function radio($name,$value) {
+			if(!empty($_SESSION['signup']['package']) && $value==$_SESSION['signup']['package'])
+				$checked='checked';
+			else
+				$checked='';
+			
+			echo "<input type='radio' name='$name' class='$name' value='$value' $checked />";
+	}
+				
+				
+			
 }
 
 class Alert {
@@ -222,21 +315,36 @@ class Alert {
 	
 }
 
-class Preview_button {
+//class to determine basic date functions
+class Date {
 	
-	function __construct($id) {
-		
-			$url = 'preview/member.php';
-			$block = '<a href="'.$url.'" target="_blank" alt="Preview Cityvate"><img src="images/signup/preview.png" id="'.$id.'"/></a>';
+	//return short/long of current month
+	function this_month($fullshortnum){
 			
-			echo $block;
+			return date($this->fullorshort($fullshortnum));
 			
 	}
 	
+	//return short/long of nth month in future
+	function nth_month($fullshortnum,$months_to_advance){
+		
+			return date($this->fullorshort($fullshortnum),strtotime("+$months_to_advance months"));
+		
+	}
+	
+	//determine shorthand or longhand
+	function fullorshort($str) {
+		
+		if($str=='full')
+			$type = 'F';
+		elseif($str=='short')
+			$type= 'M';
+		else
+			$type='m';
+		
+		return $type;
+	}
 }
-
-
-
 
 
 //function to display how/what text blocks
@@ -270,6 +378,64 @@ function quote_box($div_number,$text,$name,$city = 'SF') {
 				
 				echo $block;
 				
+}
+
+//function to generate neighborhood options during signup
+function signup_options($neighborhood_array) {
+	
+		if(is_array($neighborhood_array)){
+			
+				foreach($neighborhood_array as $key) {
+						//test to see if session is set then select it
+						if(!empty($_SESSION['signup']['neighborhood']) && $key==$_SESSION['signup']['neighborhood'])
+									$selected = "selected='selected'";
+								else
+									$selected = "";
+						echo "<option name='$key' $selected>$key</option>";
+						
+				}
+		}
+		else {
+			
+				echo "<option name='$neighborhood_array'>$neighborhood_array</option>";
+				
+		}
+}
+
+//function to generate text boxes
+function signup_boxes($title_array) {
+		
+		//declare global $form var to use from script
+		global $form;
+		
+		//loop through array and form boxes
+		if(is_array($title_array)){
+			
+				foreach($title_array as $key=>$value) {
+						//eliminate spaces and slashes from $key
+						//then convert $key to uppercase
+						$id = str_replace(' ','',$key);
+						$id = str_replace('/','',$id);
+						$key=ucwords($key);
+						
+						(!empty($_SESSION['signup'][$id]) ? $val = $_SESSION['signup'][$id] : $val='');
+						
+						//title caption for textbox
+						echo "<p class='box_title text box_title_close' id='$id'>".$key."</p>";
+						
+						//if it's password box, make password text
+						if($key=='Password')
+							$form->input('password',$id,'drop text');
+						else
+							$form->input('text',$id,'drop text','',$val);
+						
+						//lower title caption for textbox	
+						echo "<p class='text box_title_lower'>$value</p>";
+
+						
+				}
+		}
+		
 }
 
 			

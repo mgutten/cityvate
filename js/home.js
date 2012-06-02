@@ -34,8 +34,9 @@ $(function() {
 //function to trigger "fade" on click
 function click_fade(div) {
 	
-		$("#"+div).click(function() {
-			fade(div)
+		$("#"+div).click(
+			function() {
+				fade(div)
 		})
 }
 
@@ -43,7 +44,7 @@ function click_fade(div) {
 function delay_fade(div) {		
 		$('#'+div).mouseover(
 			function(){
-				fade(div);
+				fade(div)
 			}
 			);
 }
