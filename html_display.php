@@ -215,6 +215,10 @@ class Body_signup extends Body {
 				
 			$background = "<div id='background_$smallorbig'>";
 			$status = "<img src='images/signup/signup_$position.png' alt='Step $position of 4' class='position'/>";
+			
+			if($position==0)
+				$status='';
+			
 			$header = "<p class='title text' id='$id'>$title</p>";
 			
 			echo $background.$status.$header;
@@ -242,7 +246,11 @@ class Form {
 	//create custom input for form
 	function input($type,$name,$class='',$src='',$value=''){
 					
-			echo "<input type='$type' name='$name' id='input_$name' class='$class' src='$src' value='$value'/>\n";
+					if($type=='checkbox' && !empty($_SESSION['signup']['auto_renew']) && $_SESSION['signup']['auto_renew']=='Yes')
+						$checked = 'checked';
+					else
+						$checked='';
+			echo "<input type='$type' name='$name' id='input_$name' class='$class' src='$src' value='$value' $checked/>\n";
 					
 	}
 	
@@ -259,7 +267,7 @@ class Form {
 	
 }
 
-
+//form class for signup forms
 class Form_signup extends Form {
 	
 	var $last;
@@ -267,7 +275,9 @@ class Form_signup extends Form {
 	function __construct($pos) {
 			$this->last = $pos-1;
 			$next = $pos+1;
-			echo "<form action='signup_set.php?pos=$next' name='signup_form' method='POST'>\n";
+			
+			($pos == 2 ? $onsubmit = 'onsubmit = "return validate()"' : $onsubmit='');
+			echo "<form action='signup_set.php?pos=$next' name='signup_form' method='POST' $onsubmit>\n";
 			
 	}
 	
@@ -318,6 +328,12 @@ class Alert {
 //class to determine basic date functions
 class Date {
 	
+	function __construct() {
+
+		date_default_timezone_set('America/Los_Angeles');
+		
+	}
+	
 	//return short/long of current month
 	function this_month($fullshortnum){
 			
@@ -336,11 +352,11 @@ class Date {
 	function fullorshort($str) {
 		
 		if($str=='full')
-			$type = 'F';
+			$type = 'F, Y';
 		elseif($str=='short')
-			$type= 'M';
+			$type= 'M, Y';
 		else
-			$type='m';
+			$type='m, Y';
 		
 		return $type;
 	}
@@ -362,6 +378,10 @@ function how_what($howorwhat) {
 					
 					$text_num++;	
 				}
+				//insert preview img
+				if($howorwhat=='how')
+					$block .= "<a href='preview/member.php' alt='Preview Cityvate' title='Check out Cityvate'><img src='images/home/preview.png' id='preview'/></a>";
+
 				$block .= "</div>\n";
 							
 				$block = str_replace('%s',$howorwhat,$block);
@@ -380,7 +400,7 @@ function quote_box($div_number,$text,$name,$city = 'SF') {
 				
 }
 
-//function to generate neighborhood options during signup
+//function to generate neighborhood options during signup_1
 function signup_options($neighborhood_array) {
 	
 		if(is_array($neighborhood_array)){
@@ -402,7 +422,7 @@ function signup_options($neighborhood_array) {
 		}
 }
 
-//function to generate text boxes
+//function to generate text boxes signup_2
 function signup_boxes($title_array) {
 		
 		//declare global $form var to use from script
@@ -418,7 +438,12 @@ function signup_boxes($title_array) {
 						$id = str_replace('/','',$id);
 						$key=ucwords($key);
 						
+						//if session var is not empty, fill box with val
 						(!empty($_SESSION['signup'][$id]) ? $val = $_SESSION['signup'][$id] : $val='');
+						
+						//if empty and full name, give example
+						if($key=='Full Name' && $val=='')
+							$val='e.g. John Smith';
 						
 						//title caption for textbox
 						echo "<p class='box_title text box_title_close' id='$id'>".$key."</p>";
@@ -438,6 +463,51 @@ function signup_boxes($title_array) {
 		
 }
 
+//for signup_4 display
+function signup_review($textarray) {
+		
+		$edit_cnt = 0;
+		//loop through first dimension of array ("title" layer)
+		foreach($textarray as $title=>$second) {
+			if($title!='Personal Info')
+				$edit_cnt += 1;
+			//echo title portion of review
+			echo "<div class='review_box'><p class='text review_box_text'>$title</p></div>";
+			
+			//loop through second dimension of array ("key to val")
+			foreach($second as $key=>$value) {
+				
+				$block = "<p class='key text'>$key:</p>";
+				$block .= "<p id='$key' class='value text'>$value</p>";
+				
+				echo $block;
+			}
+			
+			//display "edit" button for each page
+			echo "<a href='signup_$edit_cnt.php' alt='Edit $title information' class='text edit'>edit</a>";
+			
+		}
+		
+}
+
+//date option function for signup_3 form
+function signup_date_options($num_months) {
+		//instantiate date class
+		$date = new Date();
+		
+		//loop through and create options for num_months
+		for($i=1;$i<=$num_months;$i++) {
+			
+			$month = $date->nth_month('full',$i);
+			//if session var set, set to selected
+			($_SESSION['signup']['start']==$month ? $select = 'selected' : $select='');
+			
+			echo '<option '.$select.'>'.$month.'</option>';
+		}
+}
+
+	
+		
 			
 ?>
 

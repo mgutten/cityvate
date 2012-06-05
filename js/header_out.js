@@ -32,7 +32,8 @@ $(function() {
 					$(this).val('');
 			}
 	})
-
+	
+	
 
 //end "ready" function
 });
@@ -57,3 +58,5 @@ function body_resize() {
 				}
 				
 		}
+		
+		

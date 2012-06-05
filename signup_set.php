@@ -12,7 +12,10 @@ session_start();
 		$_SESSION['signup'][$key]=$value;
 	}
 	
-	
+	//if checkbox for auto renew is unchecked, create "no"
+	if(!isset($_POST['auto_renew']) && isset($_POST['package']))
+			$_SESSION['signup']['auto_renew']='No';
+				
 	//if username/password has been submitted
 	//send to check against database
 	if(!empty($_POST['usernameemail'])){

@@ -12,6 +12,15 @@ $(function() {
 		click_fade('what');
 		click_fade('how');
 		
+		$("#preview").hover(
+			function() {
+				$(this).css('opacity','.85')
+			},
+			function() {
+				$(this).css('opacity','1');
+			})
+			
+		
 		
 		//set interval for fading and changing quotes
 		//var s = setInterval('quote_fade()',12000);
@@ -34,7 +43,7 @@ $(function() {
 //function to trigger "fade" on click
 function click_fade(div) {
 	
-		$("#"+div).click(
+		$("#"+div).one("click",
 			function() {
 				fade(div)
 		})
@@ -42,7 +51,7 @@ function click_fade(div) {
 
 //function to trigger "fade" on mouseover
 function delay_fade(div) {		
-		$('#'+div).mouseover(
+		$('#'+div).one('mouseover',
 			function(){
 				fade(div)
 			}
@@ -60,6 +69,11 @@ function fade(div) {
 			//loop through text classes and fade in one by one			
 			for(i=1;i<4;i++){
 				$('.'+i+'.'+div).delay(200+(i*600)).animate({opacity: 1},700);
+			}
+			
+			if(div=='how'){
+				setTimeout('$("#preview").css("display","block")',2500)
+				$("#preview").delay(2501).animate({opacity:1},700)
 			}
 			
 			

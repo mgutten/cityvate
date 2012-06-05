@@ -66,6 +66,7 @@
 	font-size:13px;
 	color:#DADADA;
 	opacity:0;
+	filter:alpha(opacity=0);
 	width:370px;
 	
 }
@@ -121,4 +122,18 @@
 	font-family:'Neon 80s';
 	font-size:12px;
 	color:#666;
+}
+
+#preview {
+	float:right;
+	clear:both;
+	margin-right:10px;
+	opacity:0;
+	filter:alpha(opacity=0);
+	display:none;
+}
+
+#preview:hover {
+	opacity:.85;
+	filter:alpha(opacity=85);
 }
