@@ -6,9 +6,19 @@ class Head {
 	var $script = array("jquery-1.6.min");
 	var $style= array();
 	var $title;
+	var $file_adj;
 	
 		function __construct($login_status, $title, $default_js = 0) {
 				session_start();
+				
+				//make paths relative to current file location
+				$file_loc = $_SERVER['PHP_SELF'];
+				$file_loc = explode('cityvate',$file_loc);
+				$count = substr_count($file_loc[1],'/');
+				for($i=1;$i<$count;$i++){
+					$this->file_adj .= '../';
+				}
+				$GLOBALS['file_adj']=$this->file_adj;
 				
 				//set title for page and add title css and 
 				//stylesheet to respective arrays
@@ -55,13 +65,18 @@ class Head {
 					
 						//loop through array and create stylesheet links
 						foreach($style_array as $value) {
+								//replace spaces for underscores
+								$value = str_replace(' ','_',$value);
 							
-								echo "<link rel='stylesheet' href='css/".$value.".css' media='screen' />\n";
+								echo "<link rel='stylesheet' href='".$this->file_adj."css/".$value.".css' media='screen' />\n";
 								
 						}
 				}
-				else
-						echo "<link rel='stylesheet' href='css/".$style_array.".css' media='screen' />\n";
+				else {
+						//replace spaces for underscores
+						$style_array = str_replace(' ','_',$style_array);
+						echo "<link rel='stylesheet' href='".$this->file_adj."css/".$style_array.".css' media='screen' />\n";
+				}
 				
 		}
 		
@@ -72,15 +87,22 @@ class Head {
 					
 						//loop through array and create script links
 						foreach($script_array as $value) {
+								
+								//replace spaces for underscores
+								$value = str_replace(' ','_',$value);
 							
-								echo "<script type='text/javascript' src='js/".$value.".js'></script>\n";
+								echo "<script type='text/javascript' src='".$this->file_adj."js/".$value.".js'></script>\n";
 								
 						}
 				}
-				else
-					echo "<script type='text/javascript' src='js/".$script_array.".js'></script>\n";
+				else {
+						//replace spaces for underscores
+						$script_array = str_replace(' ','_',$script_array);
+						echo "<script type='text/javascript' src='".$this->file_adj."js/".$script_array.".js'></script>\n";
+				}
 			
 		}
+		
 		
 		function close() {
 			
@@ -104,21 +126,30 @@ class Head_signup extends Head {
 
 class Header {
 	
-	var $links=array('Home' => 'home.php','About' => 'about.php');
-	var $drop=array('Login' =>'login.php');
+	var $links=array('Home' => 'home.php');
+	var $drop=array();
 	
 	function __construct($login_status) {
+	
+			//set file_adj var from Head class
+			$file_adj = $GLOBALS['file_adj'];
 			
 			//if logged out, add to array of header links
-			if($login_status == 'out') 
+			if($login_status == 'out') {
 					$this->links['Signup'] = 'signup.php';
+					$this->links['About'] = 'about.php';
+					$this->drop['Login']='login.php';
+			}
 			
 			//if logged in, change dropdown variable
-			else 
-					$this->drop = array('My Account' => 'myaccount.php');
+			else {
+					$this->drop['My Account'] = 'myaccount.php';
+					$this->links['Contact'] = 'contact.php';
+					$this->links['Home'] = 'member.php';
+			}
 					
 			//display components of header as well as background img
-			echo "<body>\n<img src='images/city_back.jpg' class='bg'/><div id='header_back'></div><div id='body'>\n<div id='header_bar'>";
+			echo "<body>\n<img src='".$file_adj."images/city_back.jpg' class='bg'/><div id='header_back'></div><div id='body'>\n<div id='header_bar'>";
 			
 			//create links
 			$this->link();
@@ -129,13 +160,20 @@ class Header {
 			//display dropdown
 			echo "<div id='dropdown'>\n";
 			//if not logged in, display form
-			if($this->drop['Login']) {
-				$form = new Form('login_check.php','POST');
+			if(!empty($this->drop['Login'])) {
+				$form = new Form($file_adj.'login_check.php','POST');
 				$form->input('text','username','username','','Username/email');
 				$form->input('password','pw','username','','password');
-				echo "<a href='forgot.php' id='forgot'>Forgot?</p></a>";
-				$form->input('image','login','','images/login_button.png');
+				echo "<a href='".$file_adj."forgot.php' id='forgot'>Forgot?</p></a>";
+				$form->input('image','login','',$file_adj.'images/login_button.png');
 				$form->close();
+			}
+			else {
+				$my_activities = "<a href='my_activities.php' alt='My Deals'><p class='my_account text'>My Deals</p></a>";
+				$calendar = "<a href='calendar.php' alt='Calendar'><p class='my_account text'>Calendar</p></a>";
+				$subscription = "<a href='subscription.php' alt='Subscription'><p class='my_account text'>Subscription</p></a>";
+				$logout = "<a href='logout.php' alt='Logout'><p class='my_account text logout'>Logout</p></a>";
+				echo $my_activities.$calendar.$subscription.$logout;
 			}
 			echo "</div>\n";
 			
@@ -147,25 +185,33 @@ class Header {
 	
 	function link() {
 			
+			$file_adj = $GLOBALS['file_adj'];
+			$file_adj2 = $file_adj;
+			
 			//create header links
 			foreach($this->links as $key=>$value) {
-					
+									
 					//base class for header links
 					$class = 'header_link';
 					
+					//if home button, apply header_first class
 					if($key == 'Home') 
 							$class .= ' header_first';
+					
+					//if logged in (ie member.php homepage), no file adjust		
+					if($value == 'member.php')
+							$file_adj2 = '';
 							
-					echo "<a href='$value' alt='$key'><div class='$class'>$key</div></a>\n";
+					echo "<a href='".$file_adj2.$value."' alt='$key'><div class='$class'>$key</div></a>\n";
+					
 					
 			}
 			
-			
 			//create dropdown menu and close header_bar div
 			foreach($this->drop as $key=>$value) {
+				//if dropdown is myaccount, do not adjust out of member folder
 				
-					
-					echo "<a href='$value'><div class='$class' id='drop'>$key <img src='images/home/arrow.png' id='arrow'/></div></a>\n</div>\n";
+					echo "<a href='".$file_adj2.$value."'><div class='$class' id='drop'>".$key."<img src='".$file_adj."images/home/arrow.png' id='arrow'/></div></a>\n</div>\n";
 					
 					
 			}
@@ -231,6 +277,35 @@ class Body_signup extends Body {
 			
 	}
 	
+}
+
+class Body_member {
+	
+	var $links = array("My Activities"=>'member.php',
+						"Calendar"=>'calendar.php',
+						"Past Activities"=>'past.php');
+	
+	function __construct($selected_tab) {
+		
+			echo "<div id='header2_back'>";
+			
+			$tabs = '';
+			$cur_tab=1;
+			
+			foreach($this->links as $key=>$value) {
+				
+					($selected_tab==$cur_tab ? $class = 'header_tall' : $class = 'header_short');
+					
+					$tabs.= "<a href='".$value."' alt='Navigate to ".$key."'><div class='".$class."'></div></a>";
+				
+					$cur_tab += 1;
+			}
+			
+			echo $tabs;
+			
+			echo "</div>";
+	}
+					
 }
 	
 
