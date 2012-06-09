@@ -11,6 +11,12 @@ class Head {
 		function __construct($login_status, $title, $default_js = 0) {
 				session_start();
 				
+				//if login status "in" then check to see if session
+				//vars are set.  If no, send to login page
+				if($login_status=='in' && empty($_SESSION['user']))
+						header('location:../login.php');
+
+				
 				//make paths relative to current file location
 				$file_loc = $_SERVER['PHP_SELF'];
 				$file_loc = explode('cityvate',$file_loc);
@@ -279,7 +285,7 @@ class Body_signup extends Body {
 	
 }
 
-class Body_member {
+class Body_member extends Body {
 	
 	var $links = array("My Activities"=>'member.php',
 						"Calendar"=>'calendar.php',
@@ -294,9 +300,9 @@ class Body_member {
 			
 			foreach($this->links as $key=>$value) {
 				
-					($selected_tab==$cur_tab ? $class = 'header_tall' : $class = 'header_short');
+					($selected_tab==$cur_tab ? $class = 'header_dark' : $class = 'header_light');
 					
-					$tabs.= "<a href='".$value."' alt='Navigate to ".$key."'><div class='".$class."'></div></a>";
+					$tabs.= "<a href='".$value."' alt='Navigate to ".$key."'><div class='".$class." text header2'>$key</div></a>";
 				
 					$cur_tab += 1;
 			}
@@ -304,7 +310,10 @@ class Body_member {
 			echo $tabs;
 			
 			echo "</div>";
+			
+			parent::__construct();
 	}
+	
 					
 }
 	

@@ -249,3 +249,38 @@ select#when {
 	margin-top:140px
 }
 
+/*login*/
+.login {
+	margin-top:50px;
+}
+
+.submit {
+	float:right;
+	margin:50px 20px 0px 0px;
+}
+
+.forgot {
+	float:left;
+	clear:both;
+	color:#0C3;
+	margin:78px 0px 0px 20px;
+	font-size:11px;
+	
+}
+
+.inspire {
+	float:left;
+	clear:both;
+	width:390px;
+	text-align:center;
+	color:#FF3;
+	font-size:10px;
+	margin:50px 0px 0px 0px;
+}
+
+#author {
+	float:right;
+	clear:both;
+	width:75px;
+	margin:3px 60px 0px 0px;
+}
