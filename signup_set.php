@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+require_once('db_functions.php');
 	//set default next to step 1
 	$next = 1;
 	
@@ -19,8 +19,10 @@ session_start();
 	//if username/password has been submitted
 	//send to check against database
 	if(!empty($_POST['usernameemail'])){
-////////////////////////////////////////////////$conn = new User_check($_POST['username'],$_POST['password']);
+		$conn = new User();
+		$conn->login($_POST['usernameemail'],'',1);
 	}
+echo $_POST['usernameemail'];
 	
 	
 header('location:signup_'.$next.'.php');

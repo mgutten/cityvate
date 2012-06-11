@@ -23,4 +23,9 @@ $form->back();
 $form->next_button();
 $form->close();
 
+//if the username existed and session was set,
+//unset it to try again with clean slate
+if(!empty($_SESSION['exists']))
+	unset($_SESSION['exists']);
+
 ?>

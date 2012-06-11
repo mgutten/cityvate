@@ -30,11 +30,6 @@ class Head {
 				//stylesheet to respective arrays
 				$this->title = $title;
 				
-				//determine if need the titled js or not
-				if($default_js==0){
-					array_push($this->script,strtolower($title));
-					array_push($this->style,strtolower($title));
-				}
 				
 				//echo up to <head> of doc
 				echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n";
@@ -54,6 +49,12 @@ class Head {
 				else {
 					array_push($this->style, 'header_in');
 					array_push($this->script, 'header_in');
+				}
+				
+				//determine if need the titled js or not
+				if($default_js==0){
+					array_push($this->script,strtolower($title));
+					array_push($this->style,strtolower($title));
 				}
 					
 				//echo base <meta>, styles, scripts
@@ -169,7 +170,7 @@ class Header {
 			if(!empty($this->drop['Login'])) {
 				$form = new Form($file_adj.'login_check.php','POST');
 				$form->input('text','username','username','','Username/email');
-				$form->input('password','pw','username','','password');
+				$form->input('password','password','username','','password');
 				echo "<a href='".$file_adj."forgot.php' id='forgot'>Forgot?</p></a>";
 				$form->input('image','login','',$file_adj.'images/login_button.png');
 				$form->close();
