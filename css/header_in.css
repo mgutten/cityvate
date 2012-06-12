@@ -1,0 +1,195 @@
+@charset "utf-8";
+/* CSS Document */
+
+img.bg {
+	/* Set rules to fill background */
+	min-height: 100%;
+	min-width: 1150px;
+
+	/* Set up proportionate scaling */
+	width: 100%;
+	height: auto;
+
+	/* Set up positioning */
+	position: fixed;
+	top: 0;
+	left: 0;
+	
+	z-index:-4;
+	display:inline;
+}
+
+@media screen and (max-width: 1024px) { /* Specific to this particular image */
+	img.bg {
+		left: 50%;
+		margin-left: -512px;   /* 50% */
+	}
+}
+
+p {
+	cursor:default;
+}
+
+a {
+	text-decoration:none;
+}
+
+.text {
+	font-family:'Neon 80s';
+	font-size:13px;
+	color:#DFDFDF;
+}
+
+#header_back {
+	background:url(../images/header_back.jpg) repeat-x;
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:-1;
+	width:100%;
+	min-width:1020px;
+	height:30px;
+}
+
+#body {
+	width:1000px;
+	margin:0px auto;
+}
+
+.header_link {
+	float:left;
+	width:100px;
+	height:22px;
+	text-align: center;
+	margin-left:30px;
+	color:#CCC;
+	font-size:13px;
+	font-family:"Neon 80s";
+	
+}
+
+.header_first {
+	margin-left:550px;
+}
+
+.header_link:hover {
+	color:#FFF;
+}
+
+#logo {
+	background:url(../images/logo.png) no-repeat;
+	width:300px;
+	height:84px;
+	float:left;
+	margin-left:22px;
+	padding-bottom:20px;
+}
+
+#arrow {
+	float:right;
+	margin-top:3px;
+}
+
+#dropdown {
+	float:left;
+	margin:0px 0px 0px 477px;
+	width:115px;
+	height:0px;
+	background-color:#000;
+	overflow:hidden;
+}
+
+.darken {
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+	background-color:#000;
+	filter:alpha(opacity=60);
+	-moz-opacity:0.6;
+	-khtml-opacity: 0.6;
+	opacity: 0.6;
+	z-index:10;
+	cursor:pointer;
+}
+
+.centered {
+	position:fixed;
+	top:300px;
+	left:50%;
+	width:600px;
+	margin-left:-300px;
+	text-align:center;
+	z-index:15;
+}
+
+.x {
+	position:fixed;
+	top:308px;
+	left:50%;
+	z-index:16;
+	margin-left:270px;
+	width:25px;
+	height:25px;
+	cursor:pointer;
+}
+
+.my_account {
+	float:left;
+	clear:both;
+	width:115px;
+	height:18px;
+	background-color:#000;
+	text-align:left;
+	margin:0px 0px 0px 0px;
+	padding:5px 0px 2px 5px;
+	cursor:pointer;
+	color:#D9D900;
+	font-size:12px;
+	border-top:#222solid 1px;
+}
+
+.my_account:hover {
+	color:#FFFF71
+}
+
+.logout {
+	color:#DFDFDF;
+}
+
+.logout:hover {
+	color:#fff;
+}
+
+#header2_back {
+	width:954px;
+	height:50px;
+	float:left;
+	clear:both;
+	margin:40px 0px 0px 29px;
+}
+
+.header_light {
+	width:171px;
+	height:40px;
+	float:left;
+	margin:0px 0px 0px 2px;
+	background:url(../images/member/header_light.png) no-repeat;
+}
+
+.header_dark {
+	width:171px;
+	height:50px;
+	float:left;
+	margin:0px 0px 0px 2px;
+	background:url(../images/member/header_dark.png) no-repeat;
+
+}
+
+.header2 {
+	color:#04B30D;
+	font-size:17px;
+	text-align:center;
+	padding-top:10px;
+}
