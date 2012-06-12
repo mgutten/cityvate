@@ -182,4 +182,33 @@
 	position:relative;
 	z-index:1;
 	margin-top:-280px;
-	
+}
+
+#body_bottom_left{
+	width:250px;
+	height: 250px;
+	float:left;
+	clear:both;
+	margin:40px 0px 0px 20px;
+}
+
+.upcoming_title {
+	float:left;
+	margin:3px 0px 0px 0px;
+	color:#FF3;
+	font-size:17px;
+}
+
+.upcoming {
+	float:left;
+	clear:both;
+	margin:20px 0px 0px 40px;
+}
+
+.upcoming_name {
+	float:left;
+	clear:both;
+	margin:0px 0px 0px 80px;
+	text-decoration:underline;
+	cursor:pointer;
+}

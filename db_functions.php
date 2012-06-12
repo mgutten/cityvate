@@ -86,7 +86,7 @@ class Activities extends User {
 	
 	function activities($selected_month = ''){
 		
-			if($selected_month == '') 
+			if($selected_month == '' || $selected_month == date('n')) 
 				$date_period = '>= MONTH(CURDATE())';
 			else
 				$date_period = '= "'.$selected_month.'"';
@@ -99,7 +99,7 @@ class Activities extends User {
 						ON `u_activities`.`aID` = `activities`.`aID` 
 						WHERE `u_activities`.`uID` = "'.$_SESSION['user']['uID'].'" AND
 						MONTH(`activities`.`month_in_use`) '.$date_period.'
-						ORDER BY name ASC';
+						ORDER BY reserve_date ASC';
 			//result set
 			$result = $this->con->query($query);
 			
@@ -115,6 +115,23 @@ class Activities extends User {
 						
 				}
 			return $this->activities;
+	}
+	
+	function upcoming($num_days = 7) {
+			
+	//figure out what reserved events are coming in the next week
+	for($i=0;$i<count($this->activities);$i++) {
+	
+		if(!empty($this->activities[$i]['reserve_date'])){
+			$date_now = time();
+			$date_event = strtotime($this->activities[$i]['reserve_date']);
+			$diff = abs($date_event-$date_now);
+			if($diff < 60*60*24*$num_days)
+				$upcoming_event[] = $i;
+		}
+	}
+	
+	return $upcoming_event;
 	}
 	
 	
