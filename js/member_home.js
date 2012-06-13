@@ -133,11 +133,20 @@ function populate_html(array) {
 
 //loop through json array and create activity bars
 function looping(array) {
+	//create done array
+	var done = new Array();
 	var i;
+	var b = 0;
 	var text='';
 	var classy = '';
 	var reserve;
 	for(i=1;i<array.length;i++) {
+		//if it is a done event, move to next event
+		if(array[i]['done']==1){
+			done[b] = array[i];
+			b++;
+			continue;
+		}
 		//if first bar, then give it selected class
 		if(i==1) {
 			classy = "activity text selected";
@@ -162,6 +171,15 @@ function looping(array) {
 		text = text+"<div class='"+classy+"' id='"+array[i]['aID']+"'><p class='activity_name'>"+array[i]['name']+"</p><p class='activity_type'>"+array[i]['type']+"</p><a href='calendar.php'>"+reserve+"</a></div>";
 	}
 	$('#top_right_activities').html(text);
+	
+	//reset text var for 'done' array
+	text ='';
+	
+	//loop through and create 'finished activities' section
+	for(b=0; b<done.length; b++){
+		text = text+"<div class='activity_done text' ><p class='activity_name'>"+done[b]['name']+"</p><p class='activity_type'>"+done[b]['type']+"</p><p class='activity_reserve activity_done_x' id='"+done[b]['aID']+"'>X</p></div>"
+	}
+	$('#activity_done_lower').html(text);
 }
 
 function set_fade_effect() {
@@ -171,7 +189,7 @@ function set_fade_effect() {
 }
 
 function bar_select(tag) {
-	
+		
 		if($('.activity').length <= 1 ){
 			return;
 		}

@@ -84,15 +84,19 @@ $done=array();
                           echo "<div class='$class' id='".$activities[$i]['aID']."'><p class='activity_name'>".$activities[$i]['name']."</p><p class='activity_type'>".$activities[$i]['type']."</p><a href='calendar.php'>$reserve_date</a></div>";
                           
                       }
-					  
-					  	echo "<div id='activity_done' class='top_right_activities'>";
-						foreach($done as $key=>$value){
-							echo $value['done'];
-						}
-						echo "</div>"
               ?>
               
       		</div>
+            <?php
+			//finished activity section
+						echo "<div id='activity_done' class='top_right_activities'><p class='text' id='activity_done_title'>Finished Activities</p><div id='activity_done_lower'>";
+						
+						foreach($done as $key=>$value){
+							echo "<div class='activity_done text' ><p class='activity_name'>".$value['name']."</p><p class='activity_type'>".$value['type']."</p><p class='activity_reserve activity_done_x' id='".$value['aID']."'>X</p></div>";
+						}
+						
+						echo "</div></div>"
+						?>
       
 </div>
 

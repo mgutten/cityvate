@@ -258,3 +258,37 @@
 	margin:-26px 40px 0px 0px;
 	opacity:.6;
 }
+
+/*finished activities*/
+#activity_done {
+	height:100px;
+}
+#activity_done_title{
+	font-size:15px;
+	color:#FF3;
+	width:390px;
+	float:left;
+	text-align:center;
+}
+
+.activity_done {
+	width:400px;
+	height:17px;
+	background:none;
+	/*#252525;*/
+	float:left;
+	clear:both;
+	margin:3px 0px 0px 0px;
+	font-size:14px;
+	color:#999;
+}
+
+.activity_done * {
+	cursor:default;
+}
+
+.activity_done_x {
+	text-align:center;
+	color:#999;
+
+}
