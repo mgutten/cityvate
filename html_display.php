@@ -535,7 +535,7 @@ function signup_boxes($title_array) {
 						
 						//if it's password box, make password text
 						if($key=='Password')
-							$form->input('password',$id,'drop text');
+							$form->input('password','password2','drop text');
 						else
 							$form->input('text',$id,'drop text','',$val);
 						

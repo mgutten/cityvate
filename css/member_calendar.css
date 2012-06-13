@@ -1,0 +1,11 @@
+@charset "utf-8";
+/* CSS Document */
+
+#body_main {
+	width:930px;
+	height:618px;
+	background:url(../images/blank_back.png) no-repeat;
+	float:left;
+	clear:both;
+	margin: -1px 0px 0px 30px;
+}

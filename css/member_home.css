@@ -10,6 +10,15 @@
 	margin: -1px 0px 0px 30px;
 }
 
+#body_bottom {
+	width:930px;
+	height:0px;
+	background:url(../images/home_bottom_bar.png);
+	margin-left:30px;
+	float:left;
+	clear:both;
+}
+
 #picture {
 	width:445px;
 	height:290px;
@@ -97,9 +106,9 @@
 	float:right;
 }
 
-#top_right_activities {
+.top_right_activities {
 	width:400px;
-	height:140px;
+	height:155px;
 	float:right;
 	margin:5px 38px 0px 0px;
 }
@@ -107,7 +116,8 @@
 .activity {
 	width:400px;
 	height:24px;
-	background:#252525;
+	background:none;
+	/*#252525;*/
 	float:left;
 	clear:both;
 	margin:3px 0px 0px 0px;
@@ -131,9 +141,9 @@
 }
 
 .activity_reserve {
-	width:55px;
+	width:60px;
 	float:left;
-	margin:2px 0px 0px 5px;
+	margin:2px 0px 0px 2px;
 	cursor:pointer;
 	color:#04B30D;
 }
@@ -211,4 +221,40 @@
 	margin:0px 0px 0px 80px;
 	text-decoration:underline;
 	cursor:pointer;
+}
+
+/*activity of the day*/
+#body_bottom_right{
+	width:600px;
+	height: 250px;
+	float:left;
+	margin:40px 0px 0px 45px;
+}
+
+.d_activity {
+	width:220px;
+	float:left;
+	clear:both;
+	text-align:center;
+	margin:25px 0px 0px 45px;
+	font-size:14px;
+}
+
+#d_activity_description {
+	text-align:justify;
+	font-size:13px;
+}
+
+#d_activity_price {
+	float:right;
+	margin:-45px 40px 0px 0px;
+}
+
+#d_activity_map {
+	float:right;
+	clear:right;
+	width:200px;
+	height:150px;
+	margin:-26px 40px 0px 0px;
+	opacity:.6;
 }

@@ -36,7 +36,7 @@ function body_resize() {
 				var height = $(window).height();
 				if(height >854) {
 				//calculate the height of the rest of visible components
-				var subtract = parseInt($("#body_main").css("height"),10)+parseInt($("#body_main").css("margin-top"),10)+114;
+				var subtract = parseInt($("#body_main").css("height"),10)+parseInt($("#body_main").css("margin-top"),10)+parseInt($("#header2_back").css("height"),10)+parseInt($("#header2_back").css("margin-top"),10)+134;
 				var div_height = height - subtract;
 				$("#body_bottom").css('height',div_height);
 				

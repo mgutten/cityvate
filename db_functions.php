@@ -87,18 +87,18 @@ class Activities extends User {
 	function activities($selected_month = ''){
 		
 			if($selected_month == '' || $selected_month == date('n')) 
-				$date_period = '>= MONTH(CURDATE())';
+				$date_period = 'MONTH(CURDATE())';
 			else
-				$date_period = '= "'.$selected_month.'"';
+				$date_period = '"'.$selected_month.'"';
 			
 			//form query to retrieve all activity names 
 			//for user with session uid and where month
 			//in use >= current month
-			$query = 'SELECT `activities`.`name` as name,`u_activities`.`reserve_date` as reserve_date, `activities`.`type` as type, `activities`.`aID` as aID FROM `u_activities` 
+			$query = 'SELECT `activities`.`name` as name,`u_activities`.`reserve_date` as reserve_date, `u_activities`.`done` as done, `activities`.`type` as type, `activities`.`aID` as aID FROM `u_activities` 
 						INNER JOIN `activities` 
 						ON `u_activities`.`aID` = `activities`.`aID` 
 						WHERE `u_activities`.`uID` = "'.$_SESSION['user']['uID'].'" AND
-						MONTH(`activities`.`month_in_use`) '.$date_period.'
+						MONTH(`activities`.`month_in_use`) = '.$date_period.'
 						ORDER BY reserve_date ASC';
 			//result set
 			$result = $this->con->query($query);
@@ -111,6 +111,7 @@ class Activities extends User {
 						$this->activities[$i]['reserve_date'] = $row['reserve_date'];
 						$this->activities[$i]['type'] = $row['type'];
 						$this->activities[$i]['aID'] = $row['aID'];
+						$this->activities[$i]['done'] = $row['done'];
 						$i++;
 						
 				}

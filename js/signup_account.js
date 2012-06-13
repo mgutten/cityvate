@@ -46,16 +46,16 @@ function validate() {
 			returning=0
 
 		}
-	if($("#input_password").val()=='' ||
-			$("#input_password").val().length < 6 ||
-			$("#input_password").val().length > 12) {
-			empty_box($("#input_password"));
+	if($("#input_password2").val()=='' ||
+			$("#input_password2").val().length < 6 ||
+			$("#input_password2").val().length > 12) {
+			empty_box($("#input_password2"));
 			returning=0
 
 	}
 			
 	if(returning==0){
-			return false
+			return false;
 	}
 	else {
 			return true;

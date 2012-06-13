@@ -3,19 +3,29 @@
 require_once('../html_display.php');
 require_once('../db_functions.php');
 
+//page should require logged in user
 $login = 'in';
 
+//create the head section
 $head = new Head($login,'Member Home');
 $head->close();
 
+//create top header
 $header = new Header($login);
 
+//create body object with first tab
+//selected(i.e. my_activities)
 $body = new Body_member(1);
 
 //make call to retrieve activities list
 $activities_call = new Activities();
 $activities = $activities_call->activities();
+//store upcoming events for coming week
 $upcoming_event = $activities_call->upcoming();
+
+//declare array for activites that have
+//been done already
+$done=array();
 
 ?>
 
@@ -52,11 +62,15 @@ $upcoming_event = $activities_call->upcoming();
           		  <p id='<?php echo date('m').date('F');?>' class='text activity_month'><?php echo date('F');?>'s Activities</p>
       
           </div>
-          <div id='top_right_activities'>
+          <div id='top_right_activities' class='top_right_activities'>
               
               <?php
               //populate with list of activities from array
                       for($i=0;$i<count($activities);$i++){
+						  	if($activities[$i]['done']==true){
+								array_push($done,$activities[$i]);
+								continue;
+							}
                               $class = 'activity text';
                               //if no reserve date set, echo link to calendar------------------------------------------------
                               if(empty($activities[$i]['reserve_date']))
@@ -70,6 +84,12 @@ $upcoming_event = $activities_call->upcoming();
                           echo "<div class='$class' id='".$activities[$i]['aID']."'><p class='activity_name'>".$activities[$i]['name']."</p><p class='activity_type'>".$activities[$i]['type']."</p><a href='calendar.php'>$reserve_date</a></div>";
                           
                       }
+					  
+					  	echo "<div id='activity_done' class='top_right_activities'>";
+						foreach($done as $key=>$value){
+							echo $value['done'];
+						}
+						echo "</div>"
               ?>
               
       		</div>
@@ -101,6 +121,27 @@ $upcoming_event = $activities_call->upcoming();
 				
 		}
 		echo $block;
+		
+		
 		?>
     
+</div>
+
+<div id="body_bottom_right">
+	<p class='text upcoming_title'>
+    	Activity of the Day
+    </p>
+    <p class="text d_activity" id='d_activity_title'>
+    	Doug Dimmadome's Grand Opening Dimmadale
+    </p>
+    <p class='text d_activity' id='d_activity_description'>
+    	Come get some eats at this lovely little place down on Ocean Ave.  Learn how to ride and run all at the same time.  First 10 customers get a free shot.
+    </p>
+    
+    <p class='text' id='d_activity_price'>
+    	Cost: FREE
+    </p>
+    
+    <a href='http://www.maps.google.com' id='d_activity_map_link'><img src="../images/maps/g_maps_test.jpg" id='d_activity_map' /></a>
+    	
 </div>

@@ -77,8 +77,18 @@ function change_month(new_month) {
 						clearTimeout(timeout[1])
 						timeout[1] = null
 						bar_select($(this));
-					})				
-			}
+					})		
+					
+				//pause image scrolling onhover
+					$('.activity,#picture').hover(
+					function() {
+						clearTimeout(timeout[1]);
+						timeout[1] = null
+					},
+					function() {
+						set_fade_effect();
+					})		
+							}
 		})
 		
 }
