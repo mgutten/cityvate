@@ -8,6 +8,8 @@ $login = 'in';
 
 //create the head section
 $head = new Head($login,'Member Calendar');
+//drag and drop script
+$head->script('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min');
 $head->close();
 
 //create top header
@@ -19,12 +21,8 @@ $body = new Body_member(2);
 
 $selected_month = date('n');
 
-$activities_call = new Activities;
-$activities = $activities_call->activities($selected_month);
-
 $calendar = new Calendar();
-$calendar->important_dates($selected_month);
-$calendar->reserved_days($activities);
+$calendar->calendar_calls($selected_month);
 
 $days=array('Su','M','T','W','Th','F','S');
 
@@ -45,69 +43,23 @@ $days=array('Su','M','T','W','Th','F','S');
     </div>
 	<div id='calendar'>
 	<?php
-	//create calendar
-		$c = 1;
-		$last_month_day = $calendar->first_day;
-		//create 5 weeks of month
-		for($i=0; $c<=$calendar->last_day; $i++) {
-			//create 7 days of week
-			for($b=0; $b<7; $b++) {
-				
-				$blank = false;
-				$class = 'calendar_day';
-				
-				//if it's the first week and before first
-				//day or after last day of month, create blanks
-				if($i==0 && $b<$calendar->first_day || $c>$calendar->last_day){
-						$day = $calendar->last_month_days-$last_month_day;
-						$blank = true;
-						$class .= ' transparent';
-						$last_month_day--;
-				}
-				else
-					$day = $c;
-				
-				//test if even or odd day
-				if(($b % 2) == 0){
-						$class .= ' calendar_light';
-				}
-				else {
-						$class .= ' calendar_dark';
-				}
-				
-				//if first day of week, start it on a new line		
-				if($b==0)
-						$class .= ' week_first';
-				//if today is not set (ie not this month),
-				//then make all days transparent
-				if(empty($calendar->today))
-						$class .= ' transparent';
-				
-				if($c == $calendar->today)
-						$class .= ' today';
-						
-				$block = "<div class='".$class."'>
-						<p class='text calendar_day_text'>".$day."</p>";
-				//if running day has a reserved activity, show name
-				if(!empty($calendar->reserved_days[$c]))
-						$block .= "<p class='text activity'>".$calendar->reserved_days[$c]."</p>";
-								
-				$block .= "</div>";
-				
-				echo $block;
-				
-				//if we are dealing with a blank day, do not 
-				//increment our running day var $c
-				if($blank === true)
-					continue;
-					
-				$c++;
-			}
-		}
+		$calendar->create_calendar();
 		
 		?>
-		</div>						
+	</div>						
 		
 </div>
 <div id='body_right'>
+	<p class='text my_activities_title'>
+    	My Activities
+    </p>
+    <p class='text my_activities_title_clarify'>
+    	drag and drop to add/change
+    </p>
+    <div id='my_activities_container'>
+    <?php
+	
+		calendar_my_activites()
+		?>
+    </div>
 </div>

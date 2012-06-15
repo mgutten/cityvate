@@ -98,11 +98,11 @@ div#calendar {
 }
 
 #left_arrow {
-	background:url(../images/member/left_arrow.png) no-repeat;
+	background:url(../images/calendar/left_arrow.png) no-repeat;
 }
 
 #right_arrow {
-	background:url(../images/member/right_arrow.png) no-repeat;
+	background:url(../images/calendar/right_arrow.png) no-repeat;
 	float:right;
 }
 
@@ -128,4 +128,60 @@ p.day_of_week {
 	width:77px;
 	float:left;
 	text-align:center;
+}
+
+#body_right > p:first-child, #body_right > p:nth-child(2)  {
+	width:280px;
+	float:left;
+	clear:both;
+	text-align:center;
+}
+
+/*my_activities section*/
+p.my_activities_title {
+	font-size:20px;
+	margin:30px 0px 0px 0px;
+	
+	
+}
+
+p.my_activities_title_clarify {
+	font-size:11px;
+	margin:0px 0px 0px 0px;
+}
+
+p.activity_bar {
+	width:180px;
+	height:18px;
+	text-align:center;
+	background-color:#006C00;
+	font-size:14px;
+	margin-top:0px;
+	padding-top:2px;
+	cursor:pointer;
+	color:#ff3;
+}
+
+p.activity_reserved {
+	background-color:#222;
+	color:#CCC;
+}
+
+div#my_activities_container {
+	float:left;
+	clear:both;
+	width:180px;
+	margin:5px 0px 0px 50px;
+}
+
+div.activity_holder {
+	width:180px;
+	height:18px;
+	float:left;
+	clear:both;
+	margin:2px 0px 2px 0px;
+}
+
+div.drophover {
+	background-color:#999;
 }

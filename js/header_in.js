@@ -1,4 +1,21 @@
 // JavaScript for logged in
+//declare set month array for member.php
+//and calendar.php
+  var month_array = new Array();
+	  month_array[01]="January";
+	  month_array[02]="February";
+	  month_array[03]="March";
+	  month_array[04]="April";
+	  month_array[05]="May";
+	  month_array[06]="June";
+	  month_array[07]="July";
+	  month_array[08]="August";
+	  month_array[09]="September";
+	  month_array[10]="October";
+	  month_array[11]="November";
+	  month_array[12]="December";
+
+
 $(function() {
 
 //resize body onload

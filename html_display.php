@@ -76,15 +76,26 @@ class Head {
 						foreach($style_array as $value) {
 								//replace spaces for underscores
 								$value = str_replace(' ','_',$value);
-							
-								echo "<link rel='stylesheet' href='".$this->file_adj."css/".$value.".css' media='screen' />\n";
+								//test if this is an external link
+								$pos = strpos($value,'http');
+								
+								if($pos===false)
+									echo "<link rel='stylesheet' href='".$this->file_adj."css/".$value.".css' media='screen' />\n";
+								else
+									echo "<link rel='stylesheet' href='".$value.".css' media='screen' />\n";
+								
 								
 						}
 				}
 				else {
 						//replace spaces for underscores
 						$style_array = str_replace(' ','_',$style_array);
-						echo "<link rel='stylesheet' href='".$this->file_adj."css/".$style_array.".css' media='screen' />\n";
+						//test if this is an external link
+						$pos = strpos($style_array,'http');
+							if($pos===false)
+									echo "<link rel='stylesheet' href='".$this->file_adj."css/".$style_array.".css' media='screen' />\n";
+								else
+									echo "<link rel='stylesheet' href='".$style_array.".css' media='screen' />\n";
 				}
 				
 		}
@@ -99,15 +110,26 @@ class Head {
 								
 								//replace spaces for underscores
 								$value = str_replace(' ','_',$value);
-							
-								echo "<script type='text/javascript' src='".$this->file_adj."js/".$value.".js'></script>\n";
+								//test if external link
+								$pos = strpos($value,'http');
 								
+								if($pos===false)
+									echo "<script type='text/javascript' src='".$this->file_adj."js/".$value.".js'></script>\n";
+								else
+									echo "<script type='text/javascript' src='".$value.".js'></script>\n";
+															
 						}
 				}
 				else {
+						//test if external link
+						$pos = strpos($script_array,'http');
 						//replace spaces for underscores
 						$script_array = str_replace(' ','_',$script_array);
-						echo "<script type='text/javascript' src='".$this->file_adj."js/".$script_array.".js'></script>\n";
+						
+						if($pos===false)
+								echo "<script type='text/javascript' src='".$this->file_adj."js/".$script_array.".js'></script>\n";
+						else
+								echo" <script type='text/javascript' src='".$script_array.".js'></script>\n";
 				}
 			
 		}
@@ -491,6 +513,16 @@ class Calendar {
 	var $month;
 	var $reserved_days = array();
 	var $last_month_days;
+	var $activities;
+	
+	function calendar_calls($selected_month) {
+		
+			$activities_call = new Activities;
+			$this->activities = $activities_call->activities($selected_month);
+			$this->important_dates($selected_month);
+			$this->reserved_days($this->activities);
+			
+	}
 	
 	function important_dates($selected_month) {
 		
@@ -516,7 +548,7 @@ class Calendar {
 	}
 	
 	function reserved_days($activities_array) {
-			
+						
 			$c=0;			
 			for($i=0;$i<count($activities_array);$i++){
 				//if reserve date is set, then take the day from it
@@ -528,6 +560,79 @@ class Calendar {
 						$c++;
 				}
 			}
+	}
+	
+	function create_calendar() {
+		global $calendar;
+		
+		//create calendar
+		$c = 1;
+		$last_month_day = $calendar->first_day;
+		$next_month_day = 1;
+		//create 5 weeks of month
+		for($i=0; $c<=$calendar->last_day; $i++) {
+			//create 7 days of week
+			for($b=0; $b<7; $b++) {
+				
+				$blank = false;
+				$class = 'calendar_day';
+				
+				//if it's the first week and before first
+				//day or after last day of month, create blanks
+				if($i==0 && $b<$calendar->first_day || $c>$calendar->last_day){
+					//if its the month before then use last months days
+					if($i==0){
+						$day = $calendar->last_month_days-$last_month_day;
+						$last_month_day--;
+					}
+					//else its next month and should start at 1
+					else {
+						$day = $next_month_day;
+						$next_month_day++;
+					}
+					
+					$blank = true;
+					$class .= ' transparent';
+						
+				}
+				else {
+					$class .= ' droppable';
+					$day = $c;
+				}
+				
+				//test if even or odd day
+				if(($b % 2) == 0){
+						$class .= ' calendar_light';
+				}
+				else {
+						$class .= ' calendar_dark';
+				}
+				
+				//if first day of week, start it on a new line		
+				if($b==0)
+						$class .= ' week_first';
+
+				if($c == $calendar->today)
+						$class .= ' today';
+						
+				$block = "<div class='".$class."'>
+						<p class='text calendar_day_text'>".$day."</p>";
+				//if running day has a reserved activity, show name
+				if(!empty($calendar->reserved_days[$c]))
+						$block .= "<p class='text activity'>".$calendar->reserved_days[$c]."</p>";
+								
+				$block .= "</div>";
+				
+				echo $block;
+				
+				//if we are dealing with a blank day, do not 
+				//increment our running day var $c
+				if($blank === true)
+					continue;
+					
+				$c++;
+			}
+		}
 	}
 }
 
@@ -712,7 +817,20 @@ function signup_date_options($num_months) {
 		}
 }
 
-
+function calendar_my_activites() {
+		global $calendar;
+	
+		for($i=0;$i<count($calendar->activities);$i++) {
+			$class = 'text activity_bar';
+			
+			if(!empty($calendar->activities[$i]['reserve_date']))
+				$class .= ' activity_reserved';
+			
+			echo "<div class='activity_holder' id='".$i."'>
+					<p class='".$class."' id='".$calendar->activities[$i]['aID']."'>".$calendar->activities[$i]['name']."</p>
+					</div>";
+		}
+}
 
 	
 		
