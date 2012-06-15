@@ -94,7 +94,13 @@ class Activities extends User {
 			//form query to retrieve all activity names 
 			//for user with session uid and where month
 			//in use >= current month
-			$query = 'SELECT `activities`.`name` as name,`u_activities`.`reserve_date` as reserve_date, `u_activities`.`done` as done, `activities`.`type` as type, `activities`.`aID` as aID FROM `u_activities` 
+			$query = 'SELECT `activities`.`name` as name,
+							`u_activities`.`reserve_date` as reserve_date, 
+							`u_activities`.`done` as done, 
+							`activities`.`type` as type, 
+							`activities`.`aID` as aID ,
+							`activities`.`reserve_needed` as reserve_needed
+						FROM `u_activities` 
 						INNER JOIN `activities` 
 						ON `u_activities`.`aID` = `activities`.`aID` 
 						WHERE `u_activities`.`uID` = "'.$_SESSION['user']['uID'].'" AND
@@ -112,6 +118,7 @@ class Activities extends User {
 						$this->activities[$i]['type'] = $row['type'];
 						$this->activities[$i]['aID'] = $row['aID'];
 						$this->activities[$i]['done'] = $row['done'];
+						$this->activities[$i]['reserve_needed'] = $row['reserve_needed'];
 						$i++;
 						
 				}
@@ -157,6 +164,28 @@ class Activities extends User {
 			//query the database
 			$this->con->query($query);
 			
+			
+	}
+	
+	function change_reserve($aid,$new_date) {
+			
+			$query = "SELECT `u_activities`.`reserve_date` as `reserve_date`,
+							 	activities.`reserve_needed` as reserve_needed 
+							 FROM `u_activities` 
+							 INNER JOIN activities 
+							 ON `u_activities`.aid = activities.aid 
+							 WHERE `u_activities`.uid = '".$_SESSION['user']['uid']."' 
+							 	AND `u_activities`.aid = '".$aid."'
+								AND (".$new_date."-`reserve_date`)>`reserve_needed`";
+							 
+			$result = $this->con->query($query);
+			
+			//if there is a result (ie the selected date is outside the reservation needed 
+			//requirement), then update to new date and time
+			if($result->num_rows>0){
+				
+				$query = "UPDATE `u_activities` SET reserve_date = '".$new_date."'";
+			}
 			
 	}
 	

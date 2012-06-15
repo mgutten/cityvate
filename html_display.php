@@ -496,9 +496,12 @@ class Form_signup extends Form {
 class Alert {
 	
 	function __construct($name,$src) {
-		
+			$file_adj ='';
+			if(!empty($GLOBALS['file_adj']))
+				$file_adj = $GLOBALS['file_adj'];
+			
 			$darken="<div class='darken $name' onclick='$(\".$name\").toggle()'></div>";
-			$img = "<img class='centered $name' src='images/signup/$src.png' />";
+			$img = "<img class='centered $name' src='".$file_adj."'images/signup/$src.png' />";
 			$x = "<div class='x $name' onclick='$(\".$name\").toggle()'></div>";
 			echo $darken.$img.$x;
 			
@@ -535,9 +538,19 @@ class Calendar {
 			}
 			else
 				$month = $selected_month;
-			
-			//select the year NEED TO DEAL WITH JANUARY-DECEMBER SWITCH /////////////////////////////////////////////////////////////////////////////////
-			$year = date('Y');
+				
+			//deal with case when switch from January
+			//to December and vice versa	
+			if($selected_month == 13){
+				$month = 0;
+				$year = date('Y')+1;
+			}
+			elseif($selected_month == 0){
+				$month = 11;
+				$year = date('Y')-1;
+			}
+			else
+				$year = date('Y');
 		
 			$this->first_day = date('w',mktime(0,0,0,$month,1,$year));
 			$this->last_day = date('t',mktime(0,0,0,$month,1,$year));
@@ -826,7 +839,7 @@ function calendar_my_activites() {
 			if(!empty($calendar->activities[$i]['reserve_date']))
 				$class .= ' activity_reserved';
 			
-			echo "<div class='activity_holder' id='".$i."'>
+			echo "<div class='activity_holder' id='".$calendar->activities[$i]['reserve_needed']."'>
 					<p class='".$class."' id='".$calendar->activities[$i]['aID']."'>".$calendar->activities[$i]['name']."</p>
 					</div>";
 		}

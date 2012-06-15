@@ -1,6 +1,20 @@
 // JavaScript Document
+
+//var to be set onclick left and right arrows
+//when changing month
 var new_month_id;
+
+//var set for use in dragging element to
+//set the activity's name when element dragged
 var dragging_name;
+var dragging_aid;
+
+//var set to select with draggable's $(this) and 
+//interchange between the functions
+//for draggable and droppable
+//*fixes complication with selecting both
+//draggable and droppable with $(this)*
+var dragging_tag;
 
 
 $(function(){
@@ -63,19 +77,47 @@ function ready_fns() {
 	$('p.activity_bar').draggable({
 			containment: "#body_main",
 			zIndex:5,
+			revert: true,
 			start: function() {
 				dragging_name = $(this).text();
-			},
-			stop: function() {
-				$(this).css({position: 'relative',top:0,left:0})
+				dragging_tag = $(this);
+				dragging_aid = $(this).attr('id');
 			}
+			
 	});
 	
 	$(".droppable").droppable({
 			hoverClass: "drophover",
 			drop: function( event, ui ) {
-				alert(dragging_name + ' was dropped on '+$(this).text());
+				reserve_needed($(this))
+				//alert(dragging_name + ' was dropped on '+$(this).text());
 			}
 		});
+}
+
+//check if a reservation is needed
+function reserve_needed(dropping_tag) {
+
+	//reserve_needed attr from db is stored
+	//in ID of container div for each draggable
+	//activity, so test against that
+	//if ID == 0, no reservation needed
+	var parent_id = dragging_tag.parent().attr('id');
+	if(parent_id==0) {
+		alert('No reservation needed');
+	}
+	else {
+		//run check to see if the selected day is
+		//less than the needed days to reserve
+		//in advance
+		//***add 1 so that we count today as 
+		//one of the required days***
+		if(parseInt(parent_id) <= (parseInt(dropping_tag.text())-parseInt($('.today').text())+1)){
+			window.location = 'activity_top.php?date=' + dragging_name + '&aid=' + dragging_aid ;///////////////////////////////////////////////
+		}
+		else{
+			alert(dragging_name + ' requires at least ' + parent_id + ' days');
+		}
+	}
 }
 	

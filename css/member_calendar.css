@@ -185,3 +185,7 @@ div.activity_holder {
 div.drophover {
 	background-color:#999;
 }
+
+.reserve{
+	display:none;
+}

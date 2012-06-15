@@ -57,9 +57,18 @@ $days=array('Su','M','T','W','Th','F','S');
     	drag and drop to add/change
     </p>
     <div id='my_activities_container'>
-    <?php
-	
-		calendar_my_activites()
+    	<?php
+		
+		//function to create draggable activities bars
+		//located in html_display.php
+		calendar_my_activites();
+		
 		?>
     </div>
 </div>
+<?php
+	//create alert button for when a reservation is
+	//required and draggable activity is dropped on
+	//droppable calendar day
+	$alert = new Alert('reserve','new_reservation');
+?>
