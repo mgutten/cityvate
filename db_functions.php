@@ -119,7 +119,7 @@ class Activities extends User {
 	}
 	
 	function upcoming($num_days = 7) {
-			
+	
 	//figure out what reserved events are coming in the next week
 	for($i=0;$i<count($this->activities);$i++) {
 	
@@ -132,7 +132,32 @@ class Activities extends User {
 		}
 	}
 	
-	return $upcoming_event;
+	if(!empty($upcoming_event))
+		return $upcoming_event;
+	}
+	
+	function remove_activity($aid,$to_current = '1'){
+			
+			//where clause for both sets of queries
+			$query_where = " WHERE `u_activities`.`uID` = '".$_SESSION['user']['uID']."' AND `u_activities`.`aID` = '".$aid."'";
+			
+			//if we want the activity to move to current
+			//activity list, then change 'done' to false and
+			//reserve_date to null
+			if($to_current == 1)
+				$query = "UPDATE `cityvate_main`.`u_activities` SET `done` = '0', reserve_date = NULL";
+			//else we want to delete that activity from
+			//the user's activity database entirely
+			else
+				$query = "DELETE FROM `u_activities`";
+			
+			//add the where clause to query
+			$query .= $query_where;
+			
+			//query the database
+			$this->con->query($query);
+			
+			
 	}
 	
 	

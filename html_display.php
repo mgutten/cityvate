@@ -10,6 +10,8 @@ class Head {
 	
 		function __construct($login_status, $title, $default_js = 0) {
 				session_start();
+				date_default_timezone_set('America/Los_Angeles');
+
 				
 				//if login status "in" then check to see if session
 				//vars are set.  If no, send to login page
@@ -291,6 +293,8 @@ class Body_member extends Body {
 	var $links = array("My Activities"=>'member.php',
 						"Calendar"=>'calendar.php',
 						"Past Activities"=>'past.php');
+	var $done = array();
+	var $activities=array();
 	
 	function __construct($selected_tab) {
 		
@@ -313,6 +317,76 @@ class Body_member extends Body {
 			echo "</div>";
 			
 			parent::__construct();
+	}
+	
+	//populate member.php with current activity bars
+	function member_activity($activities){
+			$this->activities = $activities;
+			for($i=0;$i<count($activities);$i++){
+						  	if($activities[$i]['done']==true){
+								array_push($this->done,$activities[$i]);
+								continue;
+							}
+                              $class = 'activity text';
+                              //if no reserve date set, echo link to calendar------------------------------------------------
+                              if(empty($activities[$i]['reserve_date']))
+                                  $reserve_date = '<img src="../images/member/plus.png" title="Add to Calendar" class="activity_reserve plus"/>';
+                              else{
+                                  $date = DateTime::createFromFormat('Y-m-d', substr($activities[$i]['reserve_date'],0,10));
+                                  $reserve_date = "<p class='activity_reserve' title='Change Reservation'>".$date->format('M j')."</p>";
+                              }
+                              if($i==0)
+                                  $class .= ' selected';
+                          echo "<div class='$class' id='".$activities[$i]['aID']."'>
+						  			<p class='activity_name'>".$activities[$i]['name']."</p>
+									<p class='activity_type'>".$activities[$i]['type']."</p>
+									<a href='calendar.php'>$reserve_date</a></div>";
+                          
+                      }
+	}
+	
+	//populate member.php with finished activities
+	function member_finished() {
+			if(!empty($this->done)){
+				//loop through done array and create a new
+				//line for each finished activity
+				foreach($this->done as $key=>$value){
+					echo "<div class='activity_done text' >
+							<a href='activity.php?num=".$value['aID']."' class='activity_link'>
+								<p class='activity_name'>".$value['name']."</p>
+								<p class='activity_type'>".$value['type']."</p>
+							</a>
+							<p class='activity_reserve activity_done_x' id='".$value['aID']."' title='Never Did This'>X</p></div>";
+				}
+			}
+			else
+				echo "<p class='text' id='no_activity_done'>You haven't done any activities this month.</p>";
+	}
+	
+	//populate "Coming Up" section of member.php
+	function member_upcoming($upcoming_event) {
+		
+		$block='';
+		
+		for($i=0;$i<count($upcoming_event);$i++) {
+				//shorten our reserve_date var
+				$reserve_date = $this->activities[$upcoming_event[$i]]['reserve_date'];
+				$block .= '<p id="upcoming_'.$this->activities[$upcoming_event[$i]]['name'].'" class="upcoming text">';
+				//parse reserve_date var for day, date, and time respectively
+				$day = date('D',strtotime($reserve_date));
+				$date_reserved = date('m/d',strtotime($reserve_date));
+				$time = date('g a', strtotime($reserve_date));
+				//format the date,time,day appropriately
+				$block .= $day.' '.$date_reserved.' @ '.$time."</p>";
+				
+				$block .= "<a href='activity.php?num=".$this->activities[$upcoming_event[$i]]['aID']."'><p class='text upcoming_name'>"
+							.$this->activities[$upcoming_event[$i]]['name']."</p></a>";
+				if($i>=3) {
+					break;
+				}
+				
+		}
+		echo $block;
 	}
 	
 						
@@ -408,6 +482,53 @@ class Alert {
 			
 	}
 	
+}
+
+class Calendar {
+	var $last_day;
+	var $today;
+	var $first_day;
+	var $month;
+	var $reserved_days = array();
+	var $last_month_days;
+	
+	function important_dates($selected_month) {
+		
+			$this->month = $selected_month;
+			//if it is current month, set 'today'
+			//so we can use it later
+			if($selected_month == date('n')) {
+				$month = date('n');
+				$this->today = date('j');
+			}
+			else
+				$month = $selected_month;
+			
+			//select the year NEED TO DEAL WITH JANUARY-DECEMBER SWITCH /////////////////////////////////////////////////////////////////////////////////
+			$year = date('Y');
+		
+			$this->first_day = date('w',mktime(0,0,0,$month,1,$year));
+			$this->last_day = date('t',mktime(0,0,0,$month,1,$year));
+			
+			$this->last_month_days = date('t',mktime(0,0,0,$month-1,1,$year));
+		
+			
+	}
+	
+	function reserved_days($activities_array) {
+			
+			$c=0;			
+			for($i=0;$i<count($activities_array);$i++){
+				//if reserve date is set, then take the day from it
+				//and store it in the reserved_days array
+				if(!empty($activities_array[$i]['reserve_date'])){
+						$date = new DateTime($activities_array[$i]['reserve_date']);
+						$reserve_date = $date->format('j');
+						$this->reserved_days[$reserve_date] = $activities_array[$i]['name'];
+						$c++;
+				}
+			}
+	}
 }
 
 //class to determine basic date functions
@@ -590,6 +711,8 @@ function signup_date_options($num_months) {
 			echo '<option '.$select.'>'.$month.'</option>';
 		}
 }
+
+
 
 	
 		

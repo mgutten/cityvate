@@ -18,6 +18,17 @@ var reset_list;
 
 $(function(){
 	
+	ready_functions();	
+	
+	//start image scrolling onload
+	set_fade_effect();
+	
+});
+
+//all of the functions that need to be run on ready
+//(and rerun for ajax calls)
+function ready_functions() {
+	
 	//perform custom image fade onclick
 	$('.activity').click(function() {
 		clearTimeout(timeout[1])
@@ -37,11 +48,7 @@ $(function(){
 		set_fade_effect();
 	})
 	
-	
-	//start image scrolling onload
-	set_fade_effect();
-	
-	
+		
 	$('#left_arrow').click(function() {
 		clearTimeout(timeout[1]);
 		set_fade_effect();
@@ -59,11 +66,34 @@ $(function(){
 		change_month(parseInt($('.activity_month').attr('id').substring(0,2))+1);
 	})
 	
-});
+	
+	//remove finished activity from "done" list
+	//on click of x button
+	$(".activity_done_x").click(function() {
+		remove_done($(this).attr("id"));
+	})
+}
+	
 
+
+function remove_done(id) {
+	//ajax call to remove activity
+	//from done list and move back to
+	//current list, then reload
+	$.ajax({
+		url:'ajax_db.php',
+		type: 'POST',
+		data: { aid : id},
+		success: function() {
+			window.location.reload(true);
+		}
+	})
+}
 
 function change_month(new_month) {
-		
+	//ajax call to change the month when
+	//the arrows next to month name are clicked
+	//then return data and populate html
 		$.ajax({
 			url:'activity_top.php',
 			dataType:'json',
@@ -71,23 +101,8 @@ function change_month(new_month) {
 			success: function(data) {
 					var a_array = eval(data)
 					populate_html(a_array)	
-					
-				//reeval the click function on newly generated bars
-					$('.activity').click(function() {
-						clearTimeout(timeout[1])
-						timeout[1] = null
-						bar_select($(this));
-					})		
-					
-				//pause image scrolling onhover
-					$('.activity,#picture').hover(
-					function() {
-						clearTimeout(timeout[1]);
-						timeout[1] = null
-					},
-					function() {
-						set_fade_effect();
-					})		
+					//reeval ready functions for newly generated html
+					ready_functions();		
 							}
 		})
 		
@@ -168,16 +183,29 @@ function looping(array) {
 		}
 		
 		
-		text = text+"<div class='"+classy+"' id='"+array[i]['aID']+"'><p class='activity_name'>"+array[i]['name']+"</p><p class='activity_type'>"+array[i]['type']+"</p><a href='calendar.php'>"+reserve+"</a></div>";
+		text = text+"<div class='"+classy+"' id='"+array[i]['aID']+"'>\
+						<p class='activity_name'>"+array[i]['name']+"</p>\
+						<p class='activity_type'>"+array[i]['type']+"</p>\
+						<a href='calendar.php'>"+reserve+"</a></div>";
 	}
 	$('#top_right_activities').html(text);
 	
 	//reset text var for 'done' array
 	text ='';
 	
-	//loop through and create 'finished activities' section
-	for(b=0; b<done.length; b++){
-		text = text+"<div class='activity_done text' ><p class='activity_name'>"+done[b]['name']+"</p><p class='activity_type'>"+done[b]['type']+"</p><p class='activity_reserve activity_done_x' id='"+done[b]['aID']+"'>X</p></div>"
+	if(done.length>0){
+		//loop through and create 'finished activities' section
+		for(b=0; b<done.length; b++){
+			text = text+"<div class='activity_done text' >\
+							<a href='activity.php?num="+done[b]['aID']+"' class='activity_link'>\
+								<p class='activity_name'>"+done[b]['name']+"</p>\
+								<p class='activity_type'>"+done[b]['type']+"</p></a>\
+							<p class='activity_reserve activity_done_x' id='"+done[b]['aID']+"'>X</p>\
+						</div>"
+		}
+	}
+	else {
+		text = "<p class='text' id='no_activity_done'>You haven't done any activities this month.</p>";
 	}
 	$('#activity_done_lower').html(text);
 }

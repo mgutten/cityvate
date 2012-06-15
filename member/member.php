@@ -66,37 +66,21 @@ $done=array();
               
               <?php
               //populate with list of activities from array
-                      for($i=0;$i<count($activities);$i++){
-						  	if($activities[$i]['done']==true){
-								array_push($done,$activities[$i]);
-								continue;
-							}
-                              $class = 'activity text';
-                              //if no reserve date set, echo link to calendar------------------------------------------------
-                              if(empty($activities[$i]['reserve_date']))
-                                  $reserve_date = '<img src="../images/member/plus.png" title="Add to Calendar" class="activity_reserve plus"/>';
-                              else{
-                                  $date = DateTime::createFromFormat('Y-m-d', substr($activities[$i]['reserve_date'],0,10));
-                                  $reserve_date = "<p class='activity_reserve'>".$date->format('M j')."</p>";
-                              }
-                              if($i==0)
-                                  $class .= ' selected';
-                          echo "<div class='$class' id='".$activities[$i]['aID']."'><p class='activity_name'>".$activities[$i]['name']."</p><p class='activity_type'>".$activities[$i]['type']."</p><a href='calendar.php'>$reserve_date</a></div>";
-                          
-                      }
+                      $body->member_activity($activities);
               ?>
               
       		</div>
-            <?php
-			//finished activity section
-						echo "<div id='activity_done' class='top_right_activities'><p class='text' id='activity_done_title'>Finished Activities</p><div id='activity_done_lower'>";
+            <div id='activity_done' class='top_right_activities'>
+				<p class='text' id='activity_done_title'>Finished Activities</p>
+					<div id='activity_done_lower'>
+               
+					<?php
+						$body->member_finished();
+					?>			
 						
-						foreach($done as $key=>$value){
-							echo "<div class='activity_done text' ><p class='activity_name'>".$value['name']."</p><p class='activity_type'>".$value['type']."</p><p class='activity_reserve activity_done_x' id='".$value['aID']."'>X</p></div>";
-						}
+					</div>
+            </div>
 						
-						echo "</div></div>"
-						?>
       
 </div>
 
@@ -105,27 +89,8 @@ $done=array();
     	Coming Up
     </p>
     <?php
-		$block='';
 		
-		//display upcoming events
-		for($i=0;$i<count($upcoming_event);$i++) {
-				$reserve_date = $activities[$upcoming_event[$i]]['reserve_date'];
-				$block .= '<p id="upcoming_'.$activities[$upcoming_event[$i]]['name'].'" class="upcoming text">';
-				//parse reserve_date var for day, date, and time respectively
-				$day = date('D',strtotime($reserve_date));
-				$date_reserved = date('m/d',strtotime($reserve_date));
-				$time = date('g a', strtotime($reserve_date));
-				$block .= $day.' '.$date_reserved.' @ '.$time."</p>";
-				
-				$block .= "<a href='activity.php?num=".$activities[$upcoming_event[$i]]['aID']."'><p class='text upcoming_name'>"
-							.$activities[$upcoming_event[$i]]['name']."</p></a>";
-				if($i>=3) {
-					break;
-				}
-				
-		}
-		echo $block;
-		
+		$body->member_upcoming($upcoming_event);
 		
 		?>
     

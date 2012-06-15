@@ -131,6 +131,7 @@
 	float:left;
 	margin:2px 0px 0px 15px;
 	cursor:pointer;
+	
 }
 
 .activity_type {
@@ -257,6 +258,7 @@
 	height:150px;
 	margin:-26px 40px 0px 0px;
 	opacity:.6;
+	border:#fff 1px solid;
 }
 
 /*finished activities*/
@@ -281,14 +283,21 @@
 	margin:3px 0px 0px 0px;
 	font-size:14px;
 	color:#999;
-}
 
-.activity_done * {
-	cursor:default;
 }
-
 .activity_done_x {
 	text-align:center;
-	color:#999;
+}
 
+.activity_link {
+	color:#999;
+}
+
+#no_activity_done {
+	width:300px;
+	margin:0px 0px 0px 50px;
+	text-align:center;
+	float:left;
+	clear:both;
+	color:#999;
 }
