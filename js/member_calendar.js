@@ -16,19 +16,43 @@ var dragging_aid;
 //draggable and droppable with $(this)*
 var dragging_tag;
 
+var date = new Date();
+var year= date.getFullYear();
+
 
 $(function(){
+		$('#left_arrow').click(function() {
+			new_month_id = parseInt($('.activity_month').attr('id').substring(0,2))-1;
+			change_month(new_month_id);
+	})
 	
+	$('#right_arrow').click(function() {
+			new_month_id = parseInt($('.activity_month').attr('id').substring(0,2))+1;
+			change_month(new_month_id);
+	})
+
 	ready_fns();
 	
 });
 
 function change_month(new_month) {
-	
+	//deal with January-December switch
+	if(new_month==0){
+		new_month = new_month_id=12
+		year = year-1;
+	}
+
+	if(new_month==13){
+		new_month = new_month_id = 1
+		year = year+1;
+	}
+		
 	$.ajax({
 		url: 'calendar_ajax.php',
 		type: 'POST',
-		data: {month : new_month},
+		data: {month : new_month,
+				year : year
+				},
 		success: function(data) {
 			
 			$('#calendar').html(data);
@@ -40,6 +64,7 @@ function change_month(new_month) {
 }
 
 function change_month_name() {
+
 	//find month name from month_array created
 	//in header_in.js
 	var month_name = month_array[new_month_id];
@@ -56,7 +81,6 @@ function change_month_name() {
 	$('.activity_month').attr('id',new_month_id+month_name);
 	
 	//display right arrow if shown month is before current date
-	var date = new Date();
 	var n = date.getMonth()+1;
 	(n != new_month_id ? $('#right_arrow').css('display','block') : $('#right_arrow').css('display','none'))
 
@@ -64,15 +88,6 @@ function change_month_name() {
 
 function ready_fns() {
 	
-	$('#left_arrow').click(function() {
-			new_month_id = parseInt($('.activity_month').attr('id').substring(0,2))-1;
-			change_month(new_month_id);
-	})
-	
-	$('#right_arrow').click(function() {
-			new_month_id = parseInt($('.activity_month').attr('id').substring(0,2))+1;
-			change_month(new_month_id);
-	})
 	
 	$('p.activity_bar').draggable({
 			containment: "#body_main",

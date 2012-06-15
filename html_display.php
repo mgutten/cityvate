@@ -518,16 +518,16 @@ class Calendar {
 	var $last_month_days;
 	var $activities;
 	
-	function calendar_calls($selected_month) {
+	function calendar_calls($selected_month,$year=0) {
 		
 			$activities_call = new Activities;
 			$this->activities = $activities_call->activities($selected_month);
-			$this->important_dates($selected_month);
+			$this->important_dates($selected_month,$year);
 			$this->reserved_days($this->activities);
 			
 	}
 	
-	function important_dates($selected_month) {
+	function important_dates($selected_month,$year=0) {
 		
 			$this->month = $selected_month;
 			//if it is current month, set 'today'
@@ -538,24 +538,17 @@ class Calendar {
 			}
 			else
 				$month = $selected_month;
-				
-			//deal with case when switch from January
-			//to December and vice versa	
-			if($selected_month == 13){
-				$month = 0;
-				$year = date('Y')+1;
-			}
-			elseif($selected_month == 0){
-				$month = 11;
-				$year = date('Y')-1;
-			}
-			else
+			
+			//if we have  changed year, then get calendar
+			//for corresponding year
+			if($year == 0)
 				$year = date('Y');
-		
+										
 			$this->first_day = date('w',mktime(0,0,0,$month,1,$year));
 			$this->last_day = date('t',mktime(0,0,0,$month,1,$year));
 			
-			$this->last_month_days = date('t',mktime(0,0,0,$month-1,1,$year));
+			//find the prior months number of days
+			$this->last_month_days = date('t',mktime(0,0,0,($month-1),1,$year));
 		
 			
 	}
@@ -580,7 +573,9 @@ class Calendar {
 		
 		//create calendar
 		$c = 1;
-		$last_month_day = $calendar->first_day;
+		//subtract 1 to deal with offset created by
+		//date function's array (0-6 = days of week)
+		$last_month_day = $calendar->first_day-1;
 		$next_month_day = 1;
 		//create 5 weeks of month
 		for($i=0; $c<=$calendar->last_day; $i++) {
