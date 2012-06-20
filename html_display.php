@@ -501,12 +501,80 @@ class Alert {
 				$file_adj = $GLOBALS['file_adj'];
 			
 			$darken="<div class='darken $name' onclick='$(\".$name\").toggle()'></div>";
-			$img = "<img class='centered $name' src='".$file_adj."'images/signup/$src.png' />";
+			$img = "<img class='centered $name' src='".$file_adj."images/signup/$src.png' />";
 			$x = "<div class='x $name' onclick='$(\".$name\").toggle()'></div>";
 			echo $darken.$img.$x;
 			
 	}
 	
+}
+
+//for alert popup with text
+class Alert_w_txt {
+	
+	var $name;
+	
+	function __construct($name) {
+		
+		$this->name = $name;
+			
+		$darken = "<div class='darken $name' onclick='$(\".$name\").toggle()'></div>";
+		$div = "<div class='$name text centered' id='alert_$name'>";
+		
+		echo $darken.$div;
+	}
+	
+	function calendar_alert($title, $button_src){
+		$class = $this->name;
+		//adjust for being out of root directory (within /member)
+		$file_adj ='';
+		if(!empty($GLOBALS['file_adj']))
+				$file_adj = $GLOBALS['file_adj'];
+				
+		$title = "<p class='alert_title'>$title</p>";
+		$activity_name = "<p id='alert_activity_name' class='alert_toggle'></p>";
+		$time = "<p id='alert_what_time' class=''>What time would you like your reservation?</p>";
+		$form = new Form('calendar_ajax.php','POST');
+		$select_hours = "<select id='alert_hours' name='alert_hours' class='alert_toggle'>
+							<option>12</option>";
+			for($i=1;$i<12;$i++) {
+				$select_hours .= "<option>$i</option>";
+			}
+		$select_hours .= "</select>";
+		$select_minutes = "<select id='alert_minutes' name='alert_minutes' class='alert_toggle'>
+							<option>00</option>
+							<option>15</option>
+							<option>30</option>
+							<option>45</option>
+						</select>";
+		$select_ampm = "<select id='alert_ampm' name='alert_ampm' class='alert_toggle'>
+							<option>PM</option>
+							<option>AM</option>
+						</select>";
+		$date = "<p id='alert_date' class='alert_toggle'></p>";
+		
+		
+		
+		echo $title.$activity_name.$time;
+		$form = new Form('db_ajax.php','POST');
+		echo $select_hours.$select_minutes.$select_ampm.$date;
+		$form->input('image','alert_button','alert_toggle',$file_adj.$button_src);
+		$form->input('hidden','aid','');
+		$form->input('hidden','date','');
+		$form->close();
+	}
+							
+						
+		
+		
+	
+	//close divs of alert box and add x
+	function close(){
+		
+		$x = "<div class='x $this->name' onclick='$(\".$this->name\").toggle()'></div>";
+		
+		echo "</div></div>".$x;
+	}
 }
 
 class Calendar {
@@ -521,7 +589,7 @@ class Calendar {
 	function calendar_calls($selected_month,$year=0) {
 		
 			$activities_call = new Activities;
-			$this->activities = $activities_call->activities($selected_month);
+			$this->activities = $activities_call->activities($selected_month,1);
 			$this->important_dates($selected_month,$year);
 			$this->reserved_days($this->activities);
 			
@@ -536,10 +604,22 @@ class Calendar {
 				$month = date('n');
 				$this->today = date('j');
 			}
-			else
+			//else if we are in next month, then
+			//set today at 0 so other functions 
+			//recognize that we are in the future
+			elseif($selected_month == date('n')+1){
 				$month = $selected_month;
+				$this->today = 0;
+			}
+			//else we are in a past month and so
+			//set today at high number so fns know
+			//that the selected month is in past
+			else{
+				$this->today = 100;
+				$month = $selected_month;
+			}
 			
-			//if we have  changed year, then get calendar
+			//if we have changed year, then get calendar
 			//for corresponding year
 			if($year == 0)
 				$year = date('Y');
@@ -555,15 +635,19 @@ class Calendar {
 	
 	function reserved_days($activities_array) {
 						
-			$c=0;			
 			for($i=0;$i<count($activities_array);$i++){
 				//if reserve date is set, then take the day from it
 				//and store it in the reserved_days array
 				if(!empty($activities_array[$i]['reserve_date'])){
 						$date = new DateTime($activities_array[$i]['reserve_date']);
-						$reserve_date = $date->format('j');
-						$this->reserved_days[$reserve_date] = $activities_array[$i]['name'];
-						$c++;
+						$reserve_date = $date->format('mj');
+						//find time that reservation is at to be displayed
+						//on calendar
+						$reserve_time = date('g:i a',strtotime($activities_array[$i]['reserve_date']));
+						//store result into array with name, reserve_date, and aid
+						//for future use in create_calendar
+						$this->reserved_days[$reserve_date] = array($activities_array[$i]['name'],$reserve_time,$activities_array[$i]['aID']);
+						
 				}
 			}
 	}
@@ -577,6 +661,8 @@ class Calendar {
 		//date function's array (0-6 = days of week)
 		$last_month_day = $calendar->first_day-1;
 		$next_month_day = 1;
+		$month = '0'.$this->month;
+		
 		//create 5 weeks of month
 		for($i=0; $c<=$calendar->last_day; $i++) {
 			//create 7 days of week
@@ -603,10 +689,14 @@ class Calendar {
 					$class .= ' transparent';
 						
 				}
-				else {
+				//if running day is after today, then make it droppable
+				elseif($c>=$calendar->today) {
 					$class .= ' droppable';
 					$day = $c;
 				}
+				//else not droppable
+				else
+					$day = $c;
 				
 				//test if even or odd day
 				if(($b % 2) == 0){
@@ -622,12 +712,32 @@ class Calendar {
 
 				if($c == $calendar->today)
 						$class .= ' today';
-						
-				$block = "<div class='".$class."'>
+				
+				//if we are at the end of the month, stop giving
+				//ids to the blank days
+				if($blank == true)
+					$id = '';
+				else
+					$id = $c;
+				
+				//give each calendar day an id of that day's value for
+				//use in js fn ondrag
+				$block = "<div class='".$class."' id='".$id."'>
 						<p class='text calendar_day_text'>".$day."</p>";
 				//if running day has a reserved activity, show name
-				if(!empty($calendar->reserved_days[$c]))
-						$block .= "<p class='text activity'>".$calendar->reserved_days[$c]."</p>";
+				//format for array from reserved_activities fn is monthday(eg. 0619)
+				if(!empty($calendar->reserved_days[$month.$c])){
+						if($c<$calendar->today)
+							$block .= "<p class='text activity activity_old activity_desc' onclick='activity_desc(".$calendar->reserved_days[$month.$c][2].",1)'>".$calendar->reserved_days[$month.$c][0]."</br>(".$calendar->reserved_days[$month.$c][1].")</p>";
+						else
+							$block .= "<p class='text activity activity_desc' onclick='activity_desc(".$calendar->reserved_days[$month.$c][2].",1)'>".$calendar->reserved_days[$month.$c][0]."</br>(".$calendar->reserved_days[$month.$c][1].")</p>";
+				}
+				//else give an empty block so all calendar days are standardized
+				else
+					$block .= "<p class='text activity'></p>";
+				//add p that will contain "reservation needed" or "expired" on drag
+					$block .= "<p class='text nono'></p>";
+				
 								
 				$block .= "</div>";
 				
@@ -825,17 +935,24 @@ function signup_date_options($num_months) {
 		}
 }
 
-function calendar_my_activites() {
-		global $calendar;
+function calendar_my_activities($array) {
 	
-		for($i=0;$i<count($calendar->activities);$i++) {
+		for($i=0;$i<count($array);$i++) {
 			$class = 'text activity_bar';
 			
-			if(!empty($calendar->activities[$i]['reserve_date']))
+			if(!empty($array[$i]['reserve_date'])){
 				$class .= ' activity_reserved';
-			
-			echo "<div class='activity_holder' id='".$calendar->activities[$i]['reserve_needed']."'>
-					<p class='".$class."' id='".$calendar->activities[$i]['aID']."'>".$calendar->activities[$i]['name']."</p>
+				$reserve_set = 1;
+			}
+			else
+				$reserve_set = 0;
+			//populate with draggable bars
+			//***add the 0s in front to give them unique ids from other divs
+			echo "<div class='activity_holder' id='0".$array[$i]['reserve_needed']."'>
+					<p class='".$class."' id='00".$array[$i]['aID']."' onclick='activity_desc(".$array[$i]['aID'].",".$reserve_set.")'>
+						".$array[$i]['name']."
+					</p>
+					<span id='".date('md',strtotime($array[$i]['expire']))."'></span>
 					</div>";
 		}
 }

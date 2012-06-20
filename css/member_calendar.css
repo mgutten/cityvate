@@ -18,14 +18,14 @@
 
 #body_right {
 	width:280px;
-	height:400px;
+	height:500px;
 	background:url(../images/member/body_side.png) no-repeat;
 	float:left;
 }
 
 div.calendar_day {
-	width:75px;
-	height:75px;
+	width:80px;
+	height:80px;
 	float:left;
 	margin-left:2px;
 }
@@ -56,12 +56,30 @@ p.calendar_day_text {
 p.activity {
 	float:left;
 	clear:both;
-	width:73px;
+	width:78px;
 	text-align:center;
-	margin:0px 0px 0px 1px;
-	height:56px;
+	margin:2px 0px 0px 1px;
+	height:47px;
 	font-size:12px;
 	color:#fff;
+	line-height:11px;
+}
+
+p.activity_desc {
+	cursor:pointer;
+}
+
+p.nono {
+	float:left;
+	clear:both;
+	width:78px;
+	text-align:center;
+	margin:3px 0px 0px 1px;
+	color:#ff3
+}
+
+p.activity_old {
+	color:#B1B1B1;
 }
 
 .transparent {
@@ -74,9 +92,9 @@ div.today {
 }
 
 div#calendar {
-	width:539px;
+	width:574px;
 	height:450px;
-	margin:15px 0px 0px 55px;
+	margin:15px 0px 0px 38px;
 	float:left;
 	clear:both;
 }
@@ -115,17 +133,26 @@ div#calendar {
 	margin: -2px 0px 0px 20px;
 }
 
+.activity_year {
+	font-size:15px;
+	color:#fff;
+	float:left;
+	clear:both;
+	width:80px;
+	margin:5px 0px -15px 318px;
+}
+
 /*days of the week header*/
 div#days_of_week {
-	width:539px;
+	width:574px;
 	height:18px;
 	float:left;
 	clear:both;
-	margin:10px 0px 0px 55px;
+	margin:10px 0px 0px 38px;
 }
 
 p.day_of_week {
-	width:77px;
+	width:82px;
 	float:left;
 	text-align:center;
 }
@@ -171,6 +198,7 @@ div#my_activities_container {
 	float:left;
 	clear:both;
 	width:180px;
+	height:150px;
 	margin:5px 0px 0px 50px;
 }
 
@@ -189,3 +217,168 @@ div.drophover {
 .reserve{
 	display:none;
 }
+
+/*deal with alerts*/
+
+.centered {
+	width:600px;
+	height:252px;
+	background:url(../images/calendar/reserve_pop.png) no-repeat;
+}
+
+
+#alert_activity_name {
+	float:left;
+	font-size:16px;
+	text-align:center;
+	width:600px;
+	clear:both;
+	margin:30px 0px 0px 0px;
+	color:#FF3;
+	clear:both;
+}
+
+.alert_title {
+	float:left;
+	font-size:16px;
+	color:#0C3;
+	font-size:20px;
+	margin:10px 0px 0px 10px;
+	text-align:left;
+	width:300px;
+}
+
+#alert_date {
+	float:left;
+	font-size:16px;
+	text-align:center;
+	font-size:16px;
+	width:600px;
+	color:#ff3;
+	clear:both;
+}
+
+#alert_what_time {
+	float:left;
+	font-size:16px;
+	text-align:center;
+	width:600px;
+	clear:both;
+	margin-bottom:0px;
+	margin-top:10px;
+}	
+
+#input_alert_button {
+	margin:15px 0px 0px 445px;
+	clear:both;
+	float:left;
+}
+
+#input_alert_button:hover {
+	opacity:.85;
+	filter:alpha(opacity=85);
+}
+
+select {
+	background:#333;
+	color:#FFF;
+	font-family:'Neon 80s';
+	margin-top:5px;
+	float:left;
+	clear:none;
+}
+
+#alert_hours {
+	margin-left:235px;
+}
+
+div.red {
+	background-color:#A00;
+}
+
+/*body_right activity description*/
+
+div#activity_desc_container{
+	width:260px;
+	height:215px;
+	float:left;
+	clear:both;
+	margin:10px 0px 0px 14px;
+}
+
+p#activity_title{
+	float:left;
+	clear:both;
+	width:256px;
+	text-align:center;
+	font-size:18px;
+	margin:2px 0px 0px 2px;
+	color:#ff3;
+}
+
+p#activity_desc_left{
+	float:left;
+	clear:both;
+	width:130px;
+	margin-left:15px;
+	line-height:18px;
+}
+
+#activity_desc_right{
+	float:left;
+	width:100px;
+	height:110px;
+	margin-top:16px;
+	color:#ff3;
+}
+
+p.activity_desc_ajax {
+	float:left;
+	clear:both;
+	text-align:left;
+	margin: 0px 0px 4px 0px;
+	height:14px;
+}
+
+#activity_full_info {
+	text-decoration:underline;
+}
+
+#cancel_reserve {
+	float:left;
+	clear:both;
+	margin:30px 0px 0px 170px;
+	display:none;
+	cursor:pointer;
+}
+
+#cancel_reserve:hover {
+	opacity:.85;
+	filter:alpha(opacity=85);
+}
+
+/*body_right top portion change between done and current*/
+#my_activities_done_container {
+	float:left;
+	clear:both;
+	height:16px;
+	width:130px;
+	margin:25px 0px 15px 140px;
+}
+
+.my_activities_done {
+	color:#ff3;
+	text-decoration:underline;
+	font-size:11px;
+	float:left;
+	margin:0px 4px 0px 0px;
+	cursor:pointer;
+}
+
+p.my_activities_done {
+	text-decoration:none;
+	margin-top:1px;
+	cursor:default;
+}
+
+	

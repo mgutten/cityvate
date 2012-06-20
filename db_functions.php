@@ -84,17 +84,36 @@ class Activities extends User {
 		parent::__construct();
 	}
 	
-	function activities($selected_month = ''){
+	function activities($selected_month = '',$calendar = 0,$done = 'regular'){
 		
 			if($selected_month == '' || $selected_month == date('n')) 
 				$date_period = 'MONTH(CURDATE())';
 			else
 				$date_period = '"'.$selected_month.'"';
 			
+			//test to see if we need the activities by month it was used
+			//or by when it expires
+			if($calendar==0)
+				$month_test = "MONTH(`activities`.`month_in_use`) =";
+			else
+				$month_test = "MONTH(`activities`.`expire`) >=";
+			
+			//test to see if we need the activities that are done or that are
+			//currently active
+			$where = 'WHERE `u_activities`.`uID` = "'.$_SESSION['user']['uID'].'"';
+			if($done == 'regular')
+				$where .= ' AND '.$month_test.' '.$date_period.' AND `activities`.expire >= CURDATE()';
+			elseif($done == 'done')
+				$where = ' AND `u_activities`.done = "1" AND MONTH(`activities`.month_in_use)>=MONTH(CURDATE())-2';
+			elseif($done == 'expire')
+				$where = ' AND `activities`.expire < CURDATE()';
+				
+			
 			//form query to retrieve all activity names 
 			//for user with session uid and where month
 			//in use >= current month
 			$query = 'SELECT `activities`.`name` as name,
+							`activities`.`expire` as expire,
 							`u_activities`.`reserve_date` as reserve_date, 
 							`u_activities`.`done` as done, 
 							`activities`.`type` as type, 
@@ -103,8 +122,7 @@ class Activities extends User {
 						FROM `u_activities` 
 						INNER JOIN `activities` 
 						ON `u_activities`.`aID` = `activities`.`aID` 
-						WHERE `u_activities`.`uID` = "'.$_SESSION['user']['uID'].'" AND
-						MONTH(`activities`.`month_in_use`) = '.$date_period.'
+						'.$where.'
 						ORDER BY reserve_date ASC';
 			//result set
 			$result = $this->con->query($query);
@@ -119,6 +137,7 @@ class Activities extends User {
 						$this->activities[$i]['aID'] = $row['aID'];
 						$this->activities[$i]['done'] = $row['done'];
 						$this->activities[$i]['reserve_needed'] = $row['reserve_needed'];
+						$this->activities[$i]['expire'] = $row['expire'];
 						$i++;
 						
 				}
@@ -168,25 +187,59 @@ class Activities extends User {
 	}
 	
 	function change_reserve($aid,$new_date) {
+			//if cancel reserve (ie NULL) then no quotes
+			//but if changing date then need quotes
+			if($new_date != 'NULL')
+				$new_date = "'".$new_date."'";
 			
-			$query = "SELECT `u_activities`.`reserve_date` as `reserve_date`,
-							 	activities.`reserve_needed` as reserve_needed 
-							 FROM `u_activities` 
-							 INNER JOIN activities 
-							 ON `u_activities`.aid = activities.aid 
-							 WHERE `u_activities`.uid = '".$_SESSION['user']['uid']."' 
-							 	AND `u_activities`.aid = '".$aid."'
-								AND (".$new_date."-`reserve_date`)>`reserve_needed`";
+			$query = "UPDATE `u_activities` 
+						SET `reserve_date` = ".$new_date."
+						WHERE `aID` = '".$aid."'";
 							 
 			$result = $this->con->query($query);
 			
-			//if there is a result (ie the selected date is outside the reservation needed 
-			//requirement), then update to new date and time
-			if($result->num_rows>0){
-				
-				$query = "UPDATE `u_activities` SET reserve_date = '".$new_date."'";
+	}
+	
+	function activity_desc($activity_aid) {
+		
+			$query = "SELECT `activities`.name,
+							DATE_FORMAT(`activities`.expire,'%m/%d/%Y') as expire,
+							`activities`.g_maps,
+							`activities`.type,
+							`activities`.cost,
+							`activities`.tokens,
+							`activities`.reserve_needed,
+							`activities`.month_in_use,
+							`activities`.save,
+							`activities`.desc,
+							`activities`.aID,
+							`u_activities`.done
+					FROM activities
+					INNER JOIN u_activities
+					ON `u_activities`.aID = `activities`.aID
+					WHERE `u_activities`.`uID` = '".$_SESSION['user']['uID']."'
+						AND activities.aID = '".$activity_aid."'";
+						
+			$result = $this->con->query($query);
+			
+			while($row = $result->fetch_array()){
+					
+					$activities['name'] = $row['name'];
+					$activities['aID'] = $row['aID'];
+					$activities['expire'] = $row['expire'];
+					$activities['g_maps'] = $row['g_maps'];
+					$activities['type'] = $row['type'];
+					$activities['cost'] = $row['cost'];
+					$activities['tokens'] = $row['tokens'];
+					$activities['reserve_needed'] = $row['reserve_needed'];
+					$activities['month_in_use'] = $row['month_in_use'];
+					$activities['save'] = $row['save'];
+					$activities['desc'] = $row['desc'];
+					$activities['done'] = $row['done'];
+					
 			}
 			
+			return $activities;
 	}
 	
 	

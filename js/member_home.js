@@ -82,7 +82,7 @@ function change_month(new_month) {
 	//the arrows next to month name are clicked
 	//then return data and populate html
 		$.ajax({
-			url:'activity_top.php',
+			url:'db_ajax.php',
 			dataType:'json',
 			data: {month: new_month},
 			success: function(data) {

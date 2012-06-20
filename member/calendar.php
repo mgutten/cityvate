@@ -31,9 +31,10 @@ $days=array('Su','M','T','W','Th','F','S');
 <div id='body_left'>
 	<div id='month'>
     		<div id='left_arrow' class='arrow'></div>
-            <div id='right_arrow' class='arrow' style='display:none'></div>
+            <div id='right_arrow' class='arrow'></div>
           	<p id='<?php echo date('m').date('F');?>' class='text activity_month'><?php echo date('F');?></p>
     </div>
+    <p class='text activity_year'><?php echo date('Y');?></p>
     <div id='days_of_week'>
     	<?php
 			for($i=0;$i<7;$i++){
@@ -61,14 +62,69 @@ $days=array('Su','M','T','W','Th','F','S');
 		
 		//function to create draggable activities bars
 		//located in html_display.php
-		calendar_my_activites();
+		calendar_my_activities($calendar->activities);
 		
 		?>
+    </div>
+    <div id='my_activities_done_container' class='text'> 
+    	<div class='my_activities_done' style='color:#AA0' onclick='change_done("current"); $(".my_activities_done").css("color","#FF3");$(this).css("color","#AA0")'>
+        	Current
+         </div>
+         <p class='text my_activities_done'>
+         	|
+         </p>
+        <div class='my_activities_done' onclick='change_done("done"); $(".my_activities_done").css("color","#FF3");$(this).css("color","#AA0")'>
+        	Done
+        </div>
+        <p class='text my_activities_done'>
+         	|
+        </p>
+        <div class='my_activities_done' onclick='change_done("expire"); $(".my_activities_done").css("color","#FF3");$(this).css("color","#AA0")'>
+        	Expired
+        </div>
+    </div>
+    <div id='activity_desc_container' class='text'>
+    	<p id='activity_title'>
+        Click an Activity
+         </p>
+         <p id='activity_desc_left'>
+         	Reservation Needed:</br>
+            Reserve in Advance:</br>
+            Type of Activity:</br>
+            Did It:</br>
+            Expires:</br>
+            Full Info:</br>
+         </p>
+         <div id='activity_desc_right'>
+         	<p id='activity_reserve_needed' class='activity_desc_ajax'>
+            	
+            </p>
+            <p id='activity_reserve_advance' class='activity_desc_ajax'>
+            	
+            </p>
+            <p id='activity_type' class='activity_desc_ajax'>
+            	
+            </p>
+            <p id='activity_done' class='activity_desc_ajax'>
+            	
+            </p>
+            <p id='activity_expire' class='activity_desc_ajax'>
+            	
+            </p>
+            <p id='activity_full_info' class='activity_desc_ajax'>
+            	<a href=''></a>
+            </p>
+         </div>        
+         	<img src="../images/calendar/cancel_reserve_button.png" id='cancel_reserve'/>
+         	
     </div>
 </div>
 <?php
 	//create alert button for when a reservation is
 	//required and draggable activity is dropped on
 	//droppable calendar day
-	$alert = new Alert('reserve','new_reservation');
+	$alert = new Alert_w_txt('reserve_required');
+	$alert->calendar_alert('Reservation Required','images/calendar/reserve_button.png');
+	$alert->close();
 ?>
+	
