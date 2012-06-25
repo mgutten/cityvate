@@ -103,8 +103,10 @@ class Activities extends User {
 			$where = 'WHERE `u_activities`.`uID` = "'.$_SESSION['user']['uID'].'"';
 			if($done == 'regular')
 				$where .= ' AND '.$month_test.' '.$date_period.' AND `activities`.expire >= CURDATE()';
+				
 			elseif($done == 'done')
 				$where = ' AND `u_activities`.done = "1" AND MONTH(`activities`.month_in_use)>=MONTH(CURDATE())-2';
+				
 			elseif($done == 'expire')
 				$where = ' AND `activities`.expire < CURDATE()';
 				

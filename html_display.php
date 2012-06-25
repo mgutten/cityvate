@@ -189,7 +189,7 @@ class Header {
 			echo "<a href='".$this->links['Home']."' alt='Home'><div id='logo'></div></a>";
 			
 			//display dropdown
-			echo "<div id='dropdown'>\n";
+			echo "<div id='dropdown_container'><div id='dropdown'>\n";
 			//if not logged in, display form
 			if(!empty($this->drop['Login'])) {
 				$form = new Form($file_adj.'login_check.php','POST');
@@ -206,7 +206,7 @@ class Header {
 				$logout = "<a href='logout.php' alt='Logout'><p class='my_account text logout'>Logout</p></a>";
 				echo $my_activities.$calendar.$subscription.$logout;
 			}
-			echo "</div>\n";
+			echo "</div></div>\n";
 			
 				
 
@@ -734,8 +734,12 @@ class Calendar {
 				}
 				//else give an empty block so all calendar days are standardized
 				else
-					$block .= "<p class='text activity'></p>";
+					$block .= "<p class='text activity' onclick='activity_desc(0,0)'></p>";
+					
 				//add p that will contain "reservation needed" or "expired" on drag
+				if(substr('today',$class))
+					$block .= "<p class='text nono'>Today</p>";
+				else
 					$block .= "<p class='text nono'></p>";
 				
 								

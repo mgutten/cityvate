@@ -34,18 +34,21 @@ div.calendar_light {
 	background:#444;
 	border:#999 solid 1px;
 	margin-left:0px;
+	cursor:pointer;
 }
 
 div.calendar_dark {
 	background:#333;
 	border:#999 solid 1px;
 	margin-left:0px;
+	cursor:pointer;
 
 }
 
 .week_first {
 	clear:both;
 }
+
 
 p.calendar_day_text {
 	float:left;
@@ -63,6 +66,7 @@ p.activity {
 	font-size:12px;
 	color:#fff;
 	line-height:11px;
+	cursor:pointer;
 }
 
 p.activity_desc {
@@ -88,7 +92,7 @@ p.activity_old {
 }
 
 div.today {
-	background-color:#006C00;
+	background-color:#A7A7A7;
 }
 
 div#calendar {

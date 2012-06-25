@@ -143,12 +143,12 @@ function ready_fns() {
 		});
 	
 	//change color of calendar day where activity is set
-	$(".activity_desc").hover(
+	$(".calendar_light,.calendar_dark").hover(
 		function(){
-			$(this).parent().addClass('drophover')
+			$(this).addClass('drophover')
 		},
 		function() {
-			$(this).parent().removeClass('drophover')
+			$(this).removeClass('drophover')
 		})
 	
 	//cancel selected reservation	
@@ -279,67 +279,81 @@ function reserve_needed(dropping_tag) {
 //function to populate body_right with clicked activity's
 //information
 function activity_desc(activity_aid,reserve_set){
-	
-		$.ajax({
-			url: 'db_ajax.php',
-			type:'POST',
-			dataType:'json',
-			data: {activity : activity_aid},
-			success: function(data) {
+		if(activity_aid==0)	{
+			body_right_populate(0);
+		}
+		else{
+			$.ajax({
+				url: 'db_ajax.php',
+				type:'POST',
+				dataType:'json',
+				data: {activity : activity_aid},
+				success: function(data) {
+					
+					var activity_array = eval(data);
+					body_right_populate(activity_array,reserve_set);
+					
+				}
 				
-				var activity_array = eval(data);
-				body_right_populate(activity_array,reserve_set);
-				
-			}
-			
-		})
+			})
+		}
 		
 }
 
 //populate lower half of body_right with returned json results
 //from activity_desc ajax
 function body_right_populate(array,reserve_set){
-		//change acitivity title
-		$('#activity_title').html(array.name);
-		
-		//change reservation info
-		var days = ' day';
-		if(array.reserve_needed == 0) {
-			$('#activity_reserve_needed').html('No');
-			$('#activity_reserve_advance').html('N/A');
+		//if a day was clicked without an activity
+		if(array == 0) {
+			$('#activity_title').html('No Activity Today');
+			//clear the description box of old info
+			$('#activity_desc_right').children().each(function() {
+				$(this).html('');
+			});
 		}
 		else{
-			if(array.reserve_needed>1)
-				days += 's';
-				
-			$('#activity_reserve_needed').html('Yes');
-			$('#activity_reserve_advance').html(array.reserve_needed+days);
-		}
-		
-		//change type
-		$('#activity_type').html(array.type);
-		
-		//change done/not
-		if(array.done == 0)
-			$('#activity_done').html('No');
-		else
-			$('#activity_done').html('Yes');
+			//change acitivity title
+			$('#activity_title').html(array.name);
 			
-		//change expires
-		$('#activity_expire').html(array.expire);
-		
-		//change link to full activity page
-		$('#activity_full_info').html('<a href="activity.php?num='+array.aID+'">here</a>');
-		
-		//change selected aid for use in cancel reservation button
-		selected_aid = array.aID;
-		
-		//toggle cancel reservation button
-		if(reserve_set == '1'){
-			$('#cancel_reserve').css('display','block');
-		}
-		else{
-			$('#cancel_reserve').css('display','none');
+			//change reservation info
+			var days = ' day';
+			if(array.reserve_needed == 0) {
+				$('#activity_reserve_needed').html('No');
+				$('#activity_reserve_advance').html('N/A');
+			}
+			else{
+				if(array.reserve_needed>1)
+					days += 's';
+					
+				$('#activity_reserve_needed').html('Yes');
+				$('#activity_reserve_advance').html(array.reserve_needed+days);
+			}
+			
+			//change type
+			$('#activity_type').html(array.type);
+			
+			//change done/not
+			if(array.done == 0)
+				$('#activity_done').html('No');
+			else
+				$('#activity_done').html('Yes');
+				
+			//change expires
+			$('#activity_expire').html(array.expire);
+			
+			//change link to full activity page
+			$('#activity_full_info').html('<a href="activity.php?num='+array.aID+'">here</a>');
+			
+			//change selected aid for use in cancel reservation button
+			selected_aid = array.aID;
+			
+			//toggle cancel reservation button
+			if(reserve_set == '1'){
+				$('#cancel_reserve').css('display','block');
+			}
+			else{
+				$('#cancel_reserve').css('display','none');
+			}
 		}
 		
 }

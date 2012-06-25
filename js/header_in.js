@@ -26,13 +26,15 @@ $(function() {
 	$("#drop,#dropdown").hover(
 	
 		function() {
-				$("#dropdown").stop().animate({height:'100px'},300);
+				$("#dropdown").css('z-index','2');
+				$("#dropdown").stop().animate({top:'0px'},300);
 		},
 		function() {
 				//if focused on username textbox,
 				//don't animate div to closed
 				if(!$('.username').is(':focus')){
-						$("#dropdown").stop().animate({height:'0px'},300);
+						$("#dropdown").css('z-index','-1');
+						$("#dropdown").stop().animate({top:'-100px'},300);
 				}
 	})
 	

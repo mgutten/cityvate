@@ -85,7 +85,7 @@ $days=array('Su','M','T','W','Th','F','S');
     </div>
     <div id='activity_desc_container' class='text'>
     	<p id='activity_title'>
-        Click an Activity
+        Click an Activity/Day
          </p>
          <p id='activity_desc_left'>
          	Reservation Needed:</br>
