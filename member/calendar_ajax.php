@@ -41,22 +41,6 @@ if(!empty($_POST['aid'])){
 	exit;	
 }
 
-//for changing calendar.php from current to done activities
-elseif(!empty($_POST['done'])){
-	
-	//if current button is clicked, switch to non-done activities
-	if($_POST['done'] == 'current')
-		$new_status = 'regular';
-	elseif($_POST['done'] == 'done')
-		$new_status = 'done';
-	else
-		$new_status = 'expire';
-	
-	$activities_done = $activities_call->activities('',0,$new_status);
-	
-	calendar_my_activities($activities_done);
-	
-}
 
 //for cancel reservation in calendar.php
 if(!empty($_GET['aID'])){

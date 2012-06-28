@@ -54,6 +54,7 @@ p.calendar_day_text {
 	float:left;
 	margin:2px 0px 0px 2px;
 	height:14px;
+	/*color:#B9B9b9;*/
 }
 
 p.activity {
@@ -61,10 +62,11 @@ p.activity {
 	clear:both;
 	width:78px;
 	text-align:center;
-	margin:2px 0px 0px 1px;
+	margin:-10px 0px 0px 1px;
+	padding:10px 0px 0px 0px;
 	height:47px;
 	font-size:12px;
-	color:#fff;
+	color:#ff3;
 	line-height:11px;
 	cursor:pointer;
 }
@@ -78,7 +80,7 @@ p.nono {
 	clear:both;
 	width:78px;
 	text-align:center;
-	margin:3px 0px 0px 1px;
+	margin:1px 0px 0px 1px;
 	color:#ff3
 }
 
@@ -86,14 +88,25 @@ p.activity_old {
 	color:#B1B1B1;
 }
 
-.transparent {
+div.transparent {
 	opacity:.5;
 	filter:alpha(opacity=50);
 }
 
 div.today {
-	background-color:#A7A7A7;
+	background-color:#999;
 }
+
+/*
+div.selected {
+	background-color:#999;
+}
+
+div.today > p.calendar_day_text {
+	color:#FFF
+}
+*/
+
 
 div#calendar {
 	width:574px;
@@ -178,6 +191,7 @@ p.my_activities_title {
 
 p.my_activities_title_clarify {
 	font-size:11px;
+	
 	margin:0px 0px 0px 0px;
 }
 
@@ -300,6 +314,9 @@ div.red {
 	background-color:#A00;
 }
 
+div.red_expired{
+	background-color:#A00;
+}
 /*body_right activity description*/
 
 div#activity_desc_container{
@@ -351,7 +368,7 @@ p.activity_desc_ajax {
 #cancel_reserve {
 	float:left;
 	clear:both;
-	margin:30px 0px 0px 170px;
+	margin:10px 0px 0px 170px;
 	display:none;
 	cursor:pointer;
 }
@@ -384,5 +401,19 @@ p.my_activities_done {
 	margin-top:1px;
 	cursor:default;
 }
+
+/*explanation on dragover a red day*/
+#red_explanation {
+	float:left;
+	color:#ff3;
+	margin:5px 0px 0px 38px;
+	width:574px;
+	clear:both;
+	text-align:center;
+}
+
+
+	
+	
 
 	

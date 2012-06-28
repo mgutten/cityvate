@@ -111,6 +111,7 @@
 	height:155px;
 	float:right;
 	margin:5px 38px 0px 0px;
+
 }
 
 .activity {
@@ -135,18 +136,22 @@
 }
 
 .activity_type {
-	width:105px;
+	width:110px;
 	float:left;
 	margin:2px 0px 0px 5px;
 	cursor:pointer;
 }
 
-.activity_reserve {
-	width:60px;
+.activity_reserve, .activity_expired {
+	width:55px;
 	float:left;
 	margin:2px 0px 0px 2px;
 	cursor:pointer;
 	color:#04B30D;
+}
+
+.activity_expired {
+	color:#C60000;
 }
 
 .plus {
@@ -264,6 +269,8 @@
 /*finished activities*/
 #activity_done {
 	height:100px;
+	clear:both;
+	margin-top:-90px;
 }
 #activity_done_title{
 	font-size:15px;
@@ -271,6 +278,7 @@
 	width:390px;
 	float:left;
 	text-align:center;
+	margin:10px 0px 10px 0px;
 }
 
 .activity_done {
@@ -300,4 +308,30 @@
 	float:left;
 	clear:both;
 	color:#999;
+}
+
+/*pagination*/
+#pag_nums {
+	float:right;
+	clear:both;
+	margin:-110px 60px 0px 0px;
+	height:14px;
+	
+}
+
+.pag_nums,.pag_nums_separate {
+	float:left;
+	margin:0px 0px 0px 0px;
+	padding: 0px 5px 0px 5px;
+	color:#FF3;
+	cursor:pointer;
+}
+
+.pag_nums_selected {
+	color:#595900;
+}
+
+.pag_nums_separate {
+	cursor:default;
+	margin-top:-2px;
 }

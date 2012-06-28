@@ -343,28 +343,69 @@ class Body_member extends Body {
 	
 	//populate member.php with current activity bars
 	function member_activity($activities){
+		
+			echo "<div id='top_right_activities' class='top_right_activities'>";
 			$this->activities = $activities;
-			for($i=0;$i<count($activities);$i++){
+			
+			//subtract a day to make sure the coupon is definitely expired
+			$cur_time = time()-(60*60*24);
+			$b = 0;
+			for($i = 0; $i < count($activities);$i++):
+				//if we have more than 5 activities, do pagination
+							if($b >= 5)
+								break;
+							
 						  	if($activities[$i]['done']==true){
 								array_push($this->done,$activities[$i]);
 								continue;
 							}
                               $class = 'activity text';
-                              //if no reserve date set, echo link to calendar------------------------------------------------
-                              if(empty($activities[$i]['reserve_date']))
-                                  $reserve_date = '<img src="../images/member/plus.png" title="Add to Calendar" class="activity_reserve plus"/>';
-                              else{
+                              //if no reserve date set, echo link to calendar
+                              if(empty($activities[$i]['reserve_date'])){
+                                  $reserve_date = '<a href="calendar.php"><img src="../images/member/plus.png" title="Add to Calendar" class="activity_reserve plus"/></a>';
+							  }
+							  else{
                                   $date = DateTime::createFromFormat('Y-m-d', substr($activities[$i]['reserve_date'],0,10));
-                                  $reserve_date = "<p class='activity_reserve' title='Change Reservation'>".$date->format('M j')."</p>";
-                              }
-                              if($i==0)
+                                  $reserve_date = "<a href='calendar.php'><p class='activity_reserve' title='Change Reservation'>".$date->format('M j')."</p></a>";
+							  }
+							  
+							  //if coupon is expired, show no link to calendar
+							  if(strtotime($activities[$i]['expire']) < $cur_time) {
+								  $reserve_date = '<p class="activity_expired" title="Expired">exp</p>';
+							  }
+                              
+                              if($i == 0)
                                   $class .= ' selected';
                           echo "<div class='$class' id='".$activities[$i]['aID']."'>
 						  			<p class='activity_name'>".$activities[$i]['name']."</p>
 									<p class='activity_type'>".$activities[$i]['type']."</p>
-									<a href='calendar.php'>$reserve_date</a></div>";
+									$reserve_date</div>";
+						$b++;
                           
-                      }
+            endfor;
+			
+			echo "</div>";
+			
+			//if we have more than 5 active activities, create pagination
+			if(count($activities)-count($this->done) > 5){
+				
+				echo "<div id='pag_nums'><p class='pag_nums text'>Page: </p> ";
+				
+				$pag_num = ceil(count($activities)/5);
+				for($i = 1; $i <= $pag_num; $i++){
+					$class = 'pag_nums text';
+					
+					if($i == 1)
+						$class .= ' pag_nums_selected';
+					
+					echo "<p class='$class'>$i</p>";
+					//if on last iteration, do not place a "|"
+					if($i == $pag_num)
+						continue;
+					echo "<p class='pag_nums_separate'>|</p>";
+				}
+				echo "</div>";
+			}
 	}
 	
 	//populate member.php with finished activities
@@ -589,7 +630,7 @@ class Calendar {
 	function calendar_calls($selected_month,$year=0) {
 		
 			$activities_call = new Activities;
-			$this->activities = $activities_call->activities($selected_month,1);
+			$this->activities = $activities_call->activities($selected_month,1,'none');
 			$this->important_dates($selected_month,$year);
 			$this->reserved_days($this->activities);
 			
@@ -695,8 +736,10 @@ class Calendar {
 					$day = $c;
 				}
 				//else not droppable
-				else
+				else {
+					$class .= ' not_transparent';
 					$day = $c;
+				}
 				
 				//test if even or odd day
 				if(($b % 2) == 0){
@@ -737,9 +780,6 @@ class Calendar {
 					$block .= "<p class='text activity' onclick='activity_desc(0,0)'></p>";
 					
 				//add p that will contain "reservation needed" or "expired" on drag
-				if(substr('today',$class))
-					$block .= "<p class='text nono'>Today</p>";
-				else
 					$block .= "<p class='text nono'></p>";
 				
 								
@@ -940,8 +980,14 @@ function signup_date_options($num_months) {
 }
 
 function calendar_my_activities($array) {
-	
+		//subtract a day to ensure that it is actually expired
+		$cur_time = time()-(60*60*24);
+		
 		for($i=0;$i<count($array);$i++) {
+			//if expired, do not show
+			if(strtotime($array[$i]['expire']) < $cur_time)
+				continue;
+			
 			$class = 'text activity_bar';
 			
 			if(!empty($array[$i]['reserve_date'])){

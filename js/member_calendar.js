@@ -114,7 +114,6 @@ function change_month_name() {
 
 function ready_fns() {
 	
-	
 	$('p.activity_bar').draggable({
 			containment: "#body_main",
 			zIndex:5,
@@ -128,21 +127,40 @@ function ready_fns() {
 				
 			},
 			stop: function() {
-				$(".red").children('p.nono').html('');
-				$('.red').removeClass('red');
+				$(".red,.red_expired").children('p.nono').html('');
+				$('.red,.red_expired').removeClass('red red_expired');
+				$('.not_transparent').removeClass('transparent');
+				$('#red_explanation').css('background-color','none');
+				$("#red_explanation").html('')
 			}
 			
 	});
 	
 	$(".droppable").droppable({
 			hoverClass: "drophover",
+			over: function() {
+				if($(this).is('.red')){
+					var timeout = setTimeout(function() {
+						red_explanation('reserve')},
+						2);
+				}
+				else if($(this).is('.red_expired')){
+					var timeout = setTimeout(function() {
+						red_explanation('expire')},
+						2);
+				}
+			},
+			out: function() {
+					$('#red_explanation').css('background-color','none');
+					$("#red_explanation").html('')
+			},
 			drop: function( event, ui ) {
 				reserve_needed($(this))
 				
 			}
 		});
 	
-	//change color of calendar day where activity is set
+	//change color of calendar day onmouseover
 	$(".calendar_light,.calendar_dark").hover(
 		function(){
 			$(this).addClass('drophover')
@@ -150,15 +168,41 @@ function ready_fns() {
 		function() {
 			$(this).removeClass('drophover')
 		})
+		
+	//leave clicked day selected with highlighted color
+	/*
+	$('.calendar_light,.calendar_dark').click(function() {
+		$('.selected').removeClass('selected');
+		$(this).addClass('selected');
+	});
+	*/
 	
 	//cancel selected reservation	
 	$("#cancel_reserve").click(function() {
 		window.location='calendar_ajax.php?aID='+selected_aid;
 	})
+	
+	
+	
+		
+}
+
+//populate the red explanation onhover
+function red_explanation(type){
+	//change background of explanation
+	$('#red_explanation').css('background-color','#A00');
+	
+	if(type == 'reserve'){
+			$('#red_explanation').html(dragging_name + ' requires at least ' + parseInt(dragging_tag.parent().attr('id')) + ' days advance reservation.');
+	}
+	else{
+			$('#red_explanation').html('Your coupon for ' + dragging_name + ' is expired.');
+	}
 }
 
 //determine which calendar days are no good for reservations
 function ondrag() {
+	
 	var today =  parseInt($('.today').attr('id'));
 	var last_day = parseInt($('.droppable').last().attr('id'));
 	var min_reserve = parseInt(dragging_tag.parent().attr('id'))+today;
@@ -168,9 +212,20 @@ function ondrag() {
 	if(month>date.getMonth()+1){
 		today = 0;
 	}
-	for(i=today;i<last_day+1;i++){
+	else if (month<date.getMonth()+1){
+		today = 33;
+		last_day = 32;
+	}
+	
+	for(i=0;i<last_day+1;i++){
+		
+			//grey out days before today
+			if(i<today) {
+				$("#"+i).addClass('transparent')
+			}
+			
 			//if day is before min required reserve time
-			if(i < (min_reserve)){
+			else if(i < (min_reserve)){
 				$("#"+i).addClass('red');
 				$("#"+i).children('p.nono').html('reserve min');
 			}
@@ -179,7 +234,7 @@ function ondrag() {
 			//greater than expire day
 			else if((month==parseInt(dragging_exp.substr(0,2)) && i > parseInt(dragging_exp.substr(2,4))) 
 						|| month>parseInt(dragging_exp.substr(0,2))){
-				$("#"+i).addClass('red');
+				$("#"+i).addClass('red_expired');
 				$("#"+i).children('p.nono').html('expired');
 						}
 			
@@ -198,10 +253,11 @@ function reserve_needed(dropping_tag) {
 	//create date formatted mo/dd/yyyy
 	var date_conc = $('.activity_month').attr('id').substring(0,2)+'/'+parseInt(dropping_tag.text())+'/'+year;
 	var date_formatted = year +'-'+ $('.activity_month').attr('id').substring(0,2) +'-'+ parseInt(dropping_tag.text());
-	if(dropping_tag.is('.red')){
+	if(dropping_tag.is('.red') || dropping_tag.is('.red_expired')){
 		return;
 	}
 	
+	//case when no reservation required
 	if(parent_id==0) {
 			//toggle writing within alert box if it is set to
 			//display none due to case when reservation is
@@ -217,9 +273,11 @@ function reserve_needed(dropping_tag) {
 			$('#alert_what_time').html('At what time?');
 			$('#alert_activity_name').html(dragging_name);
 			$('#alert_date').html(date_conc)
+			$('#input_alert_button').attr('src','../images/calendar/plan_button.png');
 			//toggle alert box
 			$('.reserve_required').toggle();
 	}
+	//case when reservation required
 	else {
 		
 		var today = $('.today').attr('id');
@@ -233,8 +291,6 @@ function reserve_needed(dropping_tag) {
 		//***add 1 if we count today as 
 		//one of the required days***
 		
-		var diff_days = parseInt(dropping_tag.text())-parseInt(today);
-		if(parseInt(parent_id) <= diff_days){
 			
 			//toggle writing within alert box if it is set to
 			//display none due to case when reservation is
@@ -253,32 +309,17 @@ function reserve_needed(dropping_tag) {
 			$('#alert_what_time').html('What time would you like your reservation?');
 			//create date formatted mo/dd/yyyy
 			$('#alert_date').html(date_conc)
+			$('#input_alert_button').attr('src','../images/calendar/reserve_button.png');
 			//toggle alert box
 			$('.reserve_required').toggle();
-		}
-		else{
-			var days;
-			if(parent_id==1)
-				days = 'day'
-			else
-				days = 'days';
-			
-			$('.darken,.centered,.x').toggle();
-			if($('#alert_activity_name').css('display')=='block'){
-				$('.alert_toggle').toggle();
-			}
-			
-			$('.alert_title').html('Reservation Required');
-			
-			$('#alert_what_time').html(dragging_name+' requires at least '+parent_id+' '+days+' advance reservation.');
-			$('#alert_what_time').css('margin-top','85px');
-		}
+		
+		
 	}
 }
 
 //function to populate body_right with clicked activity's
 //information
-function activity_desc(activity_aid,reserve_set){
+function activity_desc(activity_aid){
 		if(activity_aid==0)	{
 			body_right_populate(0);
 		}
@@ -291,7 +332,7 @@ function activity_desc(activity_aid,reserve_set){
 				success: function(data) {
 					
 					var activity_array = eval(data);
-					body_right_populate(activity_array,reserve_set);
+					body_right_populate(activity_array);
 					
 				}
 				
@@ -302,14 +343,15 @@ function activity_desc(activity_aid,reserve_set){
 
 //populate lower half of body_right with returned json results
 //from activity_desc ajax
-function body_right_populate(array,reserve_set){
+function body_right_populate(array){
 		//if a day was clicked without an activity
 		if(array == 0) {
-			$('#activity_title').html('No Activity Today');
+			$('#activity_title').html('No Activity');
 			//clear the description box of old info
 			$('#activity_desc_right').children().each(function() {
 				$(this).html('');
 			});
+			$('#cancel_reserve').css('display','none');
 		}
 		else{
 			//change acitivity title
@@ -327,6 +369,14 @@ function body_right_populate(array,reserve_set){
 					
 				$('#activity_reserve_needed').html('Yes');
 				$('#activity_reserve_advance').html(array.reserve_needed+days);
+			}
+			
+			//change current reservation
+			if(array.reserve_date != null){
+				$('#activity_reserve_current').html(array.reserve_date);
+			}
+			else{
+				$('#activity_reserve_current').html('None');
 			}
 			
 			//change type
@@ -348,30 +398,19 @@ function body_right_populate(array,reserve_set){
 			selected_aid = array.aID;
 			
 			//toggle cancel reservation button
-			if(reserve_set == '1'){
+			if(array.reserve_needed > 0){
+				$('#cancel_reserve').attr('src','../images/calendar/cancel_reserve_button.png');
 				$('#cancel_reserve').css('display','block');
 			}
 			else{
-				$('#cancel_reserve').css('display','none');
+				if(array.reserve_date != null){
+					$('#cancel_reserve').attr('src','../images/calendar/remove_reserve_button.png');
+					$('#cancel_reserve').css('display','block');
+				}
+				else
+					$('#cancel_reserve').css('display','none');
 			}
 		}
 		
 }
-	
-//function to load ajax of body_right my activities from done - current
-function change_done(status){
-				
-		$.ajax({
-			url: 'calendar_ajax.php',
-			type:'POST',
-			data: {done : status},
-			success: function(data) {
-				
-				$('#my_activities_container').html(data);
-				ready_fns();
-				
-			}
-			
-		})
-}
-	
+

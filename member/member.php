@@ -57,19 +57,19 @@ $done=array();
 	</a>
 						
          <div id='top_right_month'>
-                  <div id='left_arrow' class='arrow'></div>
-                  <div id='right_arrow' class='arrow' style='display:none'></div>
+                  <div id='left_arrow' class='arrow' onclick='arrow_click(-1)'></div>
+                  <div id='right_arrow' class='arrow' onclick='arrow_click(1)' style='display:none'></div>
           		  <p id='<?php echo date('m').date('F');?>' class='text activity_month'><?php echo date('F');?>'s Activities</p>
       
           </div>
-          <div id='top_right_activities' class='top_right_activities'>
+          
               
               <?php
               //populate with list of activities from array
                       $body->member_activity($activities);
               ?>
               
-      		</div>
+      		
             <div id='activity_done' class='top_right_activities'>
 				<p class='text' id='activity_done_title'>Finished Activities</p>
 					<div id='activity_done_lower'>
@@ -98,17 +98,13 @@ $done=array();
 
 <div id="body_bottom_right">
 	<p class='text upcoming_title'>
-    	Activity of the Day
+    	Free Activity of the Day
     </p>
     <p class="text d_activity" id='d_activity_title'>
     	Doug Dimmadome's Grand Opening Dimmadale
     </p>
     <p class='text d_activity' id='d_activity_description'>
     	Come get some eats at this lovely little place down on Ocean Ave.  Learn how to ride and run all at the same time.  First 10 customers get a free shot.
-    </p>
-    
-    <p class='text' id='d_activity_price'>
-    	Cost: FREE
     </p>
     
     <a href='http://www.maps.google.com' id='d_activity_map_link'><img src="../images/maps/g_maps_test.jpg" id='d_activity_map' /></a>

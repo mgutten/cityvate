@@ -47,8 +47,9 @@ $days=array('Su','M','T','W','Th','F','S');
 		$calendar->create_calendar();
 		
 		?>
-	</div>						
-		
+	</div>		
+        <p id='red_explanation' class='text'>
+        </p>
 </div>
 <div id='body_right'>
 	<p class='text my_activities_title'>
@@ -67,21 +68,6 @@ $days=array('Su','M','T','W','Th','F','S');
 		?>
     </div>
     <div id='my_activities_done_container' class='text'> 
-    	<div class='my_activities_done' style='color:#AA0' onclick='change_done("current"); $(".my_activities_done").css("color","#FF3");$(this).css("color","#AA0")'>
-        	Current
-         </div>
-         <p class='text my_activities_done'>
-         	|
-         </p>
-        <div class='my_activities_done' onclick='change_done("done"); $(".my_activities_done").css("color","#FF3");$(this).css("color","#AA0")'>
-        	Done
-        </div>
-        <p class='text my_activities_done'>
-         	|
-        </p>
-        <div class='my_activities_done' onclick='change_done("expire"); $(".my_activities_done").css("color","#FF3");$(this).css("color","#AA0")'>
-        	Expired
-        </div>
     </div>
     <div id='activity_desc_container' class='text'>
     	<p id='activity_title'>
@@ -90,6 +76,7 @@ $days=array('Su','M','T','W','Th','F','S');
          <p id='activity_desc_left'>
          	Reservation Needed:</br>
             Reserve in Advance:</br>
+            Current Reservation:</br>
             Type of Activity:</br>
             Did It:</br>
             Expires:</br>
@@ -100,6 +87,9 @@ $days=array('Su','M','T','W','Th','F','S');
             	
             </p>
             <p id='activity_reserve_advance' class='activity_desc_ajax'>
+            	
+            </p>
+            <p id='activity_reserve_current' class='activity_desc_ajax'>
             	
             </p>
             <p id='activity_type' class='activity_desc_ajax'>

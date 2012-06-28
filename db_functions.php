@@ -78,6 +78,7 @@ class User {
 class Activities extends User {
 	var $activities=array();
 	var $reserved=array();
+	var $limit=array();
 	
 	function __construct() {
 		//run parent construct to establish connection to db
@@ -95,14 +96,14 @@ class Activities extends User {
 			//or by when it expires
 			if($calendar==0)
 				$month_test = "MONTH(`activities`.`month_in_use`) =";
-			else
-				$month_test = "MONTH(`activities`.`expire`) >=";
+			
 			
 			//test to see if we need the activities that are done or that are
 			//currently active
 			$where = 'WHERE `u_activities`.`uID` = "'.$_SESSION['user']['uID'].'"';
 			if($done == 'regular')
-				$where .= ' AND '.$month_test.' '.$date_period.' AND `activities`.expire >= CURDATE()';
+				$where = ' AND '.$month_test.' '.$date_period;
+				//AND `activities`.expire >= CURDATE()';
 				
 			elseif($done == 'done')
 				$where = ' AND `u_activities`.done = "1" AND MONTH(`activities`.month_in_use)>=MONTH(CURDATE())-2';
@@ -125,7 +126,9 @@ class Activities extends User {
 						INNER JOIN `activities` 
 						ON `u_activities`.`aID` = `activities`.`aID` 
 						'.$where.'
-						ORDER BY reserve_date ASC';
+						ORDER BY expire DESC';
+									
+			
 			//result set
 			$result = $this->con->query($query);
 			
@@ -215,7 +218,8 @@ class Activities extends User {
 							`activities`.save,
 							`activities`.desc,
 							`activities`.aID,
-							`u_activities`.done
+							`u_activities`.done,
+							DATE_FORMAT(`u_activities`.reserve_date,'%m/%d/%Y') as reserve_date
 					FROM activities
 					INNER JOIN u_activities
 					ON `u_activities`.aID = `activities`.aID
@@ -238,6 +242,7 @@ class Activities extends User {
 					$activities['save'] = $row['save'];
 					$activities['desc'] = $row['desc'];
 					$activities['done'] = $row['done'];
+					$activities['reserve_date'] = $row['reserve_date'];
 					
 			}
 			
