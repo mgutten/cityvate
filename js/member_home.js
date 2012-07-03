@@ -9,9 +9,14 @@ var cur_time = Math.round(date.getTime()/1000)-(60*60*24);
 var month_limit = (date.getMonth()-5 <= 0 ? date.getMonth()+7 : date.getMonth()-5);
 
 //activities array
-var a_array;
+var a_array = null;
 
 var selected_pag = 1;
+
+var selected_pag_done = 1;
+
+//var to determine if activities array is empty or not (0 = full, 1 = empty)
+var empty = 0;
 
 
 
@@ -27,10 +32,10 @@ $(function(){
 //(and rerun for ajax calls)
 function ready_functions() {
 	
+	
 	//perform custom image fade onclick
 	$('.activity').click(function() {
-		clearTimeout(timeout[1])
-		timeout[1] = null
+		reset_list = 0;
 		bar_select($(this));
 		
 	})
@@ -55,13 +60,42 @@ function ready_functions() {
 	
 	//pagination page clicks
 	$('.pag_nums').click(function() {
-				
+		
 		var start = (parseInt($(this).text()) - 1) * 5 + 1;
 		//run pagination function to determine which page was selected
 		selected_pag = parseInt($(this).text());
 		
 		change_month(cur_month,start);
 		
+		timeout[3] = setTimeout(function() {
+							looping_act();
+							ready_functions();
+							
+					},100);
+					
+		clearTimeout(timeout[1]);
+		timeout[4] = setTimeout(function() {
+							set_fade_effect();
+							bar_select($('.activity').first());
+					},120);
+	})
+	
+	//pagination for finished activities
+	$('.pag_nums_done').click(function() {
+		$('.pag_nums_selected_done').removeClass('pag_nums_selected_done');
+		$(this).addClass('pag_nums_selected_done');
+		
+		//if a_array has not been set yet, set it
+		if(a_array === null){
+			change_month(cur_month,1)
+		}
+		
+		selected_pag_done = parseInt($(this).text());
+		
+		//let ajax run completely before looping new text
+		timeout[5] = setTimeout(function() {
+						looping_done();
+					},50);
 		
 	})
 	
@@ -70,9 +104,8 @@ function ready_functions() {
 function arrow_click(val) {
 		//reset selected pag num to 1
 		selected_pag = 1;
+		selected_pag_done = 1;
 	
-		clearTimeout(timeout[1]);
-		set_fade_effect();
 		cur_month += val;
 		
 		//deal with january,dec switch
@@ -85,7 +118,32 @@ function arrow_click(val) {
 		//(ie move to month before)
 		change_month(cur_month, 1);
 		
+		//if there are no activities for this month, say so
+		timeout[2] = setTimeout(function() {
+			   if(a_array.length < 3){
+				   empty = 1;
+				   			   
+			 	 	//no_activities();
+					//var n = date.getMonth()+1;
+					//(n != cur_month ? $('#right_arrow').css('display','block') : $('#right_arrow').css('display','none'))
+				}
+				else{
+					empty = 0;
+				}
+					reset_list = 0;
+			  		populate_html(a_array);
+					looping_act();
+					looping_done();
+				
+					//reeval ready functions for newly generated html
+					ready_functions();
+					clearTimeout(timeout[1]);
+					set_fade_effect();
+					
+		}, 100);
 		
+		
+				
 }
 
 function remove_done(id) {
@@ -114,21 +172,12 @@ function change_month(new_month, start_range) {
 				
 					a_array = eval(data)
 					
-					//if there are no activities for this month, say so
-					if(a_array.length < 3)
-						no_activities();
-					else
-						populate_html(a_array)	
-					
 					//check if we are at the end of our month_limit
 					if(new_month == month_limit)
 						$('#left_arrow').css('display','none')
 					else
 						$('#left_arrow').css('display','block');
-					
-					
-					//reeval ready functions for newly generated html
-					ready_functions();	
+						
 					
 							}
 		})
@@ -147,15 +196,8 @@ function populate_html(array) {
 		month_num=parseInt(month)
 		cur_month = parseInt(cur_month);
 		
-			
-		//change url of image
-		$('#picture_link').attr('href','activity.php?num='+array[2]['aID']);
-		
-		//change first shown image
-		$('#picture_shown').attr('src','../images/activities/'+month+'/'+array[2]['name'].replace(/ /g,'_')+'.jpg');
-		
-		//change banner title to first of array
-		$("#picture_banner_text").text(array[2]['name'])
+		//if empty activities array, toggle the picture bars to no display
+		(array.length < 3 ? $('.picture_toggle').css('display','none') : $('.picture_toggle').css('display','block'));
 		
 		//change month id so function can work next time
 		$('.activity_month').attr('id',month+month_array[month_num])
@@ -163,23 +205,66 @@ function populate_html(array) {
 		//change month name
 		$('.activity_month').text(month_array[month_num]+"'s Activities")
 		
+		//change the pic	
+		change_picture()
+		
 		//show arrow if before current month
 		var date = new Date();
 		var n = date.getMonth()+1;
 			(n != month ? $('#right_arrow').css('display','block') : $('#right_arrow').css('display','none'))
 		
-		//loop through array and display number of bars
-		looping();
+}
+
+function change_picture() {
+		var month;
 		
+		cur_month = cur_month + '';
+		(cur_month.length==1 ? month='0'+cur_month : month = cur_month)
+		month_num=parseInt(month)
+		cur_month = parseInt(cur_month);
+		
+		//create faded bars and text lines for picture in case they aren't made
+		/*
+		$('#picture_top').html("<div class='picture_banner' id='picture_top_banner'>\
+                      </div>\<p class='text banner' id='picture_banner_text'></p>\
+                      <div class='picture_banner' id='picture_bottom_banner'></div>\
+                      <p class='text banner' id='click_banner'>Click for details</p>");
+		*/
+		
+		if(empty == 1) {
 			
+			clearTimeout(timeout[0]);
+			$('.picture_toggle').css('display','none');
+			$('#picture_shown').css('opacity',1);
+			$('#picture_shown').attr('src','../images/activities/no_activities.png');
+
+		}
+		else {
+
+			
+			$('.picture_toggle').css('display','block');
+			
+			/*
+			//change url of image
+			$('#picture_link').attr('href','activity.php?num='+a_array[2]['aID']);
+			
+			
+			*/
+			//change first shown image
+			$('#picture_hidden').attr('src','../images/activities/'+month+'/'+a_array[2]['name'].replace(/ /g,'_')+'.jpg');
+			
+			image_fade(a_array[2]['name']);
+								
+			//change banner title to first of array
+			$("#picture_banner_text").text(a_array[2]['name'])
+			
+		}
 }
 
 //loop through json array and create activity bars
-function looping() {
-	
+function looping_act() {
+
 	var array = a_array;
-	//create done array
-	var done = array[0];
 	var i;
 	var b = 0;
 	var c = 0;
@@ -187,6 +272,15 @@ function looping() {
 	var classy = '';
 	var reserve;
 	
+	if(empty == 1) {
+		
+		$('#top_right_activities').html(
+					"<p class='text no_activity' id='no_activity'>There are no activities for this month.</p>"
+					)
+		$('#pag_nums').html('');
+	}
+	else {
+		
 	//start at 2 because 0 is reserved for done and pag_num
 	for(i=2;i<array.length;i++) {
 		//if first bar, then give it selected class
@@ -209,7 +303,7 @@ function looping() {
 			month_temp = month_array[month_temp].substring(0,3);
 			//pull day from reserve_date
 			var day_temp = array[i]['reserve_date'].substring(8,10);
-			reserve = "<a href='calendar.php'><p class='activity_reserve'>"+month_temp+' '+day_temp+"</p></a>";
+			reserve = "<a href='calendar.php'><p class='activity_reserve' title='Change Reservation'>"+month_temp+' '+day_temp+"</p></a>";
 		}
 
 		//if it's expired, show no calendar link
@@ -225,15 +319,42 @@ function looping() {
 		
 	}
 	
-	
 	$('#top_right_activities').html(text);
 	
+	//deal with display of pagination nums after arrow click
+	if(array[1] > 0){
+		
+		text = "<p class='pag_nums_page text'>Page: </p>" ;
+		
+		for(i = 1; i <= array[1]; i++){
+			text += "<p class='pag_nums text'>" + i + "</p>";
+			if(i == array[1])
+				continue;
+			text += "<p class='pag_nums_separate'>|</p>";
+		}
+		
+		$('#pag_nums').html(text);
+	}
+	
+	
+	pagination(selected_pag);
+	}
+}
+
+//populate finished activities
+function looping_done() {
+	
+	var done = a_array[0];
+	
 	//reset text var for 'done' array
-	text ='';
+	var text ='';
 	
 	if(done.length > 0){
+		
+		var starting_done = ((selected_pag_done - 1) * 3);
+		var ending_done = (done.length - starting_done > 3 ? starting_done + 3 : done.length);
 		//loop through and create 'finished activities' section
-		for(b=0; b<done.length; b++){
+		for(b=starting_done; b<ending_done; b++){
 			text = text+"<div class='activity_done text' >\
 							<a href='activity.php?num="+done[b]['aID']+"' class='activity_link'>\
 								<p class='activity_name'>"+done[b]['name']+"</p>\
@@ -243,12 +364,11 @@ function looping() {
 		}
 	}
 	else {
-		text = "<p class='text' id='no_activity_done'>You haven't done any activities this month.</p>";
+		text = "<p class='text no_activity' id='no_activity_done'>You haven't done any activities this month.</p>";
 	}
 	
 	$('#activity_done_lower').html(text);
 	
-	pagination(selected_pag);
 }
 
 function pagination(selected) {
@@ -283,61 +403,37 @@ function pagination(selected) {
 	}
 }
 			
-			
-			
-
-//case when there are no activities for the selected month
-function no_activities() {
-	
-	$('#top_right_activities').html(
-					"<p class='text' id='no_activity_done'>There are no activities for this month.</p>"
-					)
-	$('#activity_done_lower').html(
-					"<p class='text' id='no_activity_done'>You haven't done any activities this month.</p>"
-					);
-					
-	//change month info
-		//find new month from json array, add 0 if needed
-		//month = month(str) month_num = month(int)
-		var month;
-		(cur_month<10 ? month='0'+cur_month : month = cur_month)
-		var month_num=parseInt(month)
-		
-		
-		//change month id so function can work next time
-		$('.activity_month').attr('id',month+month_array[month_num])
-		
-		//change month name
-		$('.activity_month').text(month_array[month_num]+"'s Activities")
-					
-}
 
 function set_fade_effect() {
 	
-		timeout[1] = setInterval(function(){bar_select($('.activity.selected').next('.activity'));},4000)
+		timeout[1] = setInterval(function(){
+							if($('.activity').length <= 1 ){
+								return;
+							}
+							bar_select($('.activity.selected').next('.activity'));
+					},4000)
+						
 	
 }
 
 function bar_select(tag) {
-		
-		if($('.activity').length <= 1 ){
-			return;
-		}
-		
+
 		if(reset_list == 1) {
 			tag = $('.activity:first-child');
 			reset_list = 0;
 		}
-		if(tag.next('.activity').length == 0 && timeout[1]!=null){
+		if(tag.next('.activity').length == 0){
 			reset_list = 1;
 		}
 		//change color of background for activity bar onclick
 		$('.activity').removeClass('selected');
 		tag.addClass('selected');
 		
+		
 		//replace title of banner
 		var header = tag.children('.activity_name').html();
 		$('#picture_banner_text').html(header);
+		
 		
 		//change url of image to aID (id) of new selected bar
 		$('#picture_link').attr('href','activity.php?num='+tag.attr('id'));
@@ -357,10 +453,13 @@ function image_fade(header) {
 		$('#picture_hidden').attr('src','../images/activities/'+month+'/'+header+'.jpg');
 		//animate out top pic
 		if($('#picture_shown').css('opacity')==1){
-		$('#picture_shown').animate({opacity:0},500);
+			$('#picture_shown').animate({opacity:0},500);
 		}
 		clearTimeout(timeout[0]);
-		timeout[0] = setTimeout(function(){image_reset(header,month)},520);
+		timeout[0] = setTimeout(function(){
+				image_reset(header,month)
+				
+			},510);
 		
 			
 }

@@ -174,7 +174,7 @@ p.day_of_week {
 	text-align:center;
 }
 
-#body_right > p:first-child, #body_right > p:nth-child(2)  {
+#body_right > p:first-child  {
 	width:280px;
 	float:left;
 	clear:both;
@@ -190,9 +190,13 @@ p.my_activities_title {
 }
 
 p.my_activities_title_clarify {
+	float:left;
+	clear:both;
+	width:200px;
+	text-align:center;
 	font-size:11px;
-	
-	margin:0px 0px 0px 0px;
+	margin:0px 0px 0px 40px;
+
 }
 
 p.activity_bar {
@@ -226,6 +230,7 @@ div.activity_holder {
 	float:left;
 	clear:both;
 	margin:2px 0px 2px 0px;
+	position:relative;
 }
 
 div.drophover {
@@ -413,7 +418,6 @@ p.my_activities_done {
 }
 
 
-	
 	
 
 	

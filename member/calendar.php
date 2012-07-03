@@ -109,6 +109,7 @@ $days=array('Su','M','T','W','Th','F','S');
          	
     </div>
 </div>
+
 <?php
 	//create alert button for when a reservation is
 	//required and draggable activity is dropped on

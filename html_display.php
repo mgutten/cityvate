@@ -347,6 +347,13 @@ class Body_member extends Body {
 			echo "<div id='top_right_activities' class='top_right_activities'>";
 			$this->activities = $activities;
 			
+			if(empty($this->activities)){
+				echo "<div class='text no_activity'>There are no activities for this month.</div></div>
+						<div id='pag_nums'></div>";
+				return;
+			}
+				
+			
 			//subtract a day to make sure the coupon is definitely expired
 			$cur_time = time()-(60*60*24);
 			$b = 0;
@@ -386,17 +393,25 @@ class Body_member extends Body {
 			
 			echo "</div>";
 			
+			echo "<div id='pag_nums" . $id . "'>";
+		
 			//if we have more than 5 active activities, create pagination
-			if(count($activities)-count($this->done) > 5){
+			if(count($activities)-count($this->done) > 5)
+					$this->pagination_fn($activities, 5);
+					
+			echo "</div>";
+	}
+	
+	function pagination_fn( $array, $limit_amt, $id = '') {
+			
+			echo "<p class='pag_nums_page text'>Page: </p> ";
 				
-				echo "<div id='pag_nums'><p class='pag_nums text'>Page: </p> ";
-				
-				$pag_num = ceil(count($activities)/5);
+				$pag_num = ceil(count($array)/$limit_amt);
 				for($i = 1; $i <= $pag_num; $i++){
-					$class = 'pag_nums text';
+					$class = 'pag_nums' . $id . ' text';
 					
 					if($i == 1)
-						$class .= ' pag_nums_selected';
+						$class .= ' pag_nums_selected' . $id;
 					
 					echo "<p class='$class'>$i</p>";
 					//if on last iteration, do not place a "|"
@@ -405,36 +420,61 @@ class Body_member extends Body {
 					echo "<p class='pag_nums_separate'>|</p>";
 				}
 				echo "</div>";
-			}
 	}
+		
 	
 	//populate member.php with finished activities
 	function member_finished() {
+		echo "<div id='activity_done_lower'>";
+		
 			if(!empty($this->done)){
+				
+				$b = 0;
 				//loop through done array and create a new
 				//line for each finished activity
 				foreach($this->done as $key=>$value){
+					//limit to 3 activities
+					if($b >= 3) 
+						break;
 					echo "<div class='activity_done text' >
 							<a href='activity.php?num=".$value['aID']."' class='activity_link'>
 								<p class='activity_name'>".$value['name']."</p>
 								<p class='activity_type'>".$value['type']."</p>
 							</a>
 							<p class='activity_reserve activity_done_x' id='".$value['aID']."' title='Never Did This'>X</p></div>";
+					$b++;
 				}
+				
+				
+				
 			}
 			else
-				echo "<p class='text' id='no_activity_done'>You haven't done any activities this month.</p>";
+				echo "<p class='text no_activity' id='no_activity_done'>You haven't done any activities this month.</p>";
+		echo "</div>";
+		
+		if(count($this->done) > 3)
+					$this->pagination_fn($this->done,3,'_done');
 	}
 	
 	//populate "Coming Up" section of member.php
 	function member_upcoming($upcoming_event) {
-		
+				
 		$block='';
 		
+		if(empty($upcoming_event)){
+			$block .= '<p class="upcoming text">No activities this week!</p>';
+			$block .= '<p class="upcoming text">Either add one from your calendar.</p>';
+			$block .= '<p class="upcoming text">Or check out the free activity of the day!</p>';
+			
+			echo $block;
+			return;
+		}
+		
 		for($i=0;$i<count($upcoming_event);$i++) {
+			
 				//shorten our reserve_date var
-				$reserve_date = $this->activities[$upcoming_event[$i]]['reserve_date'];
-				$block .= '<p id="upcoming_'.$this->activities[$upcoming_event[$i]]['name'].'" class="upcoming text">';
+				$reserve_date = $upcoming_event[$i]['reserve_date'];
+				$block .= '<p id="upcoming_'.$upcoming_event[$i]['name'].'" class="upcoming text">';
 				//parse reserve_date var for day, date, and time respectively
 				$day = date('D',strtotime($reserve_date));
 				$date_reserved = date('m/d',strtotime($reserve_date));
@@ -442,8 +482,8 @@ class Body_member extends Body {
 				//format the date,time,day appropriately
 				$block .= $day.' '.$date_reserved.' @ '.$time."</p>";
 				
-				$block .= "<a href='activity.php?num=".$this->activities[$upcoming_event[$i]]['aID']."'><p class='text upcoming_name'>"
-							.$this->activities[$upcoming_event[$i]]['name']."</p></a>";
+				$block .= "<a href='activity.php?num=".$upcoming_event[$i]['aID']."'><p class='text upcoming_name'>"
+							.$upcoming_event[$i]['name']."</p></a>";
 				if($i>=3) {
 					break;
 				}
@@ -777,7 +817,7 @@ class Calendar {
 				}
 				//else give an empty block so all calendar days are standardized
 				else
-					$block .= "<p class='text activity' onclick='activity_desc(0,0)'></p>";
+					$block .= "<p class='text activity' onclick='no_clicked += 1; activity_desc(0,0);'></p>";
 					
 				//add p that will contain "reservation needed" or "expired" on drag
 					$block .= "<p class='text nono'></p>";

@@ -1,5 +1,7 @@
 // JavaScript Document
 
+var timeout;
+
 //var to be set onclick left and right arrows
 //when changing month
 var new_month_id;
@@ -28,6 +30,8 @@ var month_limit = date.getMonth()-5;
 //reservation
 var selected_aid;
 
+//deal with popup to explain click and drag after 3 clicks
+var no_clicked = 0;
 
 $(function(){
 	
@@ -44,6 +48,7 @@ $(function(){
 	})
 	
 	$('.reserve_required').toggle();
+		
 		
 	ready_fns();
 	
@@ -140,12 +145,12 @@ function ready_fns() {
 			hoverClass: "drophover",
 			over: function() {
 				if($(this).is('.red')){
-					var timeout = setTimeout(function() {
+					timeout = setTimeout(function() {
 						red_explanation('reserve')},
 						2);
 				}
 				else if($(this).is('.red_expired')){
-					var timeout = setTimeout(function() {
+					timeout = setTimeout(function() {
 						red_explanation('expire')},
 						2);
 				}
@@ -257,15 +262,11 @@ function reserve_needed(dropping_tag) {
 		return;
 	}
 	
+	
 	//case when no reservation required
 	if(parent_id==0) {
-			//toggle writing within alert box if it is set to
-			//display none due to case when reservation is
-			//needed and minimum days not reached
-			if($('#alert_activity_name').css('display')=='none'){
-					$('.alert_toggle').toggle();
-					$('#alert_what_time').css('margin-top','10px');
-			}
+			//toggle writing within alert box
+			$('.alert_toggle').toggle();
 			
 			$('#input_aid').val(dragging_aid);
 			$('#input_date').val(date_formatted);
@@ -292,13 +293,8 @@ function reserve_needed(dropping_tag) {
 		//one of the required days***
 		
 			
-			//toggle writing within alert box if it is set to
-			//display none due to case when reservation is
-			//needed and minimum days not reached
-			if($('#alert_activity_name').css('display')=='none'){
-					$('.alert_toggle').toggle();
-					$('#alert_what_time').css('margin-top','10px');
-			}
+			//toggle writing within alert box
+				$('.alert_toggle').toggle();
 			
 			//populate hidden input values with dragging aID
 			//and the date
@@ -315,11 +311,33 @@ function reserve_needed(dropping_tag) {
 		
 		
 	}
-}
+}	
 
 //function to populate body_right with clicked activity's
 //information
 function activity_desc(activity_aid){
+		
+		//if day with no activity has been clicked 3 times in a row,
+		//toggle help box
+		if(no_clicked == 3){
+			var counter=0;
+			var color;
+			
+			timeout = setInterval(function() {
+				counter += 1;
+				if(counter == 8)
+					clearInterval(timeout);
+				if(counter % 2 == 0)
+					color = 'transparent';
+				else
+					color = '#F00';
+				$('.my_activities_title_clarify').css('background-color',color)
+			},200)
+			
+			no_clicked = 0;
+		}
+
+		
 		if(activity_aid==0)	{
 			body_right_populate(0);
 		}
@@ -354,7 +372,9 @@ function body_right_populate(array){
 			$('#cancel_reserve').css('display','none');
 		}
 		else{
-			//change acitivity title
+			//populate name category of popup on click of activity	
+			$('#alert_activity_name').html(array.name);
+			//change activity title
 			$('#activity_title').html(array.name);
 			
 			//change reservation info

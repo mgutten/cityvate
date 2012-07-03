@@ -30,31 +30,51 @@ $done=array();
 ?>
 
 <div id='body_top'>
-
-	<a href='activity.php?num=<?php echo $activities[0]['aID'];?>' id='picture_link'>
+	<a href='
+	<?php
+    	if(!empty($activities))
+			echo "activity.php?num=" . $activities[0]['aID'];
+	?>' id='picture_link'>
           <div id='picture'>
                   <div id='picture_shown_outer'>
-                      <img src='../images/activities/<?php echo date('m').'/'.str_replace(' ','_',$activities[0]['name']);?>.jpg' class='activity_picture shown' id='picture_shown'/>
+                      <img src='<?php
+         if(!empty($activities))
+		 	echo "../images/activities/" . date('m') . "/" . str_replace(' ','_',$activities[0]['name']) . ".jpg";
+		else
+			echo "../images/activities/no_activities.png";?>' class='activity_picture shown' id='picture_shown'/>
                    </div>
                    <div id='picture_hidden_outer'>
-                      <img src='' id='picture_hidden'/>
+                      <img src='' id='picture_hidden' class='picture_toggle'/>
                    </div>
-      
-                      
-                  <div id='picture_top'>
-                      <div class='picture_banner' id='picture_top_banner'>
+                   
+      		<div id='picture_top'>
+         <?php
+		 //if no activities, toggle the picture bars
+    	if(!empty($activities)) 
+			$display = '';
+		else
+			$display = 'style="display:none;"';
+			
+		?>
+			        
+                  
+                      <div class='picture_banner picture_toggle' id='picture_top_banner' <?php echo $display;?>>
                       </div>
-                      <p class='text banner' id='picture_banner_text'>
-                              <?php echo $activities[0]['name'];?>
+                      <p class='text banner picture_toggle' id='picture_banner_text' <?php echo $display;?>>
+                              <?php if(!empty($activities))
+							  			echo $activities[0]['name'];?>
                       </p>
-                      <div class='picture_banner' id='picture_bottom_banner'>
+                      <div class='picture_banner picture_toggle' id='picture_bottom_banner' <?php echo $display;?>>
                       </div>
-                      <p class='text banner' id='click_banner'>
+                      <p class='text banner picture_toggle' id='click_banner' <?php echo $display;?>>
                               Click for details
                       </p>
-                   </div>
-          </div>
-	</a>
+                   
+          
+
+        	</div>
+        </div>
+        </a>
 						
          <div id='top_right_month'>
                   <div id='left_arrow' class='arrow' onclick='arrow_click(-1)'></div>
@@ -68,17 +88,17 @@ $done=array();
               //populate with list of activities from array
                       $body->member_activity($activities);
               ?>
-              
+
       		
             <div id='activity_done' class='top_right_activities'>
 				<p class='text' id='activity_done_title'>Finished Activities</p>
-					<div id='activity_done_lower'>
+					
                
 					<?php
 						$body->member_finished();
 					?>			
 						
-					</div>
+					
             </div>
 						
       

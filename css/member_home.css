@@ -267,6 +267,10 @@
 }
 
 /*finished activities*/
+#activity_done_lower {
+	height:90px;
+}
+
 #activity_done {
 	height:100px;
 	clear:both;
@@ -278,7 +282,7 @@
 	width:390px;
 	float:left;
 	text-align:center;
-	margin:10px 0px 10px 0px;
+	margin:10px 0px 0px 0px;
 }
 
 .activity_done {
@@ -301,7 +305,7 @@
 	color:#999;
 }
 
-#no_activity_done {
+.no_activity {
 	width:300px;
 	margin:0px 0px 0px 50px;
 	text-align:center;
@@ -311,7 +315,7 @@
 }
 
 /*pagination*/
-#pag_nums {
+#pag_nums,#pag_nums_done {
 	float:right;
 	clear:both;
 	margin:-110px 60px 0px 0px;
@@ -319,7 +323,11 @@
 	
 }
 
-.pag_nums,.pag_nums_separate {
+#pag_nums_done {
+	margin:5px 19px 0px 0px;
+}
+
+.pag_nums,.pag_nums_separate,.pag_nums_page,.pag_nums_done {
 	float:left;
 	margin:0px 0px 0px 0px;
 	padding: 0px 5px 0px 5px;
@@ -327,11 +335,21 @@
 	cursor:pointer;
 }
 
-.pag_nums_selected {
+.pag_nums_page {
+	cursor:default;
+}
+
+.pag_nums_selected,.pag_nums_selected_done {
 	color:#595900;
 }
 
 .pag_nums_separate {
 	cursor:default;
 	margin-top:-2px;
+}
+
+/*no_activity*/
+.no_activity {
+	text-align:center;
+	padding-top:3px;
 }

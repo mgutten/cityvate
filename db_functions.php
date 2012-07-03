@@ -101,9 +101,12 @@ class Activities extends User {
 			//test to see if we need the activities that are done or that are
 			//currently active
 			$where = 'WHERE `u_activities`.`uID` = "'.$_SESSION['user']['uID'].'"';
-			if($done == 'regular')
+			//$order_by = 'ORDER BY expire DESC';
+			$order_by = "ORDER BY CASE WHEN expire < CURDATE() THEN 10 else 0 END, reserve_date ASC";
+			if($done == 'regular'){
 				$where = ' AND '.$month_test.' '.$date_period;
-				//AND `activities`.expire >= CURDATE()';
+				//$order_by = "ORDER BY CASE WHEN expire < CURDATE() THEN 10 else 0 END, reserve_date ASC";
+			}
 				
 			elseif($done == 'done')
 				$where = ' AND `u_activities`.done = "1" AND MONTH(`activities`.month_in_use)>=MONTH(CURDATE())-2';
@@ -125,8 +128,8 @@ class Activities extends User {
 						FROM `u_activities` 
 						INNER JOIN `activities` 
 						ON `u_activities`.`aID` = `activities`.`aID` 
-						'.$where.'
-						ORDER BY expire DESC';
+						' . $where . '
+						' . $order_by;
 									
 			
 			//result set
@@ -152,6 +155,7 @@ class Activities extends User {
 	function upcoming($num_days = 7) {
 	
 	//figure out what reserved events are coming in the next week
+	/*
 	for($i=0;$i<count($this->activities);$i++) {
 	
 		if(!empty($this->activities[$i]['reserve_date'])){
@@ -165,6 +169,32 @@ class Activities extends User {
 	
 	if(!empty($upcoming_event))
 		return $upcoming_event;
+		*/
+		
+	$query = "SELECT u_activities.aID, 
+					u_activities.reserve_date,
+					activities.name as name
+				FROM u_activities
+				INNER JOIN activities
+				ON u_activities.aid = activities.aid	
+				WHERE DATEDIFF(reserve_date,CURDATE()) <= 7
+				AND DATEDIFF(reserve_date,CURDATE()) >= 0
+				AND u_activities.uID = '" . $_SESSION['user']['uID'] . "'";
+				
+	$result = $this->con->query($query);
+	
+	$i=0;
+	if($result){
+		while($row = $result->fetch_array()) {
+				
+				$upcoming_event[$i]['aID'] = $row['aID'];
+				$upcoming_event[$i]['reserve_date'] = $row['reserve_date'];
+				$upcoming_event[$i]['name'] = $row['name'];
+				$i++;
+		}
+		
+		return $upcoming_event;
+	}
 	}
 	
 	function remove_activity($aid,$to_current = '1'){
