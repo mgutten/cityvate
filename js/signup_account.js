@@ -6,13 +6,11 @@ $(document).ready(function() {
 	$('#input_fullname').click(function(){
 		fullname_check()
 		});
+		
 	if($('#input_fullname').val()=='e.g. John Smith'){
 		$('#input_fullname').css('color','#555');
 	}
 	
-	$('input[type=text],input[type=password]').focus(function(){
-			$(this).css('background-color','#313131');
-		});
 	
 })
 

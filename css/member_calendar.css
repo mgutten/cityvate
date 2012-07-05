@@ -213,7 +213,7 @@ p.activity_bar {
 
 p.activity_reserved {
 	background-color:#222;
-	color:#CCC;
+	color:#ff3;/*#CCC*/
 }
 
 div#my_activities_container {

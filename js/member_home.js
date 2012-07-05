@@ -18,6 +18,9 @@ var selected_pag_done = 1;
 //var to determine if activities array is empty or not (0 = full, 1 = empty)
 var empty = 0;
 
+//var to check whether fade effect is currently happening
+var timeout_check = 0;
+
 
 
 $(function(){
@@ -39,15 +42,18 @@ function ready_functions() {
 		bar_select($(this));
 		
 	})
-	
+		
 	//pause image scrolling onhover
 	$('.activity,#picture').hover(
 	function() {
-		clearTimeout(timeout[1]);
-		timeout[1] = null
+			clearTimeout(timeout[1]);
+			clearTimeout(timeout[6]);
 	},
 	function() {
-		set_fade_effect();
+			timeout[6] = setTimeout(function() {
+							set_fade_effect();
+				}, 520);
+		
 	})
 		
 	
@@ -74,6 +80,7 @@ function ready_functions() {
 					},100);
 					
 		clearTimeout(timeout[1]);
+		
 		timeout[4] = setTimeout(function() {
 							set_fade_effect();
 							bar_select($('.activity').first());
@@ -99,6 +106,7 @@ function ready_functions() {
 		
 	})
 	
+	
 }
 	
 function arrow_click(val) {
@@ -120,16 +128,11 @@ function arrow_click(val) {
 		
 		//if there are no activities for this month, say so
 		timeout[2] = setTimeout(function() {
-			   if(a_array.length < 3){
+			   if(a_array.length < 3)
 				   empty = 1;
-				   			   
-			 	 	//no_activities();
-					//var n = date.getMonth()+1;
-					//(n != cur_month ? $('#right_arrow').css('display','block') : $('#right_arrow').css('display','none'))
-				}
-				else{
+				else
 					empty = 0;
-				}
+				
 					reset_list = 0;
 			  		populate_html(a_array);
 					looping_act();
@@ -161,6 +164,9 @@ function remove_done(id) {
 }
 
 function change_month(new_month, start_range) {
+	//initiate loading cursor
+	$("*").css('cursor','wait');
+	
 	//ajax call to change the month when
 	//the arrows next to month name are clicked
 	//then return data and populate html
@@ -174,10 +180,14 @@ function change_month(new_month, start_range) {
 					
 					//check if we are at the end of our month_limit
 					if(new_month == month_limit)
-						$('#left_arrow').css('display','none')
+						$('#left_arrow').hide();
 					else
-						$('#left_arrow').css('display','block');
-						
+						$('#left_arrow').show();
+					
+					//cancel loading cursor
+					$("*").css('cursor','auto');
+					$("#left_arrow").css('cursor','pointer');
+					$("#right_arrow").css('cursor','pointer');
 					
 							}
 		})
@@ -195,9 +205,6 @@ function populate_html(array) {
 		(cur_month.length==1 ? month='0'+cur_month : month = cur_month)
 		month_num=parseInt(month)
 		cur_month = parseInt(cur_month);
-		
-		//if empty activities array, toggle the picture bars to no display
-		(array.length < 3 ? $('.picture_toggle').css('display','none') : $('.picture_toggle').css('display','block'));
 		
 		//change month id so function can work next time
 		$('.activity_month').attr('id',month+month_array[month_num])
@@ -222,34 +229,23 @@ function change_picture() {
 		(cur_month.length==1 ? month='0'+cur_month : month = cur_month)
 		month_num=parseInt(month)
 		cur_month = parseInt(cur_month);
-		
-		//create faded bars and text lines for picture in case they aren't made
-		/*
-		$('#picture_top').html("<div class='picture_banner' id='picture_top_banner'>\
-                      </div>\<p class='text banner' id='picture_banner_text'></p>\
-                      <div class='picture_banner' id='picture_bottom_banner'></div>\
-                      <p class='text banner' id='click_banner'>Click for details</p>");
-		*/
-		
+				
 		if(empty == 1) {
 			
 			clearTimeout(timeout[0]);
 			$('.picture_toggle').css('display','none');
-			$('#picture_shown').css('opacity',1);
+			$('#picture_shown').stop().css('opacity',1);
 			$('#picture_shown').attr('src','../images/activities/no_activities.png');
 
 		}
 		else {
-
 			
 			$('.picture_toggle').css('display','block');
 			
-			/*
 			//change url of image
 			$('#picture_link').attr('href','activity.php?num='+a_array[2]['aID']);
 			
-			
-			*/
+		
 			//change first shown image
 			$('#picture_hidden').attr('src','../images/activities/'+month+'/'+a_array[2]['name'].replace(/ /g,'_')+'.jpg');
 			
@@ -405,7 +401,9 @@ function pagination(selected) {
 			
 
 function set_fade_effect() {
-	
+		
+		clearTimeout(timeout[1]);
+		
 		timeout[1] = setInterval(function(){
 							if($('.activity').length <= 1 ){
 								return;
@@ -455,7 +453,12 @@ function image_fade(header) {
 		if($('#picture_shown').css('opacity')==1){
 			$('#picture_shown').animate({opacity:0},500);
 		}
+		
+		//set var so we can test against it to see if we are in middle of bar change
+		timeout_check = 1;
+		
 		clearTimeout(timeout[0]);
+		
 		timeout[0] = setTimeout(function(){
 				image_reset(header,month)
 				
@@ -469,6 +472,9 @@ function image_reset(header,month) {
 
 $('#picture_shown').css('opacity',1);
 $('#picture_shown').attr('src','../images/activities/'+month+'/'+header+'.jpg');
+
+//reset timeout check
+timeout_check = 0;
 
 }
 

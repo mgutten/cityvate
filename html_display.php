@@ -192,7 +192,7 @@ class Header {
 			echo "<div id='dropdown_container'><div id='dropdown'>\n";
 			//if not logged in, display form
 			if(!empty($this->drop['Login'])) {
-				$form = new Form($file_adj.'login_check.php','POST');
+				$form = new Form($file_adj.'login_check.php','POST','return validate("")');
 				$form->input('text','username','username','','Username/email');
 				$form->input('password','password','username','','password');
 				echo "<a href='".$file_adj."forgot.php' id='forgot'>Forgot?</p></a>";
@@ -317,6 +317,7 @@ class Body_member extends Body {
 						"Past Activities"=>'past.php');
 	var $done = array();
 	var $activities=array();
+	
 	
 	function __construct($selected_tab) {
 		
@@ -493,6 +494,133 @@ class Body_member extends Body {
 	}
 	
 						
+}
+
+//class for past activities
+class Body_member_past extends Body_member {	
+	
+	//function to call all respective fns that will display activities
+	//for past.php
+	public function display_activities() {
+			
+			$this->get_activities();
+			$array = $this->separate_activities();	
+			$this->html_activities($array);
+	}
+	
+	//retrieve activities from all months prior to current month
+	public function get_activities() {
+			
+			//store activities call in public var
+			$this->activities_call = new Activities();
+			//store activities array from every month before this one
+			$this->activities = $this->activities_call->past_activities();
+								
+	}	
+	
+	//separate retrieved activity array into associative arrays for
+	//use in html_activities looping
+	public function separate_activities() {
+			
+			//our return array created with 2 indexes
+			//0 = not done activities, 1 = done activities
+			$activities = array();
+
+			$cur_time = time() - (60*60*24);
+			
+			
+			//separate activities into separate arrays
+			for($i = 0; $i < count($this->activities); $i++){
+					
+					//if the selected month is not yet an array,
+					//create the array for both done and not done
+					if(empty($activities[$this->activities[$i]['month_in_use']])){
+							$activities[$this->activities[$i]['month_in_use']] = array(0=>array(),
+																						1=>array()
+																					);
+					}
+					
+					//create multidimensional array of format $activities['done']['month_in_use'][array(aid,name)]
+					//so activities are split first into done and not done, then into month
+					
+					//case when expired, push activity to end of array
+					if(strtotime($this->activities[$i]['expire']) < $cur_time){
+						array_push($activities[$this->activities[$i]['month_in_use']][$this->activities[$i]['done']], 
+									array('aID'=>$this->activities[$i]['aID'],
+										'name'=>$this->activities[$i]['name'],
+										'expire'=>true
+										));					
+						continue;
+					}
+					//case when not expired, unshift onto beginning of array
+						array_unshift($activities[$this->activities[$i]['month_in_use']][$this->activities[$i]['done']], 
+									array('aID'=>$this->activities[$i]['aID'],
+										'name'=>$this->activities[$i]['name'],
+										'expire'=>false
+										));
+	
+			}
+			
+			return $activities;
+	}
+	
+
+	public function html_activities($array) {
+			
+			$block = '';		
+			if(!empty($array)){
+				//loop through outermost layer (months)
+				foreach($array as $month=>$v) {
+					
+					
+						$block .= "<div class='month_back'></div>        
+									<p class='month_title text'>
+									" . $month . "
+									</p>";
+						
+						//loop through done array					
+						foreach($v as $done=>$inner) {
+							
+							$block .= "<div class='month_body_" . $done . "'>";
+							
+							//loop through individual activity arrays
+							foreach($inner as $key=>$value) {
+								//loop through each activity to pull out $name
+									$class= 'text activity';
+									$title = '';
+									
+									if($value['expire'] == true){
+										$class .= ' expired';
+										$title = 'Expired';
+									}
+									
+									
+									$block .= "<a href='activity.php?num=" . $value['aID'] . "'>
+													<p class='" . $class . "' title = '" . $title . "'>
+														" . $value['name'] . "
+													</p>
+												</a>";
+												
+								}
+						
+							$block .= "</div>";
+							
+						}
+						
+				}
+				
+			}
+		else {
+			$block .= "<p class='text activity' id='no_activities'>You have no past activities.</br>Check back later!</p>";
+			
+			
+		}
+	
+		echo $block;
+	
+	}
+	
+	
 }
 	
 
@@ -950,6 +1078,8 @@ function signup_boxes($title_array) {
 						$id = str_replace(' ','',$key);
 						$id = str_replace('/','',$id);
 						$key=ucwords($key);
+						$class = 'drop text';
+						$lower = '';
 						
 						//if session var is not empty, fill box with val
 						(!empty($_SESSION['signup'][$id]) ? $val = $_SESSION['signup'][$id] : $val='');
@@ -963,12 +1093,20 @@ function signup_boxes($title_array) {
 						
 						//if it's password box, make password text
 						if($key=='Password')
-							$form->input('password','password2','drop text');
-						else
-							$form->input('text',$id,'drop text','',$val);
+							$form->input('password','password2',$class);
+						else{
+							//case when username is not in email format
+							if($key=='Username/email' && !empty($_SESSION['user']['email'])){
+								$class .= ' red_back';
+								$lower = ' red';
+								$value = 'Please enter a valid email address.';
+							}
+								
+							$form->input('text',$id,$class,'',$val);
+						}
 						
 						//lower title caption for textbox	
-						echo "<p class='text box_title_lower'>$value</p>";
+						echo "<p class='text box_title_lower $lower'>$value</p>";
 
 						
 				}
@@ -1025,7 +1163,7 @@ function calendar_my_activities($array) {
 		
 		for($i=0;$i<count($array);$i++) {
 			//if expired, do not show
-			if(strtotime($array[$i]['expire']) < $cur_time)
+			if(strtotime($array[$i]['expire']) < $cur_time || $array[$i]['done'] == 1)
 				continue;
 			
 			$class = 'text activity_bar';

@@ -19,10 +19,16 @@ require_once('db_functions.php');
 	//if username/password has been submitted
 	//send to check against database
 	if(!empty($_POST['usernameemail'])){
+		
+		if(!preg_match('/^[a-zA-Z0-9_\-\.]+@[a-z]+\.[com|net|edu|org|biz]+$/i',$_POST['usernameemail'])){
+			$_SESSION['user']['email'] = true;
+			header('location:signup_2.php');
+			exit;
+		}
+		
 		$conn = new User();
 		$conn->login($_POST['usernameemail'],'',1);
 	}
-echo $_POST['usernameemail'];
 	
 	
 header('location:signup_'.$next.'.php');

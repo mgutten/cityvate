@@ -407,6 +407,7 @@ function body_right_populate(array){
 				$('#activity_done').html('No');
 			else
 				$('#activity_done').html('Yes');
+			
 				
 			//change expires
 			$('#activity_expire').html(array.expire);
@@ -418,12 +419,12 @@ function body_right_populate(array){
 			selected_aid = array.aID;
 			
 			//toggle cancel reservation button
-			if(array.reserve_needed > 0){
+			if(array.reserve_needed > 0 && array.done == 0){
 				$('#cancel_reserve').attr('src','../images/calendar/cancel_reserve_button.png');
 				$('#cancel_reserve').css('display','block');
 			}
 			else{
-				if(array.reserve_date != null){
+				if(array.reserve_date != null && array.done == 0){
 					$('#cancel_reserve').attr('src','../images/calendar/remove_reserve_button.png');
 					$('#cancel_reserve').css('display','block');
 				}

@@ -132,6 +132,7 @@
 	float:left;
 	margin:2px 0px 0px 15px;
 	cursor:pointer;
+	color:#04B30D;
 	
 }
 
@@ -140,14 +141,22 @@
 	float:left;
 	margin:2px 0px 0px 5px;
 	cursor:pointer;
+	color:#04B30D;
 }
 
 .activity_reserve, .activity_expired {
 	width:55px;
+	padding-left:4px;
 	float:left;
+	font-size:15.5px;
 	margin:2px 0px 0px 2px;
 	cursor:pointer;
 	color:#04B30D;
+}
+
+.activity_reserve:hover {
+	opacity:.70;
+	filter:alpha(opacity=70);
 }
 
 .activity_expired {
@@ -301,7 +310,7 @@
 	text-align:center;
 }
 
-.activity_link {
+.activity {
 	color:#999;
 }
 

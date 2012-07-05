@@ -23,10 +23,6 @@ $activities = $activities_call->activities();
 //store upcoming events for coming week
 $upcoming_event = $activities_call->upcoming();
 
-//declare array for activites that have
-//been done already
-$done=array();
-
 ?>
 
 <div id='body_top'>
@@ -109,7 +105,7 @@ $done=array();
     	Coming Up
     </p>
     <?php
-		
+		//function to display upcoming reservations
 		$body->member_upcoming($upcoming_event);
 		
 		?>

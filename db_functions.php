@@ -16,10 +16,35 @@ class User {
 	}
 	
 	function login($username,$password,$checking=0) {
-		
+			
+			$_SESSION['user']['username'] = $username;
+			
 			$pw = $this->password($password);
 			
 			$query = "SELECT uID,username FROM users WHERE username='".$username."' ";
+			
+			//make first query to see if username exists in db
+			$result = $this->con->query($query);
+			
+			//if doesn't exist, set fail session and redirect to login.php
+			if($result->num_rows < 1 && $checking == 0) {
+				$_SESSION['user']['username_fail'] = $username;
+				$_SESSION['user']['password_fail'] = true;
+				header('location:login.php?login=fail');
+				exit;
+			}
+			elseif($result->num_rows > 1 && $checking != 0){
+				//if found results and not checking for pw ($checking==1),
+				//then username is taken, send back to signup page
+					$_SESSION['exists']=TRUE;
+					header('location:signup_2.php');
+					exit;
+			}
+			else{
+				//case when username exists but password entered later is incorrect
+				//notify user that it is wrong password
+				$_SESSION['user']['password_fail'] = true;
+			}
 			
 			//if we arent simply checking if username exists, test password also
 			if($checking==0)
@@ -34,26 +59,18 @@ class User {
 				//if checking for password also ($checking=0)
 				//send back to login page
 				if($checking==0){
-				header('location:login.php?login=fail');
-				exit;
+					header('location:login.php?login=fail');
+					exit;
 				}
 				
 			}
 			//if find result store info to session and login
 			else {
-				//if found results and not checking for pw ($checking=1),
-				//then username is taken, send back to signup page
-				if($checking!=0){
-					$_SESSION['exists']=TRUE;
-					header('location:signup_2.php');
-					exit;
-				}
 					
 				//loop through and store necessary user information
 				while($row = $result->fetch_array()){
 						
 						$_SESSION['user']['uID'] = $row['uID'];
-						$_SESSION['user']['username'] = $row['username'];
 						
 				}
 				
@@ -79,6 +96,7 @@ class Activities extends User {
 	var $activities=array();
 	var $reserved=array();
 	var $limit=array();
+	var $result;
 	
 	function __construct() {
 		//run parent construct to establish connection to db
@@ -133,8 +151,16 @@ class Activities extends User {
 									
 			
 			//result set
-			$result = $this->con->query($query);
+			$this->result = $this->con->query($query);
 			
+				$array = array('name','aID','expire','type',
+								'reserve_needed',
+								'done','reserve_date');
+								
+				return $this->loop_results($array,1);
+			
+			
+			/*
 			//loop through array and set results to activities array
 			$i=0;
 			while($row = $result->fetch_array()){
@@ -150,6 +176,7 @@ class Activities extends User {
 						
 				}
 			return $this->activities;
+			*/
 	}
 	
 	function upcoming($num_days = 7) {
@@ -181,10 +208,15 @@ class Activities extends User {
 				AND DATEDIFF(reserve_date,CURDATE()) >= 0
 				AND u_activities.uID = '" . $_SESSION['user']['uID'] . "'";
 				
-	$result = $this->con->query($query);
+	$this->result = $this->con->query($query);
 	
-	$i=0;
-	if($result){
+	//$i=0;
+	
+		
+		$array = array('aID','reserve_date','name');
+							
+		return $this->loop_results($array,1);
+		/*
 		while($row = $result->fetch_array()) {
 				
 				$upcoming_event[$i]['aID'] = $row['aID'];
@@ -194,7 +226,8 @@ class Activities extends User {
 		}
 		
 		return $upcoming_event;
-	}
+		*/
+	
 	}
 	
 	function remove_activity($aid,$to_current = '1'){
@@ -256,8 +289,15 @@ class Activities extends User {
 					WHERE `u_activities`.`uID` = '".$_SESSION['user']['uID']."'
 						AND activities.aID = '".$activity_aid."'";
 						
-			$result = $this->con->query($query);
+			$this->result = $this->con->query($query);
 			
+			$array = array('name','aID','expire','g_maps','type','cost',
+							'tokens','reserve_needed','month_in_use',
+							'save','desc','done','reserve_date');
+							
+			return $this->loop_results($array);
+			
+			/*
 			while($row = $result->fetch_array()){
 					
 					$activities['name'] = $row['name'];
@@ -277,8 +317,69 @@ class Activities extends User {
 			}
 			
 			return $activities;
+			*/
 	}
 	
+	function past_activities() {
+		
+			$query = "SELECT activities.name,
+							activities.aID,
+							activities.expire,
+							MONTHNAME(activities.month_in_use) as month_in_use,
+							u_activities.done
+						FROM activities
+						INNER JOIN u_activities
+						ON activities.aID = u_activities.aID
+						WHERE u_activities.uID = '" . $_SESSION['user']['uID'] . "'
+						AND MONTH(activities.month_in_use) < MONTH(CURDATE())
+						ORDER BY u_activities.done";
+			
+			$this->result = $this->con->query($query);
+			
+			$array = array('name','aID','expire','month_in_use','done');
+			
+			return $this->loop_results($array,1);
+			
+			
+	}
+			
+			
+	function loop_results($array,$counter = 0) {
+			
+			if($this->result->num_rows > 0){
+				
+				//if counter is set to true, initiate counter
+				if($counter == 1) 
+					$i=0;
+				
+				while($row = $this->result->fetch_array()){
+					
+					//if counter is set, create multi-dimensional array
+					if($counter == 1){
+						
+						foreach($array as $value) {
+							$res_array[$i][$value] = $row[$value];
+						}
+						$i++;
+						continue;
+						
+					}
+					
+					//else we just need one result of associative array
+					foreach($array as $value) {
+						
+						$res_array[$value] = $row[$value];
+						
+					}
+					
+					
+				}
+				
+				return $res_array;
+			}
+				
+	}
+				
 	
 }
 

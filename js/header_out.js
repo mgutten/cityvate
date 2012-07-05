@@ -36,6 +36,11 @@ $(function() {
 			}
 	})
 	
+	//change background color of input boxes in case they have been
+	//turned red due to validate()
+	$('input[type=text],input[type=password]').focus(function(){
+			$(this).css('background-color','#313131');
+		});
 	
 
 //end "ready" function
@@ -61,5 +66,36 @@ function body_resize() {
 				}
 				
 		}
+				
+//validate function for various login boxes
+function validate(id) {
+	
+	var returning;
+	var username = $('#input_username' + id).val();
+	var password = $('#input_password' + id).val();
+	
+	//if id is blank then dealing with header login dropdown
+	if(id == "" && username == 'Username/email'){
+		returning = 0;
+		$("#input_username" + id).css('background-color','#950000');
+	}
+		
+	if(username == ''){
+		returning = 0;
+		$('#username_lower').text('Please enter a valid email');
+		$("#input_username" + id).css('background-color','#950000');
+	}
+	if(password == ''){
+		returning = 0;
+		$('#password_lower').text('Please enter your password');
+		$("#input_password" + id).css('background-color','#950000');
+	}
+		
+	if(returning == 0)
+		return false;
+	else
+		return true;
+	
+}
 		
 		
