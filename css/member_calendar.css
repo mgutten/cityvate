@@ -27,20 +27,20 @@ div.calendar_day {
 	width:80px;
 	height:80px;
 	float:left;
-	margin-left:2px;
+	position:relative;
+	margin:0px 0px 0px 0px;
 }
+
 
 div.calendar_light {
 	background:#444;
 	border:#999 solid 1px;
-	margin-left:0px;
 	cursor:pointer;
 }
 
 div.calendar_dark {
 	background:#333;
 	border:#999 solid 1px;
-	margin-left:0px;
 	cursor:pointer;
 
 }
@@ -68,10 +68,6 @@ p.activity {
 	font-size:12px;
 	color:#ff3;
 	line-height:11px;
-	cursor:pointer;
-}
-
-p.activity_desc {
 	cursor:pointer;
 }
 
@@ -210,6 +206,8 @@ p.activity_bar {
 	cursor:pointer;
 	color:#ff3;
 }
+
+
 
 p.activity_reserved {
 	background-color:#222;
@@ -417,7 +415,19 @@ p.my_activities_done {
 	text-align:center;
 }
 
+div.draggable_container {
+	position:relative;
+	width:76px;
+	float:left;
+	clear:both;
+}
 
-	
+p.draggable {
+	padding:2px;
+	margin-top:0px;
+	float:none !important;
+	clear:none !important;
+}
+
 
 	

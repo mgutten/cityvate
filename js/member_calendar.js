@@ -38,17 +38,17 @@ $(function(){
 	//fire functions when click left/right arrow for 
 	//changing the month
 	$('#left_arrow').click(function() {
-			new_month_id = parseInt($('.activity_month').attr('id').substring(0,2))-1;
+			new_month_id = parseInt($('.activity_month').attr('id').substring(0,2),10)-1;
 			change_month(new_month_id);
 	})
 	
 	$('#right_arrow').click(function() {
-			new_month_id = parseInt($('.activity_month').attr('id').substring(0,2))+1;
+			new_month_id = parseInt($('.activity_month').attr('id').substring(0,2),10)+1;
 			change_month(new_month_id);
 	})
 	
 	$('.reserve_required').toggle();
-		
+			
 		
 	ready_fns();
 	
@@ -65,6 +65,7 @@ function change_month(new_month) {
 		new_month = new_month_id = 1
 		year = year+1;
 	}
+	
 		
 	$.ajax({
 		url: 'calendar_ajax.php',
@@ -91,7 +92,7 @@ function change_month_name() {
 	//turn new_month_id into str to check length
 	new_month_id += '';
 	
-	if(new_month_id.length <2) {
+	if(new_month_id.length < 2) {
 		new_month_id = '0'+new_month_id;
 	}
 	
@@ -100,6 +101,7 @@ function change_month_name() {
 	$('.activity_month').attr('id',new_month_id+month_name);
 	//change year text
 	$('.activity_year').html(year);
+	
 	
 	//display right arrow if shown month is before current date
 	//***add 2 to adjust off of array 0 and then allow movement
@@ -119,15 +121,18 @@ function change_month_name() {
 
 function ready_fns() {
 	
-	$('p.activity_bar').draggable({
+
+	
+	$('p.activity_bar,p.draggable').draggable({
 			containment: "#body_main",
 			zIndex:5,
 			revert: true,
 			start: function() {
-				dragging_exp = $(this).parent().children('span').attr('id');
-				dragging_name = $(this).text();
+			
+				dragging_exp = $(this).next('span').attr('id');
+				dragging_name = $(this).text().replace(/\(+[0-9]+[:]+[0-9]+[pm|am]+\)+/g,'');
 				dragging_tag = $(this);
-				dragging_aid = $(this).attr('id');
+				dragging_aid = parseInt($(this).attr('id'),10);
 				ondrag();
 				
 			},
@@ -198,7 +203,7 @@ function red_explanation(type){
 	$('#red_explanation').css('background-color','#A00');
 	
 	if(type == 'reserve'){
-			$('#red_explanation').html(dragging_name + ' requires at least ' + parseInt(dragging_tag.parent().attr('id')) + ' days advance reservation.');
+			$('#red_explanation').html(dragging_name + ' requires at least ' + parseInt(dragging_tag.parent().attr('id'),10) + ' days advance reservation.');
 	}
 	else{
 			$('#red_explanation').html('Your coupon for ' + dragging_name + ' is expired.');
@@ -207,11 +212,11 @@ function red_explanation(type){
 
 //determine which calendar days are no good for reservations
 function ondrag() {
-	
-	var today =  parseInt($('.today').attr('id'));
-	var last_day = parseInt($('.droppable').last().attr('id'));
-	var min_reserve = parseInt(dragging_tag.parent().attr('id'))+today;
-	var month = parseInt($('.activity_month').attr('id'));
+
+	var today =  parseInt($('.today').attr('id'),10);
+	var last_day = parseInt($('.droppable').last().attr('id'),10);
+	var min_reserve = parseInt(dragging_tag.parent().attr('id'),10)+today;
+	var month = parseInt($('.activity_month').attr('id'),10);
 	
 	//if we are in the future, then loop through all days
 	if(month>date.getMonth()+1){
@@ -237,14 +242,14 @@ function ondrag() {
 			
 			//if viewed month is greater than expire month or if day is 
 			//greater than expire day
-			else if((month==parseInt(dragging_exp.substr(0,2)) && i > parseInt(dragging_exp.substr(2,4))) 
-						|| month>parseInt(dragging_exp.substr(0,2))){
+			else if((month==parseInt(dragging_exp.substr(0,2),10) && i > parseInt(dragging_exp.substr(2,4),10)) 
+						|| month>parseInt(dragging_exp.substr(0,2),10)){
 				$("#"+i).addClass('red_expired');
 				$("#"+i).children('p.nono').html('expired');
 						}
 			
 	}
-			
+		
 }
 
 //check if a reservation is needed
@@ -254,10 +259,10 @@ function reserve_needed(dropping_tag) {
 	//in ID of container div for each draggable
 	//activity, so test against that
 	//if ID == 0, no reservation needed
-	var parent_id = parseInt(dragging_tag.parent().attr('id'));
+	var parent_id = parseInt(dragging_tag.parent().attr('id'),10);
 	//create date formatted mo/dd/yyyy
-	var date_conc = $('.activity_month').attr('id').substring(0,2)+'/'+parseInt(dropping_tag.text())+'/'+year;
-	var date_formatted = year +'-'+ $('.activity_month').attr('id').substring(0,2) +'-'+ parseInt(dropping_tag.text());
+	var date_conc = $('.activity_month').attr('id').substring(0,2)+'/'+parseInt(dropping_tag.text(),10)+'/'+year;
+	var date_formatted = year +'-'+ $('.activity_month').attr('id').substring(0,2) +'-'+ parseInt(dropping_tag.text(),10);
 	if(dropping_tag.is('.red') || dropping_tag.is('.red_expired')){
 		return;
 	}

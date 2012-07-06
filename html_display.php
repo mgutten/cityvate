@@ -853,9 +853,13 @@ class Calendar {
 						//find time that reservation is at to be displayed
 						//on calendar
 						$reserve_time = date('g:i a',strtotime($activities_array[$i]['reserve_date']));
+						$expire = date('md',strtotime($activities_array[$i]['expire']));
+						$name = $activities_array[$i]['name'];
+						$aid = $activities_array[$i]['aID'];
+						$reserve_needed = $activities_array[$i]['reserve_needed'];
 						//store result into array with name, reserve_date, and aid
 						//for future use in create_calendar
-						$this->reserved_days[$reserve_date] = array($activities_array[$i]['name'],$reserve_time,$activities_array[$i]['aID']);
+						$this->reserved_days[$reserve_date] = array($name,$reserve_time,$aid,$expire,$reserve_needed);
 						
 				}
 			}
@@ -939,9 +943,14 @@ class Calendar {
 				//format for array from reserved_activities fn is monthday(eg. 0619)
 				if(!empty($calendar->reserved_days[$month.$c])){
 						if($c<$calendar->today)
-							$block .= "<p class='text activity activity_old activity_desc' onclick='activity_desc(".$calendar->reserved_days[$month.$c][2].",1)'>".$calendar->reserved_days[$month.$c][0]."</br>(".$calendar->reserved_days[$month.$c][1].")</p>";
+							$block .= "<p class='text activity activity_old' onclick='activity_desc(".$calendar->reserved_days[$month.$c][2].",1)'>".$calendar->reserved_days[$month.$c][0]."</br>(".$calendar->reserved_days[$month.$c][1].")</p>";
 						else
-							$block .= "<p class='text activity activity_desc' onclick='activity_desc(".$calendar->reserved_days[$month.$c][2].",1)'>".$calendar->reserved_days[$month.$c][0]."</br>(".$calendar->reserved_days[$month.$c][1].")</p>";
+							$block .= "<div class='draggable_container' id='0" . $calendar->reserved_days[$month.$c][4] . "'>
+										<p id='000" . $calendar->reserved_days[$month.$c][2] . "' class='text activity draggable' onclick='activity_desc(".$calendar->reserved_days[$month.$c][2].",1)'>
+											".$calendar->reserved_days[$month.$c][0]."</br>(".$calendar->reserved_days[$month.$c][1].")
+										</p>
+										<span id='" . $calendar->reserved_days[$month.$c][3] . "'></span>
+										</div>";
 				}
 				//else give an empty block so all calendar days are standardized
 				else
