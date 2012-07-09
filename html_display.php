@@ -1158,8 +1158,3 @@ function calendar_my_activities($array) {
 					</div>";
 		}
 }
-
-	
-		
-			
-?>

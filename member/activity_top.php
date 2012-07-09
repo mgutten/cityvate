@@ -14,6 +14,3 @@ if(!empty($_GET['month'])){
 	echo json_encode($activities);
 }
 
-
-
-?>

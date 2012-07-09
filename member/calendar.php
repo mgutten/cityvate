@@ -1,6 +1,6 @@
 <?php
 
-require_once('../html_display.php');
+require_once('../classes.php');
 require_once('../db_functions.php');
 
 //page should require logged in user
@@ -117,5 +117,4 @@ $days=array('Su','M','T','W','Th','F','S');
 	$alert = new Alert_w_txt('reserve_required');
 	$alert->calendar_alert('Reservation Required','images/calendar/reserve_button.png');
 	$alert->close();
-?>
 	
