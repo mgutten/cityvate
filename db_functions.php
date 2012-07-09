@@ -33,7 +33,7 @@ class User {
 				header('location:login.php?login=fail');
 				exit;
 			}
-			elseif($result->num_rows > 1 && $checking != 0){
+			elseif($result->num_rows > 0 && $checking != 0){
 				//if found results and not checking for pw ($checking==1),
 				//then username is taken, send back to signup page
 					$_SESSION['exists']=TRUE;
@@ -44,11 +44,14 @@ class User {
 				//case when username exists but password entered later is incorrect
 				//notify user that it is wrong password
 				$_SESSION['user']['password_fail'] = true;
+
 			}
-			
+
 			//if we arent simply checking if username exists, test password also
 			if($checking==0)
 				$query.= "and password='".$pw."'";
+			else
+				return;
 			
 			$result = $this->con->query($query);
 			

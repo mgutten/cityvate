@@ -975,43 +975,6 @@ class Calendar {
 	}
 }
 
-//class to determine basic date functions
-class Date {
-	
-	function __construct() {
-
-		date_default_timezone_set('America/Los_Angeles');
-		
-	}
-	
-	//return short/long of current month
-	function this_month($fullshortnum){
-			
-			return date($this->fullorshort($fullshortnum));
-			
-	}
-	
-	//return short/long of nth month in future
-	function nth_month($fullshortnum,$months_to_advance){
-		
-			return date($this->fullorshort($fullshortnum),strtotime("+$months_to_advance months"));
-		
-	}
-	
-	//determine shorthand or longhand
-	function fullorshort($str) {
-		
-		if($str=='full')
-			$type = 'F, Y';
-		elseif($str=='short')
-			$type= 'M, Y';
-		else
-			$type='m, Y';
-		
-		return $type;
-	}
-}
-
 
 //function to display how/what text blocks
 //on homepage
@@ -1105,11 +1068,15 @@ function signup_boxes($title_array) {
 							$form->input('password','password2',$class);
 						else{
 							//case when username is not in email format
-							if($key=='Username/email' && !empty($_SESSION['user']['email'])){
+							if($key=='Username/email' && 
+								(!empty($_SESSION['user']['email']) || !empty($_SESSION['exists']))){
 								$class .= ' red_back';
 								$lower = ' red';
 								$value = 'Please enter a valid email address.';
 							}
+							//case when username is taken
+							if($lower == ' red' && !empty($_SESSION['exists']))
+								$value = 'That username is already taken';
 								
 							$form->input('text',$id,$class,'',$val);
 						}
@@ -1152,13 +1119,11 @@ function signup_review($textarray) {
 
 //date option function for signup_3 form
 function signup_date_options($num_months) {
-		//instantiate date class
-		$date = new Date();
 		
 		//loop through and create options for num_months
 		for($i=1;$i<=$num_months;$i++) {
 			
-			$month = $date->nth_month('full',$i);
+			$month = date('F, Y',strtotime('+' . $i . ' months'));
 			//if session var set, set to selected
 			($_SESSION['signup']['start']==$month ? $select = 'selected' : $select='');
 			
@@ -1198,8 +1163,3 @@ function calendar_my_activities($array) {
 		
 			
 ?>
-
-
-
-
-			
