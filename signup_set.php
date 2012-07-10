@@ -37,4 +37,3 @@ require_once('db_functions.php');
 	}
 	
 header('location:signup_'.$next.'.php');
-?>

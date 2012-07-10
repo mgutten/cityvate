@@ -7,4 +7,3 @@ if(!empty($_COOKIE['user']))
 	unset($_COOKIE['user']);
 
 header('location:../home.php');
-?>

@@ -30,6 +30,12 @@ p {
 	cursor:default;
 }
 
+.text {
+	font-family:'Neon 80s';
+	font-size:14px;
+	color:#DFDFDF;
+}
+
 #header_back {
 	background:url(../images/header_back.jpg) repeat-x;
 	position:absolute;

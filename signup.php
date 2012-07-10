@@ -1,7 +1,9 @@
 <?php
-require_once('html_display.php');
 
 $login = 'out';
+
+require_once('classes.php');
+
 
 $head = new Head($login,'Signup');
 $head->close();
@@ -46,7 +48,5 @@ if(empty($_SESSION['signup_visit'])) {
 
 //set signup session var as blank array
 $_SESSION['signup']=array();
-
-?>
 
 	

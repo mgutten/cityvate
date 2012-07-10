@@ -1,8 +1,10 @@
 <?php
 
-require_once('html_display.php');
-
 $login = 'out';
+
+require_once('classes.php');
+
+//position in signup process
 $pos = 4;
 
 $head = new Head_signup($login,'Signup Review',1);

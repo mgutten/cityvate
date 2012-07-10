@@ -130,7 +130,7 @@ function ready_fns() {
 			start: function() {
 			
 				dragging_exp = $(this).next('span').attr('id');
-				dragging_name = $(this).text().replace(/\(+[0-9]+[:]+[0-9]+[pm|am]+\)+/g,'');
+				dragging_name = $(this).text().replace(/\(+[0-9]+[:]+[0-9]+ [pm|am]+\)+/g,'');
 				dragging_tag = $(this);
 				dragging_aid = parseInt($(this).attr('id'),10);
 				ondrag();

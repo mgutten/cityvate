@@ -1,8 +1,10 @@
 <?php
 
-require_once('html_display.php');
-
 $login = 'out';
+
+require_once('classes.php');
+
+//position in signup process
 $pos = 3;
 
 $head = new Head_signup($login,'Signup Package',1);
@@ -43,5 +45,3 @@ $form->input('checkbox','auto_renew','auto','','Yes');
 $form->back();
 $form->next_button();
 $form->close();
-
-?>

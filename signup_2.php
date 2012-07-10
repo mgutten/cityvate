@@ -1,8 +1,10 @@
 <?php
 
-require_once('html_display.php');
-
 $login = 'out';
+
+require_once('classes.php');
+
+//position var to show position in signup process
 $pos = 2;
 
 $head = new Head_signup($login,'Signup Account',0);
@@ -29,4 +31,3 @@ if(!empty($_SESSION['exists']))
 	unset($_SESSION['exists']);
 if(!empty($_SESSION['user']['email']))
 	unset($_SESSION['user']['email']);
-?>

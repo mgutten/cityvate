@@ -1,6 +1,9 @@
 <?php
 session_start();
-require_once('../html_display.php');
+
+$login = 'in';
+
+require_once('../classes.php');
 require_once('../db_functions.php');
 $activities_call = new Activities;
 
@@ -49,5 +52,3 @@ if(!empty($_GET['aID'])){
 	header('location:calendar.php');
 	exit;
 }
-
-?>

@@ -1,10 +1,11 @@
 <?php
 
+//page should require logged in user
+$login = 'in';
+
 require_once('../classes.php');
 require_once('../db_functions.php');
 
-//page should require logged in user
-$login = 'in';
 
 //create the head section
 $head = new Head($login,'Member Calendar');

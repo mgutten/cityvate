@@ -1,8 +1,10 @@
 <?php
 
-require_once('html_display.php');
-
 $login = 'out';
+
+require_once('classes.php');
+
+//position var to show what place in signup process we are at
 $pos = 1;
 
 $head = new Head_signup($login,'Signup City',1);
@@ -14,10 +16,6 @@ $body = new Body_signup();
 $body->background('Select Your Location',$pos);
 
 $form = new Form_signup($pos);
-
-$neighborhoods = array('SOMA','Castro','Chinatown','Fisherman\'s Wharf','Haight',
-					'Japantown','Marina','Mission','North Beach','Pacific Heights',
-					'Presidio','Panhandle','Tenderloin','Union Square');
 ?>
 
 <div class='box_title text'>Your City</div>
@@ -29,7 +27,7 @@ $neighborhoods = array('SOMA','Castro','Chinatown','Fisherman\'s Wharf','Haight'
 <div class='box_title text'>Your Neighborhood</div>
 <select name='neighborhood' id='neighborhood' class='text drop'>
 	<?php
-		signup_options($neighborhoods);
+		signup_options();
 	?>
 </select>	
 
@@ -38,4 +36,4 @@ $form->back();
 $form->next_button();
 $form->close();
 
-?>	
+	

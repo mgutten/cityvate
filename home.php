@@ -1,12 +1,13 @@
 <?php
 
-include('html_display.php');
+$login = 'out';
 
-$log = 'out';
-$head = new Head($log,'Home');
+require_once('classes.php');
+
+$head = new Head($login,'Home');
 $head->close();
 
-$header = new Header($log);
+$header = new Header($login);
 
 $body = new Body();
 
@@ -41,4 +42,3 @@ $text=array('what'=>array(
 		quote_box('first',"I found myself caught in a rut, sitting around bored out of my mind.  But then I signed up for Cityvate, and now have something to look forward to every week!","John B");
 		quote_box('second',"I work all day and don't have time to find fun things to do in my free time.  Cityvate does the hard work for me and leaves me smiling every time.","Emily S");
 		
-?>

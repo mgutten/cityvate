@@ -1,8 +1,11 @@
 <?php
 
-require_once('html_display.php');
-
 $login = 'out';
+
+require_once('classes.php');
+
+//position is off of signup process, but requires same template,
+//so set position to 0
 $pos=0;
 
 $head = new Head_signup($login,'City Unavailable',1);

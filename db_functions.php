@@ -21,7 +21,7 @@ class User {
 			
 			$pw = $this->password($password);
 			
-			$query = "SELECT uID,username FROM users WHERE username='".$username."' ";
+			$query = "SELECT uID,username,fname,lname,neighborhood,city FROM users WHERE username='".$username."' ";
 			
 			//make first query to see if username exists in db
 			$result = $this->con->query($query);
@@ -71,11 +71,17 @@ class User {
 			else {
 					
 				//loop through and store necessary user information
+				$array = array('uID','username','fname','lname','neighborhood','city');
+				
 				while($row = $result->fetch_array()){
 						
-						$_SESSION['user']['uID'] = $row['uID'];
+						foreach($array as $val){
+							
+							$_SESSION['user'][$val] = $row[$val];
+						}
 						
 				}
+				
 				
 				//login to member page
 				header('location:member/member.php');
@@ -90,6 +96,87 @@ class User {
 			
 			$salt = md5($this->salt);
 			return md5($salt . $password);
+	}
+	
+	public function get_user_info() {
+		
+		//if session var is not empty, take from there
+		//else die
+		if(!empty($_SESSION['user']['uID']))
+			$uid = $_SESSION['user']['uID'];
+		else
+			return;
+		
+		//set array of column values
+		$array = array('pID','package','gID','package','end_date');
+		
+		$query = "SELECT ";
+			
+			//loop through array and append column name to query
+			foreach($array as $val) {
+				if($val == end($array)){
+					$query .= "DATE_FORMAT(end_date,'%M %e, %Y') as end_date";
+					break;
+				}
+					
+				$query .= $val . ',';
+
+			}
+		
+		//finish query
+		$query .= " FROM u_subscriptions
+					WHERE uID = '" . $uid . "'";
+					
+					
+		$result = $this->con->query($query);
+		
+		//loop through array of columns and set session vars for each
+		while($row = $result->fetch_array()){
+			
+				foreach($array as $val) {
+					
+					$_SESSION['user'][$val] = $row[$val];
+					
+				}
+		}
+		
+		
+	}
+	
+	function loop_results($array,$counter = 0) {
+			
+			if($this->result->num_rows > 0){
+				
+				//if counter is set to true, initiate counter
+				if($counter == 1) 
+					$i=0;
+				
+				while($row = $this->result->fetch_array()){
+					
+					//if counter is set, create multi-dimensional array
+					if($counter == 1){
+						
+						foreach($array as $value) {
+							$res_array[$i][$value] = $row[$value];
+						}
+						$i++;
+						continue;
+						
+					}
+					
+					//else we just need one result of associative array
+					foreach($array as $value) {
+						
+						$res_array[$value] = $row[$value];
+						
+					}
+					
+					
+				}
+				
+				return $res_array;
+			}
+				
 	}
 	
 	
@@ -347,43 +434,6 @@ class Activities extends User {
 	}
 			
 			
-	function loop_results($array,$counter = 0) {
-			
-			if($this->result->num_rows > 0){
-				
-				//if counter is set to true, initiate counter
-				if($counter == 1) 
-					$i=0;
-				
-				while($row = $this->result->fetch_array()){
-					
-					//if counter is set, create multi-dimensional array
-					if($counter == 1){
-						
-						foreach($array as $value) {
-							$res_array[$i][$value] = $row[$value];
-						}
-						$i++;
-						continue;
-						
-					}
-					
-					//else we just need one result of associative array
-					foreach($array as $value) {
-						
-						$res_array[$value] = $row[$value];
-						
-					}
-					
-					
-				}
-				
-				return $res_array;
-			}
-				
-	}
 				
 	
 }
-
-?>

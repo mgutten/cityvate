@@ -23,12 +23,6 @@
 	text-align:center;
 }
 
-.text {
-	font-family:'Neon 80s';
-	font-size:14px;
-	color:#DFDFDF;
-}
-
 /*yellow title of signup forms*/
 .title {
 	width:380px;
@@ -61,7 +55,7 @@
 }
 
 /*title for text boxes*/
-.box_title {
+.box_title,.box_title_close {
 	margin: 40px 0px 0px 0px;
 	float:left;
 	clear:both;
@@ -288,4 +282,9 @@ select#when {
 	clear:both;
 	width:75px;
 	margin:3px 60px 0px 0px;
+}
+
+/*code for member/change.php*/
+.change_subtitle {
+	margin-top:70px;
 }

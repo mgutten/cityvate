@@ -55,11 +55,13 @@ class Head {
 				//appropriate css stylesheet/script else logged
 				//in stylesheet/script
 				if($login_status == 'out') {
-					array_push($this->style, 'header_out');
+					array_unshift($this->style, 'header_out');
+					//jquery file needs to remain above header js so push
 					array_push($this->script, 'header_out');
 				}
 				else {
-					array_push($this->style, 'header_in');
+					array_unshift($this->style, 'header_in');
+					//jquery file needs to remain above header js so push
 					array_push($this->script, 'header_in');
 				}
 				
@@ -177,7 +179,7 @@ class Header {
 			
 			//if logged in, change dropdown variable
 			else {
-					$this->drop['My Account'] = 'myaccount.php';
+					$this->drop['My Account'] = 'account.php';
 					$this->links['Contact'] = 'contact.php';
 					$this->links['Home'] = 'member.php';
 			}
@@ -396,5 +398,46 @@ class Alert_w_txt {
 	}
 }
 
+class Head_signup extends Head {
+	
+	var $style = array('signup_form');
+	
+	
+}
+
+class Body_signup extends Body {
+	
+	function background($title, $position) {
+			
+			//if at last page for signup,
+			//load large background
+			if($position==4) {
+				$smallorbig = 'big';
+				$id = 'review';
+			}
+			else{
+				$id='';
+				$smallorbig = 'small';
+			}
+				
+			$background = "<div id='background_$smallorbig'>";
+			$status = "<img src='images/signup/signup_$position.png' alt='Step $position of 4' class='position'/>";
+			
+			if($position==0)
+				$status='';
+			
+			$header = "<p class='text title' id='$id'>$title</p>";
+			
+			echo $background.$status.$header;
+			
+	}
+	
+	function close(){
+		
+			echo "</div>";
+			
+	}
+	
+}
 
 	

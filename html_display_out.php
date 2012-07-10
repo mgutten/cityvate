@@ -1,47 +1,5 @@
 <?php
 
-class Head_signup extends Head {
-	
-	var $style = array('signup_form');
-	
-	
-}
-
-class Body_signup extends Body {
-	
-	function background($title, $position) {
-			
-			//if at last page for signup,
-			//load large background
-			if($position==4) {
-				$smallorbig = 'big';
-				$id = 'review';
-			}
-			else{
-				$id='';
-				$smallorbig = 'small';
-			}
-				
-			$background = "<div id='background_$smallorbig'>";
-			$status = "<img src='images/signup/signup_$position.png' alt='Step $position of 4' class='position'/>";
-			
-			if($position==0)
-				$status='';
-			
-			$header = "<p class='title text' id='$id'>$title</p>";
-			
-			echo $background.$status.$header;
-			
-	}
-	
-	function close(){
-		
-			echo "</div>";
-			
-	}
-	
-}
-
 //form class for signup forms
 class Form_signup extends Form {
 	
@@ -125,7 +83,11 @@ function quote_box($div_number,$text,$name,$city = 'SF') {
 }
 
 //function to generate neighborhood options during signup_1
-function signup_options($neighborhood_array) {
+function signup_options() {
+	
+	$neighborhood_array = array('SOMA','Castro','Chinatown','Fisherman\'s Wharf','Haight',
+					'Japantown','Marina','Mission','North Beach','Pacific Heights',
+					'Presidio','Panhandle','Tenderloin','Union Square');
 	
 		if(is_array($neighborhood_array)){
 			

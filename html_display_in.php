@@ -313,6 +313,83 @@ class Body_member_past extends Body_member {
 	
 }
 
+//class to use template from Body_member class in account/subscription.php
+class Body_account extends Body_member {
+	var $links = array("My Account"=>'account.php',
+						"Subscription"=>'subscription.php'
+						);
+						
+	var $title_array = array("Account Info"=>array(
+									"Email/Username"=>'username',
+									"Password"=>false,
+									"Subscription"=>array('package','end_date')),
+							"Personal Info" =>array(
+									"Name"=>array('fname','lname'),
+									"City"=>'city',
+									"Neighborhood"=>'neighborhood')
+							);
+						
+	public function my_account_boxes() {
+			
+			//retrieve all user info and set to session vars
+			$this->get_user_info();
+			
+			$array = $this->title_array;
+			$block = '';
+			
+			//loop through outer array to display title_back
+			foreach($array as $title=>$sub){
+				
+						$block .= "<div class='title_back'><p class='text title'>" . $title . "</p></div>";
+						
+					//loop through inner to grab individual categories
+					foreach($sub as $val=>$key){
+							
+							$block .= "<p class='text sub_title'>" . $val . ":</p>
+										<p class='text sub_title_val'>";
+							
+							if($key == false){
+								$block .= '**********';
+								$key = strtolower($val);
+							}
+							//if key has a sub array of session associative indexes
+							elseif(is_array($key)){
+								//if it's the name category, concatenate fname and lname
+								if($val == 'Name')
+									$block .= ucwords($_SESSION['user'][$key[0]] . ' ' . $_SESSION['user'][$key[1]]);
+								//else separate to 2 lines
+								else
+									$block .= ucwords($_SESSION['user'][$key[0]]) . '</br>ends ' . ucwords($_SESSION['user'][$key[1]]);
+								
+								//convert key from array to string
+								$key = strtolower($val);
+							}
+							//else it is a regular index and display regular key
+							else
+								$block .= ucwords($_SESSION['user'][$key]);	
+								
+							$block .= "</p>";
+							
+							$block .= "<a href='change.php?type=" . $key . "' class='text sub_link'>change</a>";
+						
+					}
+			}
+			
+			echo $block;
+	}
+	
+	public function get_user_info() {
+		
+			$user = new User();
+			$user->get_user_info();
+			
+			
+			
+	}
+					
+					
+}
+
 class Calendar {
 	var $last_day;
 	var $today;

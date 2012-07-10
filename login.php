@@ -1,8 +1,10 @@
 <?php
 
-	require_once('html_display.php');
-	
 	$login = 'out';
+
+	require_once('classes.php');
+	
+
 	$pos=0;
 	
 	$head = new Head_signup($login,'Login',1);
@@ -13,6 +15,7 @@
 	$body = new Body_signup();
 	$body->background('Login',$pos);
 	
+	//create form for login that will run js fn validate() for id _main
 	$form = new Form("login_check.php","POST","return validate(\"_main\")");
 	
 	$class = 'drop text';
@@ -67,4 +70,3 @@ if(!empty($_SESSION['user']['username_fail']))
 if(!empty($_SESSION['user']['password_fail']))
 	unset($_SESSION['user']['password_fail']);
 	
-?>

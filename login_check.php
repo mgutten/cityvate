@@ -17,4 +17,3 @@ foreach($_POST as $key=>$value){
 
 $check = new User();
 $check->login($user,$pw);
-?>

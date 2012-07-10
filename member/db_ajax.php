@@ -72,8 +72,3 @@ elseif(!empty($_POST['aid'])){
 	$remove_activity = new Activities();
 	$remove_activity->remove_activity($_POST['aid']);
 }
-
-
-
-
-?>
