@@ -29,5 +29,5 @@ $form->close();
 //unset it to try again with clean slate
 if(!empty($_SESSION['exists']))
 	unset($_SESSION['exists']);
-if(!empty($_SESSION['user']['email']))
-	unset($_SESSION['user']['email']);
+if(!empty($_SESSION['user']['email_fail']))
+	unset($_SESSION['user']['email_fail']);

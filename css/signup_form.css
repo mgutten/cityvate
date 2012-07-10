@@ -54,6 +54,11 @@
 	margin:155px 0px 0px 55px;
 }
 
+.next_button:hover {
+	opacity:.85;
+	filter:alpha(opacity=85);
+}
+
 /*title for text boxes*/
 .box_title,.box_title_close {
 	margin: 40px 0px 0px 0px;
@@ -286,5 +291,14 @@ select#when {
 
 /*code for member/change.php*/
 .change_subtitle {
-	margin-top:70px;
+	margin-top:60px;
+}
+
+#change_forgot {
+	text-decoration:underline;
+	color:#04B30D;
+}
+
+.red_back {
+	background-color:#950000;
 }

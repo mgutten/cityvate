@@ -205,3 +205,12 @@ a {
 	text-align:center;
 	padding-top:10px;
 }
+
+/*red input boxes*/
+.red_back {
+	background-color:#950000;
+}
+
+.red {
+	color:#CA0000;
+}

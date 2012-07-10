@@ -38,6 +38,13 @@ $(function() {
 				}
 	})
 	
+	//change any input back to regular colors if they are red
+	$('input').focus(function() {
+		if($(this).is('.red_back')){
+			$(this).removeClass('red_back');
+		}
+	});
+	
 	
 //end "ready" function
 });
@@ -62,6 +69,29 @@ function body_resize() {
 				}
 				
 		}
+		
+function validate(form_name) {
+		var returning = 1;
+		
+		$('#' + form_name + ' input[type=text],input[type=password]').each(function(){
+			
+			if($.trim($(this).val()) == ''){
+				returning = 0;
+				$(this).addClass('red_back');
+			}
+			
+		});
+		
+		if(returning == 0){
+			return false;
+		}
+		else
+			return true;
+		
+		
+}
+	
+	
 		
 
 		

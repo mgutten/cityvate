@@ -197,7 +197,7 @@ class Header {
 			echo "<div id='dropdown_container'><div id='dropdown'>\n";
 			//if not logged in, display form
 			if(!empty($this->drop['Login'])) {
-				$form = new Form($file_adj.'login_check.php','POST','return validate("")');
+				$form = new Form($file_adj.'login_authenticate.php','POST','return validate("")');
 				$form->input('text','username','username','','Username/email');
 				$form->input('password','password','username','','password');
 				echo "<a href='".$file_adj."forgot.php' id='forgot'>Forgot?</p></a>";
@@ -284,9 +284,9 @@ class Body {
 class Form {
 	
 	//create form tag
-	function __construct($action, $method, $onsubmit='') {
+	function __construct($action, $method, $onsubmit='',$id = '') {
 		
-			echo "<form action='$action' method='$method' onsubmit='$onsubmit'>\n";
+			echo "<form action='$action' method='$method' onsubmit='$onsubmit' id = '$id'>\n";
 			
 	}
 	
@@ -322,7 +322,7 @@ class Alert {
 				$file_adj = $GLOBALS['file_adj'];
 			
 			$darken="<div class='darken $name' onclick='$(\".$name\").toggle()'></div>";
-			$img = "<img class='centered $name' src='".$file_adj."images/signup/$src.png' />";
+			$img = "<img class='centered $name' src='".$file_adj."images/alert/$src.png' />";
 			$x = "<div class='x $name' onclick='$(\".$name\").toggle()'></div>";
 			echo $darken.$img.$x;
 			
@@ -440,4 +440,30 @@ class Body_signup extends Body {
 	
 }
 
+
+//function to generate neighborhood options during signup_1 and member/change.php
+function signup_options() {
+	
+	$neighborhood_array = array('SOMA','Castro','Chinatown','Fisherman\'s Wharf','Haight',
+					'Japantown','Marina','Mission','North Beach','Pacific Heights',
+					'Presidio','Panhandle','Tenderloin','Union Square');
+	
+		if(is_array($neighborhood_array)){
+			
+				foreach($neighborhood_array as $key) {
+						//test to see if session is set then select it
+						if(!empty($_SESSION['signup']['neighborhood']) && $key==$_SESSION['signup']['neighborhood'])
+									$selected = "selected='selected'";
+								else
+									$selected = "";
+						echo "<option name='$key' $selected>$key</option>";
+						
+				}
+		}
+		else {
+			
+				echo "<option name='$neighborhood_array'>$neighborhood_array</option>";
+				
+		}
+}
 	

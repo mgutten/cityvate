@@ -16,7 +16,7 @@
 	$body->background('Login',$pos);
 	
 	//create form for login that will run js fn validate() for id _main
-	$form = new Form("login_check.php","POST","return validate(\"_main\")");
+	$form = new Form("login_authenticate.php","POST","return validate(\"_main\")");
 	
 	$class = 'drop text';
 	

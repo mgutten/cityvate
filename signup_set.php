@@ -26,7 +26,7 @@ require_once('db_functions.php');
 	if(!empty($_POST['usernameemail'])){
 
 		if(!preg_match('/^[a-zA-Z0-9_\-\.]+@[a-z]+\.[com|net|edu|org|biz]+$/i',$_POST['usernameemail'])){
-			$_SESSION['user']['email'] = true;
+			$_SESSION['user']['email_fail'] = true;
 			header('location:signup_2.php');
 			exit;
 		}

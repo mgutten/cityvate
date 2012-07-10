@@ -82,32 +82,6 @@ function quote_box($div_number,$text,$name,$city = 'SF') {
 				
 }
 
-//function to generate neighborhood options during signup_1
-function signup_options() {
-	
-	$neighborhood_array = array('SOMA','Castro','Chinatown','Fisherman\'s Wharf','Haight',
-					'Japantown','Marina','Mission','North Beach','Pacific Heights',
-					'Presidio','Panhandle','Tenderloin','Union Square');
-	
-		if(is_array($neighborhood_array)){
-			
-				foreach($neighborhood_array as $key) {
-						//test to see if session is set then select it
-						if(!empty($_SESSION['signup']['neighborhood']) && $key==$_SESSION['signup']['neighborhood'])
-									$selected = "selected='selected'";
-								else
-									$selected = "";
-						echo "<option name='$key' $selected>$key</option>";
-						
-				}
-		}
-		else {
-			
-				echo "<option name='$neighborhood_array'>$neighborhood_array</option>";
-				
-		}
-}
-
 //function to generate text boxes signup_2
 function signup_boxes($title_array) {
 		
@@ -142,7 +116,7 @@ function signup_boxes($title_array) {
 						else{
 							//case when username is not in email format
 							if($key=='Username/email' && 
-								(!empty($_SESSION['user']['email']) || !empty($_SESSION['exists']))){
+								(!empty($_SESSION['user']['email_fail']) || !empty($_SESSION['exists']))){
 								$class .= ' red_back';
 								$lower = ' red';
 								$value = 'Please enter a valid email address.';

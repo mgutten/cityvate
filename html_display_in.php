@@ -370,6 +370,9 @@ class Body_account extends Body_member {
 								
 							$block .= "</p>";
 							
+							//do not display change option for city
+							if($key == 'city')
+								continue;
 							$block .= "<a href='change.php?type=" . $key . "' class='text sub_link'>change</a>";
 						
 					}

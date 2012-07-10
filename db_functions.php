@@ -91,6 +91,23 @@ class User {
 			
 	}
 	
+	function check_password($password) {
+		$username = $_SESSION['user']['username'];
+		$password = $this->password($password);
+		
+		$query = 'SELECT uID FROM users WHERE username = "' . $username . '" AND
+					password = "' . $password . '"';
+					
+		$result = $this->con->query($query);
+		
+		//if num_rows>0 then results found and user exists
+		if($result->num_rows > 0) 
+			return true;
+		else
+			return false;
+	}
+		
+	
 	//hash the password
 	function password($password) {
 			
@@ -142,6 +159,35 @@ class User {
 		
 		
 	}
+	
+	//fn to change value of column for individual user from change_authenticate.php
+	function change($column_array){
+		
+		$query = "UPDATE users 
+					SET ";
+					
+		$last_key = end(array_keys($column_array));			
+		
+		foreach($column_array as $column => $new){
+			//hash pw
+			if($column == 'password')
+				$new = $this->password($new);
+			
+		 	$query .= $column . " = '" . $new . "'";
+			
+			if($column != $last_key)
+				$query .= ",";
+				
+			//set updated session var
+			$_SESSION['user'][$column] = $new;
+			
+		}
+		$query .= " WHERE uID = '" . $_SESSION['user']['uID'] . "'";
+									
+		$result = $this->con->query($query);
+		
+	}
+		
 	
 	function loop_results($array,$counter = 0) {
 			

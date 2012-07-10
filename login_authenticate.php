@@ -11,7 +11,6 @@ foreach($_POST as $key=>$value){
 		$user = $value;
 	elseif(strpos($key,'pass') !== false)
 		$pw = $value;
-		
 }
 
 

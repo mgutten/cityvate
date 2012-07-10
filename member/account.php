@@ -18,4 +18,8 @@ $body = new Body_account(1);
 
 $body->my_account_boxes();
 
+if(!empty($_SESSION['user']['change_success'])){
+	$alert = new Alert('note','note_alert');
+	unset($_SESSION['user']['change_success']);
+}
 
