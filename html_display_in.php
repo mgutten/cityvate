@@ -84,7 +84,7 @@ class Body_member extends Body {
 			
 			echo "</div>";
 			
-			echo "<div id='pag_nums" . $id . "'>";
+			echo "<div id='pag_nums'>";
 		
 			//if we have more than 5 active activities, create pagination
 			if(count($activities)-count($this->done) > 5)
@@ -317,18 +317,27 @@ class Body_member_past extends Body_member {
 class Body_account extends Body_member {
 	var $links = array("My Account"=>'account.php',
 						"Subscription"=>'subscription.php'
+						
 						);
 						
 	var $title_array = array("Account Info"=>array(
 									"Email/Username"=>'username',
 									"Password"=>false,
-									"Subscription"=>array('package','end_date')),
+									"Subscription"=>array('package','end_date'),
+									"Balance"=>'tokens_balance'),
 							"Personal Info" =>array(
 									"Name"=>array('fname','lname'),
 									"City"=>'city',
 									"Neighborhood"=>'neighborhood')
 							);
-						
+	
+	public function __destruct() {
+		
+		//close divs and create "Questions?" bottom
+		echo "</div><div id='body_bottom_account' class='text'>Questions?  Contact us at support@cityvate.com</div></div></body></html>";
+		
+	}
+	
 	public function my_account_boxes() {
 			
 			//retrieve all user info and set to session vars
@@ -365,13 +374,16 @@ class Body_account extends Body_member {
 								$key = strtolower($val);
 							}
 							//else it is a regular index and display regular key
-							else
+							else{
 								$block .= ucwords($_SESSION['user'][$key]);	
+								if($key == 'tokens_balance')
+									$block .= ' tokens';
+							}
 								
 							$block .= "</p>";
 							
 							//do not display change option for city
-							if($key == 'city')
+							if($key == 'city' || $key == 'tokens_balance')
 								continue;
 							$block .= "<a href='change.php?type=" . $key . "' class='text sub_link'>change</a>";
 						
@@ -385,8 +397,6 @@ class Body_account extends Body_member {
 		
 			$user = new User();
 			$user->get_user_info();
-			
-			
 			
 	}
 					

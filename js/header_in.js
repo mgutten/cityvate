@@ -46,6 +46,24 @@ $(function() {
 	});
 	
 	
+	/*code for change.php*/
+	//yes button clicked on form in change.php
+	$('.yes').click(function(){
+			$('#change_info').submit();
+	});
+	
+	//hide alert box on load change.php
+	$('.confirm').hide();
+	
+	//return validate function when click submit button
+	$('#input_submitter').click(function() {
+		return validate("change_info");
+		
+	});
+	/*end code for change.php*/
+	
+	
+	
 //end "ready" function
 });
 
@@ -69,7 +87,8 @@ function body_resize() {
 				}
 				
 		}
-		
+
+//validate a form
 function validate(form_name) {
 		var returning = 1;
 		
@@ -82,16 +101,24 @@ function validate(form_name) {
 			
 		});
 		
-		if(returning == 0){
+		if(returning == 0)
 			return false;
-		}
-		else
+		else{
+			//if on change.php form, toggle confirmation box
+			if(form_name == 'change_info'){
+				//test if it's a password and change to *** not letters
+				var text = $('#input_change').val();
+				if($('#input_change').is('input[type=password]'))
+					text = '*********';
+					
+				$('.alert_main_val').text(text);
+				$('.confirm').toggle();
+				return false;
+			}
 			return true;
-		
-		
+		}
+				
 }
-	
-	
 		
 
 		

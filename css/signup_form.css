@@ -61,7 +61,7 @@
 
 /*title for text boxes*/
 .box_title,.box_title_close {
-	margin: 40px 0px 0px 0px;
+	margin: 45px 0px 0px 0px;
 	float:left;
 	clear:both;
 	font-size:20px;
@@ -73,9 +73,14 @@
 	margin: 20px 0px 0px 0px;
 }
 
-.box_title#fullname {
-	margin: 10px 0px 0px 0px;
+.box_title_close:first-child {
+	margin-top: 10px;
 }
+
+.box_title:first-child {
+	margin-top:50px;
+}
+
 
 /*text boxes*/
 .drop {
@@ -87,6 +92,11 @@
 	margin:5px 0px 0px 90px;
 	background-color:#313131;
 	padding-left:5px;
+}
+
+select.drop {
+	width:210px;
+	height:24px;
 }
 
 .box_title_lower {
@@ -301,4 +311,51 @@ select#when {
 
 .red_back {
 	background-color:#950000;
+}
+
+#alert_confirm {
+	background:#000;
+	width:600px;
+	height:200px;
+	border:#0C3 solid 1px;
+}
+
+.alert_main {
+	float:left;
+	clear:both;
+	width:500px;
+	margin: 20px 0px 0px 50px;
+	text-align:center;
+	font-size:15px;
+}
+
+.alert_main_val {
+	float:left;
+	clear:both;
+	width:600px;
+	height:16px;
+	font-size:16px;
+	color:#FF3;
+}
+
+.button {
+	float:left;
+	cursor:pointer;
+	margin:40px 0px 0px 50px;
+}
+
+.button:hover {
+	opacity:.85;
+	filter:alpha(opacity=85);
+}
+
+.yes {
+	clear:both;
+	margin-left:190px;
+}
+
+.fail {
+	margin:-20px 0px -14px 0px;
+	height:14px;
+	font-size:14px;
 }

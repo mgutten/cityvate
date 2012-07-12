@@ -205,7 +205,7 @@ class Header {
 				$form->close();
 			}
 			else {
-				$my_activities = "<a href='my_activities.php' alt='My Deals'><p class='my_account text'>My Deals</p></a>";
+				$my_activities = "<a href='account.php' alt='My Deals'><p class='my_account text'>Account Info</p></a>";
 				$calendar = "<a href='calendar.php' alt='Calendar'><p class='my_account text'>Calendar</p></a>";
 				$subscription = "<a href='subscription.php' alt='Subscription'><p class='my_account text'>Subscription</p></a>";
 				$logout = "<a href='logout.php' alt='Logout'><p class='my_account text logout'>Logout</p></a>";
@@ -384,17 +384,41 @@ class Alert_w_txt {
 		$form->input('hidden','date','');
 		$form->close();
 	}
-							
-						
+					
+	function confirm($type) {
+		$block = "<p class='alert_title	text'>Confirmation</p>";
 		
+		$block .= "<p class='alert_main text'>Are you sure you want to change your " . $type . " to:";
+		
+		$block .= "<p class='alert_main_val'></p>";
+		
+		$block .= "<img src='../images/change/yes_button.png' class='yes button'/><img src='../images/change/no_button.png' class='no button' onclick='$(\".$this->name\").toggle()'/>";
+		
+		echo $block;
+		
+		$this->close();
+		
+	}
+	
+	function generic($header,$main) {
+		
+		$block = "<p class='alert_title	text'>$header</p>";
+		
+		$block .= "<p class='alert_main text'>$main</p>";
+		
+		echo $block;
+		
+		$this->close();
+		
+	}
 		
 	
 	//close divs of alert box and add x
 	function close(){
 		
-		$x = "<div class='x $this->name' onclick='$(\".$this->name\").toggle()'></div>";
+		$x = "<div class='x $this->name text' onclick='$(\".$this->name\").toggle()'>X</div>";
 		
-		echo "</div></div>".$x;
+		echo "</div></div>" . $x;
 	}
 }
 
@@ -430,6 +454,46 @@ class Body_signup extends Body {
 			
 			echo $background.$status.$header;
 			
+	}
+	
+	function create_input($array,$action,$onsubmit = '',$id = '') {
+			
+			$form = new Form($action,'POST',$onsubmit,$id);
+			$input_cnt = count($array);
+			
+			foreach($array as $title => $box_type){
+				$class = 'drop text';
+				$title_class = 'box_title';
+				
+				//if we have more than 2 input boxes, make distance closer
+				if($input_cnt > 2)
+					$title_class = 'box_title_close';
+				
+				//create title for input box
+				echo "<div class='$title_class text'>$title</div>";
+				
+				$title = str_replace(' ','_',$title);
+				//if box_type is array, then we are using a select input and must create
+				if(is_array($box_type['type'])){
+					echo "<select name='$title' class='$class'>";
+					//loop through select array and create options
+					foreach($box_type['type'] as $val){
+						echo "<option>$val</option>";
+					}
+					//close select option and skip to next input box
+					echo "</select>";
+				}
+				//if not array, then display regular input box 
+				else{
+					$form->input($box_type,$title,$class);
+					
+				}
+				
+				echo "<p class='text box_title_lower'>" . $box_type['lower'] . "</p>";
+			}
+			
+			$form->input('image','submitter','next_button','');
+			$form->close();
 	}
 	
 	function close(){

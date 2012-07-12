@@ -108,7 +108,7 @@ function signup_boxes($title_array) {
 							$val='e.g. John Smith';
 						
 						//title caption for textbox
-						echo "<p class='box_title text box_title_close' id='$id'>".$key."</p>";
+						echo "<p class='text box_title_close' id='$id'>".$key."</p>";
 						
 						//if it's password box, make password text
 						if($key=='Password')

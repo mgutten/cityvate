@@ -145,6 +145,8 @@ a {
 	width:25px;
 	height:25px;
 	cursor:pointer;
+	color:#0C3;
+	font-size:18px;
 }
 
 .my_account {
@@ -213,4 +215,40 @@ a {
 
 .red {
 	color:#CA0000;
+}
+
+/*overlapping classes for alert_w_txt classes (change.php and calendar.php)*/
+.alert_title {
+	float:left;
+	font-size:16px;
+	color:#0C3;
+	font-size:20px;
+	margin:10px 0px 0px 10px;
+	text-align:left;
+	width:300px;
+}
+
+.alert_main {
+	float:left;
+	clear:both;
+	width:500px;
+	margin: 50px 0px 0px 50px;
+	text-align:center;
+	font-size:16px;
+}
+
+/*overlapping bottom "Questions?" div for account.php and subscription.php*/
+#body_bottom_account {
+	width:700px;
+	height:25px;
+	margin:0px 0px 0px 30px;
+	background:#000;
+	opacity:.5;
+	filter:alpha(opacity=50);
+	float:left;
+	clear:both;
+	color:#ccc;
+	text-align:center;
+	padding-top:5px;
+	cursor:default;
 }

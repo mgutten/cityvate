@@ -21,8 +21,22 @@ class User {
 			
 			$pw = $this->password($password);
 			
-			$query = "SELECT uID,username,fname,lname,neighborhood,city FROM users WHERE username='".$username."' ";
+			//array of wanted information
+			$array = array('uID','username','fname','lname','neighborhood','city','tokens_balance');
+			$last = end($array);
 			
+			//start building query
+			$query = "SELECT ";
+			
+			//loop through column array and build query
+			foreach($array as $key){
+				$query .= $key;
+				if($key != $last)
+					$query .= ',';
+			}
+			
+			$query .= " FROM users WHERE username='".$username."' ";
+						
 			//make first query to see if username exists in db
 			$result = $this->con->query($query);
 			
@@ -69,10 +83,10 @@ class User {
 			}
 			//if find result store info to session and login
 			else {
-					
+				//unset password fail session var
+				unset($_SESSION['user']['password_fail']);
 				//loop through and store necessary user information
-				$array = array('uID','username','fname','lname','neighborhood','city');
-				
+								
 				while($row = $result->fetch_array()){
 						
 						foreach($array as $val){

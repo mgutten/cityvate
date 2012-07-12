@@ -24,23 +24,31 @@ $header = new Header($login);
 $body = new Body_signup();
 $body->background('Change ' . $type_uc,$pos);
 
-$form = new Form('change_authenticate.php','POST','return validate("change_info");','change_info');
+$form = new Form('change_authenticate.php','POST','','change_info');
 
 $username_lower = '';
 
 ?>
+<p class='box_title_lower fail red text'><?php
+	//if password failed, show text to indicate failure
+	if(!empty($_SESSION['user']['password_fail']))
+		echo "Failed";
+		?></p>
 <div class='box_title_close change_subtitle text'>New <?php echo $type_uc;?></div>
 
 <?php
+//if changing neighborhood, create dropdown
 if($type == 'neighborhood'){
-	echo "<select name='change' class='drop text'>";
+	echo "<select name='change' id='input_change' class='drop text'>";
 	
 	signup_options();
 	
 	echo "</select>";
 }
+//else if password then create password input box
 elseif($type == 'password')
 	$form->input('password','change','drop text');
+//else regular input box
 else{
 	$class = 'drop text';
 	
@@ -80,10 +88,12 @@ $form->input('password','password',$class);
 <?php
 $form->input('hidden','type','','',$type);
 
-$form->input('image','submit','next_button','../images/change/update_button.png');
+$form->input('image','submitter','next_button','../images/change/update_button.png');
 
 $form->close();
 ?>
 <a href='account.php' class='back text'>Back</a>
 <?php
 $body->close();
+$alert = new Alert_w_txt('confirm');
+$alert->confirm($type);

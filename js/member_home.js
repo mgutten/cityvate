@@ -3,6 +3,7 @@ var timeout=[];
 var reset_list;
 var date = new Date();
 var cur_month = date.getMonth()+1;
+var cur_month_str = (cur_month < 10 ? '0' + cur_month : cur_month);
 //convert date time to seconds, not milli
 //subtract a day to make sure coupon is truly expired
 var cur_time = Math.round(date.getTime()/1000)-(60*60*24);
@@ -21,6 +22,7 @@ var empty = 0;
 //var to check whether fade effect is currently happening
 var timeout_check = 0;
 
+var image_array = new Array;
 
 
 $(function(){
@@ -106,7 +108,34 @@ function ready_functions() {
 		
 	})
 	
+	//preload new images for smoother fade effect
+	preload_images();
 	
+	
+		
+	
+}
+
+//function to preload all of the images for smooth fade effect
+function preload(arrayOfImages) {
+    $(arrayOfImages).each(function(){
+        $('<img/>')[0].src = this;
+        
+    });
+	
+}
+
+//create array of images, then run preload fn
+function preload_images() {
+	var img;
+	var month = cur_month_str;
+	//push img tags into array
+		$('.activity_name').each(function() {
+			
+			img = '../images/activities/' + month + '/' + $(this).text().replace(/ /g,'_') + '.jpg';
+			image_array.push(img);
+		})
+	preload(image_array);	
 }
 	
 function arrow_click(val) {
@@ -167,6 +196,9 @@ function change_month(new_month, start_range) {
 	//initiate loading cursor
 	$("*").css('cursor','wait');
 	
+	//set str var of current month to new val
+	cur_month_str = (cur_month < 10 ? '0' + cur_month : cur_month);
+	
 	//ajax call to change the month when
 	//the arrows next to month name are clicked
 	//then return data and populate html
@@ -197,15 +229,10 @@ function change_month(new_month, start_range) {
 //populate html with returned json data from ajax call
 function populate_html(array) {
 		
-		//find new month from json array, add 0 if needed
-		//month = month(str) month_num = month(int)
-		var month;
-		
-		cur_month = cur_month + '';
-		(cur_month.length==1 ? month='0'+cur_month : month = cur_month)
-		month_num=parseInt(month)
-		cur_month = parseInt(cur_month);
-		
+		//set 2 vars 1 to handle str (ie 07 not 7) and other to handle arrays (3 not 03)
+		var month = cur_month_str;
+		var month_num=cur_month;
+				
 		//change month id so function can work next time
 		$('.activity_month').attr('id',month+month_array[month_num])
 		
@@ -223,12 +250,9 @@ function populate_html(array) {
 }
 
 function change_picture() {
-		var month;
 		
-		cur_month = cur_month + '';
-		(cur_month.length==1 ? month='0'+cur_month : month = cur_month)
-		month_num=parseInt(month)
-		cur_month = parseInt(cur_month);
+		var month = cur_month_str;
+		var month_num=cur_month;
 				
 		if(empty == 1) {
 			
@@ -453,7 +477,7 @@ function image_fade(header) {
 		if($('#picture_shown').css('opacity')==1){
 			$('#picture_shown').animate({opacity:0},500);
 		}
-		
+				
 		//set var so we can test against it to see if we are in middle of bar change
 		timeout_check = 1;
 		
@@ -462,16 +486,16 @@ function image_fade(header) {
 		timeout[0] = setTimeout(function(){
 				image_reset(header,month)
 				
-			},510);
+			},505);
 		
 			
 }
 
 //reset top image to new image so loop of fades can be achieved
 function image_reset(header,month) {
-
-$('#picture_shown').css('opacity',1);
 $('#picture_shown').attr('src','../images/activities/'+month+'/'+header+'.jpg');
+$('#picture_shown').css('opacity',1);
+
 
 //reset timeout check
 timeout_check = 0;
