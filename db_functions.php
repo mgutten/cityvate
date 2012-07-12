@@ -51,7 +51,7 @@ class User {
 				//if found results and not checking for pw ($checking==1),
 				//then username is taken, send back to signup page
 					$_SESSION['exists']=TRUE;
-					header('location:signup_2.php');
+					header('location:signup_2');
 					exit;
 			}
 			else{
@@ -98,7 +98,7 @@ class User {
 				
 				
 				//login to member page
-				header('location:member/member.php');
+				header('location:member/member');
 			}
 			
 			$result->free();

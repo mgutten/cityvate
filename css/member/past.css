@@ -1,0 +1,107 @@
+@charset "utf-8";
+/* CSS Document */
+
+p {
+	margin: 5px 0px 0px 0px;
+}
+
+/*main body back*/
+#body_main {
+	width:865px;
+	height:618px;
+	background:url(../../images/past/back.png) repeat-y;
+	float:left;
+	clear:both;
+	margin: -1px 0px 0px 30px;
+}
+
+/*top titile for past.php*/
+.title {
+
+	text-align:center;
+	font-size:22px;
+	color:#FF3;
+	margin:0px 0px 0px 0px;
+}
+
+#never_container,#did_container {
+	width:250px;
+	height:45px;
+	float:left;
+	background:url(../../images/past/never.png);
+	margin:20px 0px 0px 100px;
+}
+
+#did_container {
+	background:url(../../images/past/did.png);
+	margin-left:175px;
+}
+
+/*display of month separators*/
+.month_back {
+	float:left;
+	clear:both;
+	width:860px;
+	height:30px;
+	margin:20px 0px 0px 2px;
+	background:url(../../images/past/month_back.png);
+}
+
+.month_title{
+	float:left;
+	clear:both;
+	text-align:center;
+	font-size:17px;
+	color:#04B30D;
+	width:110px;
+	height:20px;
+	margin:-25px 0px 0px 379px;
+}
+
+/*left body(0) of month's activities and right body(1)*/
+.month_body_0,.month_body_1 {
+	float:left;
+	clear:both;
+	width:400px;
+	margin:5px 0px 0px 25px;
+	text-align:center;
+}
+
+/*body_right for done activities set to 1
+because array is stored as 0 and 1*/
+.month_body_1 {
+	clear:none;
+}
+
+p.activity {
+	font-size:15px;
+	cursor:pointer;
+	width: 200px;
+	height:19px;
+	padding-top:1px;
+	background:#003E00;
+	color:#04B30D;
+	margin-left:100px;
+}
+
+p.activity:hover {
+	opacity:.8;
+	filter:alpha(opacity=80);
+}
+
+p.expired {
+	color:#F00;
+	background:none;
+}
+
+#no_activities {
+	float:left;
+	clear:both;
+	width:855px;
+	text-align:center;
+	font-size:20px;
+	margin:40px 0px 0px 5px;
+	padding-bottom:27px;
+	cursor:default;
+}
+	

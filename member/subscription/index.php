@@ -1,19 +1,20 @@
 <?php
+/* location member/subscription/index.php */
 
 //if button has been clicked, load change page into this one and exit
 if(!empty($_GET['type'])){
 	if($_GET['type'] == 'cancel'){
-		require_once('cancel_subscription.php');
+		require_once('../cancel_subscription.php');
 		exit;
 	}
-	require_once('subscription/change.php');
+	require_once('change.php');
 	exit;
 }
 
 $login = 'in';
 
-require_once('../db_functions.php');
-require_once('../classes.php');
+require_once('../../db_functions.php');
+require_once('../../classes.php');
 
 
 //create the head section
@@ -44,7 +45,7 @@ if(empty($_SESSION['user']['package']))
     <p class='package_val text'><?php echo $_SESSION['user']['end_date'];?></p>
 </div>
 
-<a href='subscription/change.php?type=package'><img src="../images/subscription/upgrade_button.png" class='button first'/></a>
-<a href='subscription/change.php?type=end_date'><img src="../images/subscription/end_button.png" class='button'/></a>
-<a href='subscription/change.php?type=payment'><img src="../images/subscription/pay_button.png" class='button'/></a>
-<a href='subscription/change.php?type=cancel'><img src="../images/subscription/cancel_button.png" class='button'/></a>
+<a href='change.php?type=package'><img src="../../images/subscription/upgrade_button.png" class='button first'/></a>
+<a href='change.php?type=end_date'><img src="../../images/subscription/end_button.png" class='button'/></a>
+<a href='change.php?type=payment'><img src="../../images/subscription/pay_button.png" class='button'/></a>
+<a href='change.php?type=cancel'><img src="../../images/subscription/cancel_button.png" class='button'/></a>

@@ -57,7 +57,7 @@ $(function() {
 	
 	//return validate function when click submit button
 	$('#input_submitter').click(function() {
-		return validate("change_info");
+		return validate($('form').attr('id'));
 		
 	});
 	/*end code for change.php*/
@@ -104,17 +104,22 @@ function validate(form_name) {
 		if(returning == 0)
 			return false;
 		else{
+			
 			//if on change.php form, toggle confirmation box
 			if(form_name == 'change_info'){
+				//get first box' selector
+				var change_box = $('#change_info :input:first');
+				var text = change_box.val();
+				
 				//test if it's a password and change to *** not letters
-				var text = $('#input_change').val();
-				if($('#input_change').is('input[type=password]'))
+				if(change_box.is('input[type=password]'))
 					text = '*********';
 					
 				$('.alert_main_val').text(text);
 				$('.confirm').toggle();
 				return false;
 			}
+			
 			return true;
 		}
 				

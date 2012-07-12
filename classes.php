@@ -16,6 +16,7 @@ class Head {
 	var $script = array("jquery-1.6.min");
 	var $style= array();
 	var $title;
+	var $title_css;
 	var $file_adj;
 	
 		function __construct($login_status, $title, $default_js = 0) {
@@ -23,10 +24,10 @@ class Head {
 				date_default_timezone_set('America/Los_Angeles');
 
 				
-				//if login status "in" then check to see if session
+				//if login status "in" then check to see if sessione
 				//vars are set.  If no, send to login page
 				if($login_status=='in' && empty($_SESSION['user']))
-						header('location:../login.php');
+						header('location:../login');
 
 				
 				//make paths relative to current file location
@@ -42,6 +43,19 @@ class Head {
 				//stylesheet to respective arrays
 				$this->title = $title;
 				
+				//separate title into directory (ie Member Home => member/home)
+				$title = explode(' ', strtolower($title));
+				$last = end($title);
+				
+				//loop through and concatenate new title for scripts and css
+				foreach($title as $val) {
+					
+					$this->title_css .= $val;
+					
+					if($val != $last)
+						$this->title_css .= '/';
+				}
+				
 				
 				//echo up to <head> of doc
 				echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n";
@@ -49,7 +63,7 @@ class Head {
 				
 				//define meta tags, adding title to keywords
 				$meta_desc = 'Cityvate is your personal activity agent, helping you to find awesome local and motivating you to get out and try something new!';
-				$meta_key = 'cityvate, fun life, exciting life, local activities, san francisco activities, '.$title;
+				$meta_key = 'cityvate, fun life, exciting life, local activities, san francisco activities, ' . $title;
 					
 				//if header is for logged out page, display
 				//appropriate css stylesheet/script else logged
@@ -67,8 +81,8 @@ class Head {
 				
 				//determine if need the titled js or not
 				if($default_js==0){
-					array_push($this->script,strtolower($title));
-					array_push($this->style,strtolower($title));
+					array_push($this->script,$this->title_css);
+					array_push($this->style,$this->title_css);
 				}
 					
 				//echo base <meta>, styles, scripts
@@ -162,7 +176,7 @@ class Head {
 
 class Header {
 	
-	var $links=array('Home' => 'home.php');
+	var $links=array();
 	var $drop=array();
 	
 	function __construct($login_status) {
@@ -170,18 +184,20 @@ class Header {
 			//set file_adj var from Head class
 			$file_adj = $GLOBALS['file_adj'];
 			
+			$this->links['Home'] = '../';
+			
 			//if logged out, add to array of header links
 			if($login_status == 'out') {
-					$this->links['Signup'] = 'signup.php';
-					$this->links['About'] = 'about.php';
-					$this->drop['Login']='login.php';
+					$this->links['Signup'] = 'signup';
+					$this->links['About'] = 'about';
+					$this->drop['Login']='login';
 			}
 			
 			//if logged in, change dropdown variable
 			else {
-					$this->drop['My Account'] = 'account.php';
-					$this->links['Contact'] = 'contact.php';
-					$this->links['Home'] = 'member.php';
+					$this->drop['My Account'] = 'account';
+					$this->links['Contact'] = 'contact';
+					$this->links['Home'] = 'member';
 			}
 					
 			//display components of header as well as background img
@@ -205,10 +221,10 @@ class Header {
 				$form->close();
 			}
 			else {
-				$my_activities = "<a href='account.php' alt='My Deals'><p class='my_account text'>Account Info</p></a>";
-				$calendar = "<a href='calendar.php' alt='Calendar'><p class='my_account text'>Calendar</p></a>";
-				$subscription = "<a href='subscription.php' alt='Subscription'><p class='my_account text'>Subscription</p></a>";
-				$logout = "<a href='logout.php' alt='Logout'><p class='my_account text logout'>Logout</p></a>";
+				$my_activities = "<a href='" . $file_adj . "member/account' alt='My Deals'><p class='my_account text'>Account Info</p></a>";
+				$calendar = "<a href='" . $file_adj . "member/calendar' alt='Calendar'><p class='my_account text'>Calendar</p></a>";
+				$subscription = "<a href='" . $file_adj . "member/subscription' alt='Subscription'><p class='my_account text'>Subscription</p></a>";
+				$logout = "<a href='" . $file_adj . "member/logout' alt='Logout'><p class='my_account text logout'>Logout</p></a>";
 				echo $my_activities.$calendar.$subscription.$logout;
 			}
 			echo "</div></div>\n";
@@ -235,8 +251,8 @@ class Header {
 							$class .= ' header_first';
 					
 					//if logged in (ie member.php homepage), no file adjust		
-					if($value == 'member.php')
-							$file_adj2 = '';
+					if($value == 'member')
+							$file_adj2 = $file_adj2 . 'member/';
 							
 					echo "<a href='".$file_adj2.$value."' alt='$key'><div class='$class'>$key</div></a>\n";
 					
@@ -259,6 +275,11 @@ class Header {
 
 
 class Body {
+	
+	//set cost of each package for all pages
+	var $package_cost = array('budget'=>25,
+							'basic'=>50,
+							'premium'=>100);
 	
 	function __construct() {
 		
@@ -392,7 +413,8 @@ class Alert_w_txt {
 		
 		$block .= "<p class='alert_main_val'></p>";
 		
-		$block .= "<img src='../images/change/yes_button.png' class='yes button'/><img src='../images/change/no_button.png' class='no button' onclick='$(\".$this->name\").toggle()'/>";
+		$block .= "<img src='" . $GLOBALS['file_adj'] . "images/change/yes_button.png' class='yes button'/>
+					<img src='" . $GLOBALS['file_adj'] . "images/change/no_button.png' class='no button' onclick='$(\".$this->name\").toggle()'/>";
 		
 		echo $block;
 		
@@ -424,12 +446,16 @@ class Alert_w_txt {
 
 class Head_signup extends Head {
 	
-	var $style = array('signup_form');
+	var $style = array('signup/form');
 	
 	
 }
 
 class Body_signup extends Body {
+	
+	var $neighborhoods = array('SOMA','Castro','Chinatown','Fisherman\'s Wharf','Haight',
+					'Japantown','Marina','Mission','North Beach','Pacific Heights',
+					'Presidio','Panhandle','Tenderloin','Union Square');
 	
 	function background($title, $position) {
 			
@@ -445,7 +471,7 @@ class Body_signup extends Body {
 			}
 				
 			$background = "<div id='background_$smallorbig'>";
-			$status = "<img src='images/signup/signup_$position.png' alt='Step $position of 4' class='position'/>";
+			$status = "<img src='" . $GLOBALS['file_adj'] . "images/signup/signup_$position.png' alt='Step $position of 4' class='position'/>";
 			
 			if($position==0)
 				$status='';
@@ -464,6 +490,7 @@ class Body_signup extends Body {
 			foreach($array as $title => $box_type){
 				$class = 'drop text';
 				$title_class = 'box_title';
+				$lower_class = 'text box_title_lower';
 				
 				//if we have more than 2 input boxes, make distance closer
 				if($input_cnt > 2)
@@ -472,7 +499,14 @@ class Body_signup extends Body {
 				//create title for input box
 				echo "<div class='$title_class text'>$title</div>";
 				
-				$title = str_replace(' ','_',$title);
+				$title = str_replace(' ','_',strtolower($title));
+				
+				//if fail var is set for this input box, turn to red
+				if(!empty($_SESSION['user'][$title . '_fail'])){
+					$class .= ' red_back';
+					$lower_class .= ' red';
+					unset($_SESSION['user'][$title . '_fail']);
+				}
 				//if box_type is array, then we are using a select input and must create
 				if(is_array($box_type['type'])){
 					echo "<select name='$title' class='$class'>";
@@ -480,39 +514,35 @@ class Body_signup extends Body {
 					foreach($box_type['type'] as $val){
 						echo "<option>$val</option>";
 					}
-					//close select option and skip to next input box
+					//close select option
 					echo "</select>";
 				}
 				//if not array, then display regular input box 
 				else{
-					$form->input($box_type,$title,$class);
+					
+					$form->input($box_type['type'],strtolower($title),$class);
 					
 				}
 				
-				echo "<p class='text box_title_lower'>" . $box_type['lower'] . "</p>";
+				//display lower text below the input box
+				echo "<p class='$lower_class'>" . $box_type['lower'] . "</p>";
 			}
 			
-			$form->input('image','submitter','next_button','');
+			$form->input('image','submitter','next_button',$GLOBALS['file_adj'] . 'images/change/update_button.png');
 			$form->close();
-	}
-	
-	function close(){
-		
-			echo "</div>";
 			
+			//return up one directory to parent file (ie account/change.php routes to account.php)
+			$refering_url = dirname($_SERVER['PHP_SELF']) . '.php';
+			
+			echo "<a href='$refering_url' class='back text'>Back</a>";
 	}
 	
-}
-
-
-//function to generate neighborhood options during signup_1 and member/change.php
-function signup_options() {
+	//function to generate neighborhood options during signup_1 and member/change.php
+	function signup_options() {
 	
-	$neighborhood_array = array('SOMA','Castro','Chinatown','Fisherman\'s Wharf','Haight',
-					'Japantown','Marina','Mission','North Beach','Pacific Heights',
-					'Presidio','Panhandle','Tenderloin','Union Square');
+		$neighborhood_array = $this->neighborhoods;
 	
-		if(is_array($neighborhood_array)){
+			if(is_array($neighborhood_array)){
 			
 				foreach($neighborhood_array as $key) {
 						//test to see if session is set then select it
@@ -523,11 +553,20 @@ function signup_options() {
 						echo "<option name='$key' $selected>$key</option>";
 						
 				}
-		}
-		else {
-			
-				echo "<option name='$neighborhood_array'>$neighborhood_array</option>";
+			}
+			else {
+				
+					echo "<option name='$neighborhood_array'>$neighborhood_array</option>";
 				
 		}
 }
+	
+	function close(){
+		
+			echo "</div>";
+			
+	}
+	
+}
+
 	

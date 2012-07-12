@@ -2,9 +2,9 @@
 
 class Body_member extends Body {
 	
-	var $links = array("My Activities"=>'member.php',
-						"Calendar"=>'calendar.php',
-						"Past Activities"=>'past.php');
+	var $links = array("Home"=>'member',
+						"Calendar"=>'calendar',
+						"Past Activities"=>'past');
 	var $done = array();
 	var $activities=array();
 	
@@ -385,7 +385,7 @@ class Body_account extends Body_member {
 							//do not display change option for city
 							if($key == 'city' || $key == 'tokens_balance')
 								continue;
-							$block .= "<a href='change.php?type=" . $key . "' class='text sub_link'>change</a>";
+							$block .= "<a href='account/change.php?type=" . $key . "' class='text sub_link'>change</a>";
 						
 					}
 			}

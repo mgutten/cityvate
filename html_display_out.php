@@ -16,20 +16,20 @@ class Form_signup extends Form {
 	
 	function back() {
 			if($this->last==0) 
-				$loc = '';
+				$loc = '../signup';
 			else
-				$loc = '_'.$this->last;
+				$loc = 'signup_'.$this->last;
 			
 			($this->last==3 ? $id='back' : $id='');
 			
-			$back = "<a href='signup".$loc.".php' alt='Back to step ".$this->last."'><p class='back text' id='$id'>Back</p></a>\n";
+			$back = "<a href='".$loc."' alt='Back to step ".$this->last."'><p class='back text' id='$id'>Back</p></a>\n";
 			
 			echo $back;
 			
 	}
 	
 	function next_button() {			
-			$this->input('image','next','next_button','images/signup/next_button.png');
+			$this->input('image','next','next_button',$GLOBALS['file_adj'] . 'images/signup/next_button.png');
 	}
 	
 	function radio($name,$value) {
@@ -52,7 +52,7 @@ function how_what($howorwhat) {
 				global $text_num;
 				global $text;
 				
-				$block = "<div class='how_what' id='%s'>\n<img src='images/home/%s.png' id='%s_img'/>\n";
+				$block = "<div class='how_what' id='%s'>\n<img src='" . $GLOBALS['file_adj'] . "images/home/%s.png' id='%s_img'/>\n";
 							
 				foreach($text[$howorwhat] as $key=>$value){
 					
@@ -62,7 +62,7 @@ function how_what($howorwhat) {
 				}
 				//insert preview img
 				if($howorwhat=='how')
-					$block .= "<a href='preview/member.php' alt='Preview Cityvate' title='Check out Cityvate'><img src='images/home/preview.png' id='preview'/></a>";
+					$block .= "<a href='preview/member.php' alt='Preview Cityvate' title='Check out Cityvate'><img src='" . $GLOBALS['file_adj'] . "images/home/preview.png' id='preview'/></a>";
 
 				$block .= "</div>\n";
 							

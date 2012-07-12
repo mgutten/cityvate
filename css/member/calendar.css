@@ -1,0 +1,424 @@
+@charset "utf-8";
+/* CSS Document */
+
+#body_main {
+	width:930px;
+	height:618px;
+	float:left;
+	clear:both;
+	margin: -1px 0px 0px 30px;
+}
+
+#body_left {
+	width:650px;
+	height:618px;
+	float:left;
+	background:url(../../images/blank_back.png);
+}
+
+#body_right {
+	width:280px;
+	height:500px;
+	background:url(../../images/member/body_side.png) no-repeat;
+	float:left;
+}
+
+div.calendar_day {
+	width:80px;
+	height:80px;
+	float:left;
+	position:relative;
+	margin:0px 0px 0px 0px;
+}
+
+
+div.calendar_light {
+	background:#444;
+	border:#999 solid 1px;
+	cursor:pointer;
+}
+
+div.calendar_dark {
+	background:#333;
+	border:#999 solid 1px;
+	cursor:pointer;
+
+}
+
+.week_first {
+	clear:both;
+}
+
+
+p.calendar_day_text {
+	float:left;
+	margin:2px 0px 0px 2px;
+	height:14px;
+	/*color:#B9B9b9;*/
+}
+
+p.activity {
+	float:left;
+	clear:both;
+	width:78px;
+	text-align:center;
+	margin:-10px 0px 0px 1px;
+	padding:10px 0px 0px 0px;
+	height:47px;
+	font-size:12px;
+	color:#ff3;
+	line-height:11px;
+	cursor:pointer;
+}
+
+p.nono {
+	float:left;
+	clear:both;
+	width:78px;
+	text-align:center;
+	margin:1px 0px 0px 1px;
+	color:#ff3
+}
+
+p.activity_old {
+	color:#B1B1B1;
+}
+
+div.transparent {
+	opacity:.5;
+	filter:alpha(opacity=50);
+}
+
+div.today {
+	background-color:#999;
+}
+
+/*
+div.selected {
+	background-color:#999;
+}
+
+div.today > p.calendar_day_text {
+	color:#FFF
+}
+*/
+
+
+div#calendar {
+	width:574px;
+	height:450px;
+	margin:15px 0px 0px 38px;
+	float:left;
+	clear:both;
+}
+
+#month {
+	width:164px;
+	height:22px;
+	float:left;
+	margin:25px 0px 0px 255px;
+}
+
+.arrow {
+	width:14px;
+	height:20px;
+	float:left;
+	margin-top:2px;
+	cursor:pointer;
+
+}
+
+#left_arrow {
+	background:url(../../images/calendar/left_arrow.png) no-repeat;
+}
+
+#right_arrow {
+	background:url(../../images/calendar/right_arrow.png) no-repeat;
+	float:right;
+}
+
+.activity_month {
+	color:#fff;
+	font-size:22px;
+	width:120px;
+	height:22px;
+	text-align:center;
+	margin: -2px 0px 0px 20px;
+}
+
+.activity_year {
+	font-size:15px;
+	color:#fff;
+	float:left;
+	clear:both;
+	width:80px;
+	margin:5px 0px -15px 318px;
+}
+
+/*days of the week header*/
+div#days_of_week {
+	width:574px;
+	height:18px;
+	float:left;
+	clear:both;
+	margin:10px 0px 0px 38px;
+}
+
+p.day_of_week {
+	width:82px;
+	float:left;
+	text-align:center;
+}
+
+#body_right > p:first-child  {
+	width:280px;
+	float:left;
+	clear:both;
+	text-align:center;
+}
+
+/*my_activities section*/
+p.my_activities_title {
+	font-size:20px;
+	margin:30px 0px 0px 0px;
+	
+	
+}
+
+p.my_activities_title_clarify {
+	float:left;
+	clear:both;
+	width:200px;
+	text-align:center;
+	font-size:11px;
+	margin:0px 0px 0px 40px;
+
+}
+
+p.activity_bar {
+	width:180px;
+	height:18px;
+	text-align:center;
+	background-color:#006C00;
+	font-size:14px;
+	margin-top:0px;
+	padding-top:2px;
+	cursor:pointer;
+	color:#ff3;
+}
+
+
+
+p.activity_reserved {
+	background-color:#222;
+	color:#ff3;/*#CCC*/
+}
+
+div#my_activities_container {
+	float:left;
+	clear:both;
+	width:180px;
+	height:150px;
+	margin:5px 0px 0px 50px;
+}
+
+div.activity_holder {
+	width:180px;
+	height:18px;
+	float:left;
+	clear:both;
+	margin:2px 0px 2px 0px;
+	position:relative;
+}
+
+div.drophover {
+	background-color:#999;
+}
+
+.reserve{
+	display:none;
+}
+
+/*deal with alerts*/
+
+.centered {
+	width:600px;
+	height:252px;
+	background:#000;
+	border:#0C3 solid 1px;
+}
+
+
+#alert_activity_name {
+	float:left;
+	font-size:16px;
+	text-align:center;
+	width:600px;
+	clear:both;
+	margin:30px 0px 0px 0px;
+	color:#FF3;
+	clear:both;
+}
+
+#alert_date {
+	float:left;
+	font-size:16px;
+	text-align:center;
+	font-size:16px;
+	width:600px;
+	color:#ff3;
+	clear:both;
+}
+
+#alert_what_time {
+	float:left;
+	font-size:16px;
+	text-align:center;
+	width:600px;
+	clear:both;
+	margin-bottom:0px;
+	margin-top:10px;
+}	
+
+#input_alert_button {
+	margin:15px 0px 0px 445px;
+	clear:both;
+	float:left;
+}
+
+#input_alert_button:hover {
+	opacity:.85;
+	filter:alpha(opacity=85);
+}
+
+select {
+	background:#333;
+	color:#FFF;
+	font-family:'Neon 80s';
+	margin-top:5px;
+	float:left;
+	clear:none;
+}
+
+#alert_hours {
+	margin-left:235px;
+}
+
+div.red {
+	background-color:#A00;
+}
+
+div.red_expired{
+	background-color:#A00;
+}
+/*body_right activity description*/
+
+div#activity_desc_container{
+	width:260px;
+	height:215px;
+	float:left;
+	clear:both;
+	margin:10px 0px 0px 14px;
+}
+
+p#activity_title{
+	float:left;
+	clear:both;
+	width:256px;
+	text-align:center;
+	font-size:18px;
+	margin:2px 0px 0px 2px;
+	color:#ff3;
+}
+
+p#activity_desc_left{
+	float:left;
+	clear:both;
+	width:130px;
+	margin-left:15px;
+	line-height:18px;
+}
+
+#activity_desc_right{
+	float:left;
+	width:100px;
+	height:110px;
+	margin-top:16px;
+	color:#ff3;
+}
+
+p.activity_desc_ajax {
+	float:left;
+	clear:both;
+	text-align:left;
+	margin: 0px 0px 4px 0px;
+	height:14px;
+}
+
+#activity_full_info {
+	text-decoration:underline;
+}
+
+#cancel_reserve {
+	float:left;
+	clear:both;
+	margin:10px 0px 0px 170px;
+	display:none;
+	cursor:pointer;
+}
+
+#cancel_reserve:hover {
+	opacity:.85;
+	filter:alpha(opacity=85);
+}
+
+/*body_right top portion change between done and current*/
+#my_activities_done_container {
+	float:left;
+	clear:both;
+	height:16px;
+	width:130px;
+	margin:25px 0px 15px 140px;
+}
+
+.my_activities_done {
+	color:#ff3;
+	text-decoration:underline;
+	font-size:11px;
+	float:left;
+	margin:0px 4px 0px 0px;
+	cursor:pointer;
+}
+
+p.my_activities_done {
+	text-decoration:none;
+	margin-top:1px;
+	cursor:default;
+}
+
+/*explanation on dragover a red day*/
+#red_explanation {
+	float:left;
+	color:#ff3;
+	margin:5px 0px 0px 38px;
+	width:574px;
+	clear:both;
+	text-align:center;
+}
+
+div.draggable_container {
+	position:relative;
+	width:76px;
+	float:left;
+	clear:both;
+}
+
+p.draggable {
+	padding:2px;
+	margin-top:0px;
+	float:none !important;
+	clear:none !important;
+}
+
+
+	

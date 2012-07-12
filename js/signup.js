@@ -26,7 +26,7 @@ function fade_signup(num) {
 		function() {
 			$(this).stop().animate({opacity:0},500);
 			timeout[0] = setTimeout('$("#text'+num+'").addClass("types")',549);
-			timeout[1] = setTimeout('$("#text'+num+'").html("<img src=\'images/signup/'+inner[num]+'.png\'/>")',549);
+			timeout[1] = setTimeout('$("#text'+num+'").html("<img src=\'../images/signup/'+inner[num]+'.png\'/>")',549);
 			timeout[2] = setTimeout('$("#fade'+num+'").stop().animate({opacity:1},500)',550);
 		},
 		
