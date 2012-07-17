@@ -183,7 +183,7 @@ function remove_done(id) {
 	//from done list and move back to
 	//current list, then reload
 	$.ajax({
-		url:'db_ajax.php',
+		url:'/member/ajax_calls/db_ajax.php',
 		type: 'POST',
 		data: { aid : id},
 		success: function() {
@@ -203,7 +203,7 @@ function change_month(new_month, start_range) {
 	//the arrows next to month name are clicked
 	//then return data and populate html
 		$.ajax({
-			url:'db_ajax.php',
+			url:'/member/ajax_calls/db_ajax.php',
 			dataType:'json',
 			data: {month: new_month , start : start_range},
 			success: function(data) {
@@ -267,7 +267,7 @@ function change_picture() {
 			$('.picture_toggle').css('display','block');
 			
 			//change url of image
-			$('#picture_link').attr('href','activity.php?num='+a_array[2]['aID']);
+			$('#picture_link').attr('href','/member/activity/'+a_array[2]['aID']);
 			
 		
 			//change first shown image
@@ -376,7 +376,7 @@ function looping_done() {
 		//loop through and create 'finished activities' section
 		for(b=starting_done; b<ending_done; b++){
 			text = text+"<div class='activity_done text' >\
-							<a href='activity.php?num="+done[b]['aID']+"' class='activity_link'>\
+							<a href='/member/activity/"+done[b]['aID']+"' class='activity_link'>\
 								<p class='activity_name'>"+done[b]['name']+"</p>\
 								<p class='activity_type'>"+done[b]['type']+"</p></a>\
 							<p class='activity_reserve activity_done_x' id='"+done[b]['aID']+"'>X</p>\
@@ -458,7 +458,7 @@ function bar_select(tag) {
 		
 		
 		//change url of image to aID (id) of new selected bar
-		$('#picture_link').attr('href','activity.php?num='+tag.attr('id'));
+		$('#picture_link').attr('href','/member/activity/'+tag.attr('id'));
 		
 		//change image
 		image_fade(header);

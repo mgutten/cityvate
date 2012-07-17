@@ -68,7 +68,7 @@ function change_month(new_month) {
 	
 		
 	$.ajax({
-		url: 'calendar_ajax.php',
+		url: '/member/ajax_calls/calendar_ajax.php',
 		type: 'POST',
 		data: {month : new_month,
 				year : year
@@ -189,7 +189,7 @@ function ready_fns() {
 	
 	//cancel selected reservation	
 	$("#cancel_reserve").click(function() {
-		window.location='calendar_ajax.php?aID='+selected_aid;
+		window.location='/member/ajax_calls/calendar_ajax.php?aID='+selected_aid;
 	})
 	
 	
@@ -348,7 +348,7 @@ function activity_desc(activity_aid){
 		}
 		else{
 			$.ajax({
-				url: 'db_ajax.php',
+				url: '/member/ajax_calls/db_ajax.php',
 				type:'POST',
 				dataType:'json',
 				data: {activity : activity_aid},

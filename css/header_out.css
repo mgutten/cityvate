@@ -37,7 +37,7 @@ p {
 }
 
 #header_back {
-	background:url(../images/header_back.jpg) repeat-x;
+	background:url('/images/header_back.jpg') repeat-x;
 	position:absolute;
 	top:0;
 	left:0;
@@ -73,7 +73,7 @@ p {
 }
 
 #logo {
-	background:url(../images/logo.png) no-repeat;
+	background:url('/images/logo.png') no-repeat;
 	width:300px;
 	height:84px;
 	float:left;

@@ -1,0 +1,9 @@
+#RewriteEngine On
+
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+
+#RewriteRule ^!signup/step(\d+)|(unavailable)$ signup.php?page=$1$2 [L]
+
+#RewriteRule ^step(\d+)|(unavailable)$ index.php?route=signup/signup_1&action=$1$2 [L,QSA]
+

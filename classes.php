@@ -3,9 +3,9 @@
 //check login var to see whether logged in or not
 //then include corresponding class file
 if($login == 'in')
-	include('html_display_in.php');
+	include('/classes/html_display_in.php');
 else
-	include('html_display_out.php');
+	include('/classes/html_display_out.php');
 	
 
 //declare common classes between logged in vs. logged out
@@ -17,30 +17,32 @@ class Head {
 	var $style= array();
 	var $title;
 	var $title_css;
-	var $file_adj;
+	var $file_adj = '/';
 	
-		function __construct($login_status, $title, $default_js = 0) {
-				session_start();
+		function __construct($title, $default_js = 0) {
 				date_default_timezone_set('America/Los_Angeles');
+				
+				global $login;
 
 				
 				//if login status "in" then check to see if sessione
 				//vars are set.  If no, send to login page
-				if($login_status=='in' && empty($_SESSION['user']))
-						header('location:../login');
+				if($login=='in' && empty($_SESSION['user']))
+						header('location:/login');
 
 				
 				//make paths relative to current file location
+				/*
 				$file_loc = $_SERVER['PHP_SELF'];
 				$file_loc = explode('cityvate',$file_loc);
 				$count = substr_count($file_loc[1],'/');
 				for($i=1;$i<$count;$i++){
 					$this->file_adj .= '../';
 				}
+				*/
 				$GLOBALS['file_adj']=$this->file_adj;
 				
-				//set title for page and add title css and 
-				//stylesheet to respective arrays
+				//set title for page
 				$this->title = $title;
 				
 				//separate title into directory (ie Member Home => member/home)
@@ -68,7 +70,7 @@ class Head {
 				//if header is for logged out page, display
 				//appropriate css stylesheet/script else logged
 				//in stylesheet/script
-				if($login_status == 'out') {
+				if($login == 'out') {
 					array_unshift($this->style, 'header_out');
 					//jquery file needs to remain above header js so push
 					array_push($this->script, 'header_out');
@@ -92,7 +94,7 @@ class Head {
 				
 				
 		}
-		
+				
 		//create stylesheet links
 		function style($style_array) {
 				
@@ -106,7 +108,7 @@ class Head {
 								$pos = strpos($value,'http');
 								
 								if($pos===false)
-									echo "<link rel='stylesheet' href='".$this->file_adj."css/".$value.".css' media='screen' />\n";
+									echo "<link rel='stylesheet' href='/css/" . $value . ".css' media='screen' />\n";
 								else
 									echo "<link rel='stylesheet' href='".$value.".css' media='screen' />\n";
 								
@@ -119,9 +121,9 @@ class Head {
 						//test if this is an external link
 						$pos = strpos($style_array,'http');
 							if($pos===false)
-									echo "<link rel='stylesheet' href='".$this->file_adj."css/".$style_array.".css' media='screen' />\n";
+									echo "<link rel='stylesheet' href='/css/" . $style_array . ".css' media='screen' />\n";
 								else
-									echo "<link rel='stylesheet' href='".$style_array.".css' media='screen' />\n";
+									echo "<link rel='stylesheet' href='" . $style_array . ".css' media='screen' />\n";
 				}
 				
 		}
@@ -140,9 +142,9 @@ class Head {
 								$pos = strpos($value,'http');
 								
 								if($pos===false)
-									echo "<script type='text/javascript' src='".$this->file_adj."js/".$value.".js'></script>\n";
+									echo "<script type='text/javascript' src='/js/".$value.".js'></script>\n";
 								else
-									echo "<script type='text/javascript' src='".$value.".js'></script>\n";
+									echo "<script type='text/javascript' src='" . $value . ".js'></script>\n";
 															
 						}
 				}
@@ -153,7 +155,7 @@ class Head {
 						$script_array = str_replace(' ','_',$script_array);
 						
 						if($pos===false)
-								echo "<script type='text/javascript' src='".$this->file_adj."js/".$script_array.".js'></script>\n";
+								echo "<script type='text/javascript' src='/js/".$script_array.".js'></script>\n";
 						else
 								echo" <script type='text/javascript' src='".$script_array.".js'></script>\n";
 				}
@@ -179,15 +181,17 @@ class Header {
 	var $links=array();
 	var $drop=array();
 	
-	function __construct($login_status) {
-	
+	function __construct() {
+			
+			global $login;
+			
 			//set file_adj var from Head class
 			$file_adj = $GLOBALS['file_adj'];
 			
-			$this->links['Home'] = '../';
+			$this->links['Home'] = '';
 			
 			//if logged out, add to array of header links
-			if($login_status == 'out') {
+			if($login == 'out') {
 					$this->links['Signup'] = 'signup';
 					$this->links['About'] = 'about';
 					$this->drop['Login']='login';
@@ -195,8 +199,8 @@ class Header {
 			
 			//if logged in, change dropdown variable
 			else {
-					$this->drop['My Account'] = 'account';
-					$this->links['Contact'] = 'contact';
+					$this->drop['My Account'] = 'member/account';
+					$this->links['Contact'] = 'member/contact';
 					$this->links['Home'] = 'member';
 			}
 					
@@ -207,30 +211,29 @@ class Header {
 			$this->link();
 			
 			//display logo
-			echo "<a href='".$this->links['Home']."' alt='Home'><div id='logo'></div></a>";
+			echo "<a href='/".$this->links['Home']."' alt='Home'><div id='logo'></div></a>";
 			
 			//display dropdown
 			echo "<div id='dropdown_container'><div id='dropdown'>\n";
 			//if not logged in, display form
 			if(!empty($this->drop['Login'])) {
-				$form = new Form($file_adj.'login_authenticate.php','POST','return validate("")');
+				$form = new Form($file_adj.'login/login_authenticate.php','POST','return validate("")');
 				$form->input('text','username','username','','Username/email');
 				$form->input('password','password','username','','password');
-				echo "<a href='".$file_adj."forgot.php' id='forgot'>Forgot?</p></a>";
+				echo "<a href='forgot' id='forgot'>Forgot?</p></a>";
 				$form->input('image','login','',$file_adj.'images/login_button.png');
 				$form->close();
 			}
 			else {
-				$my_activities = "<a href='" . $file_adj . "member/account' alt='My Deals'><p class='my_account text'>Account Info</p></a>";
-				$calendar = "<a href='" . $file_adj . "member/calendar' alt='Calendar'><p class='my_account text'>Calendar</p></a>";
-				$subscription = "<a href='" . $file_adj . "member/subscription' alt='Subscription'><p class='my_account text'>Subscription</p></a>";
-				$logout = "<a href='" . $file_adj . "member/logout' alt='Logout'><p class='my_account text logout'>Logout</p></a>";
+				$my_activities = "<a href='/member/account' alt='My Deals'><p class='my_account text'>Account Info</p></a>";
+				$calendar = "<a href='/member/calendar' alt='Calendar'><p class='my_account text'>Calendar</p></a>";
+				$subscription = "<a href='/member/subscription' alt='Subscription'><p class='my_account text'>Subscription</p></a>";
+				$logout = "<a href='/member/logout' alt='Logout'><p class='my_account text logout'>Logout</p></a>";
 				echo $my_activities.$calendar.$subscription.$logout;
 			}
 			echo "</div></div>\n";
 			
 				
-
 			
 	//end __construct()
 	}
@@ -249,12 +252,8 @@ class Header {
 					//if home button, apply header_first class
 					if($key == 'Home') 
 							$class .= ' header_first';
-					
-					//if logged in (ie member.php homepage), no file adjust		
-					if($value == 'member')
-							$file_adj2 = $file_adj2 . 'member/';
-							
-					echo "<a href='".$file_adj2.$value."' alt='$key'><div class='$class'>$key</div></a>\n";
+												
+					echo "<a href='/" . $value . "' alt='$key'><div class='$class'>$key</div></a>\n";
 					
 					
 			}
@@ -263,7 +262,7 @@ class Header {
 			foreach($this->drop as $key=>$value) {
 				//if dropdown is myaccount, do not adjust out of member folder
 				
-					echo "<a href='".$file_adj2.$value."'><div class='$class' id='drop'>".$key."<img src='".$file_adj."images/home/arrow.png' id='arrow'/></div></a>\n</div>\n";
+					echo "<a href='/". $value . "'><div class='$class' id='drop'>".$key."<img src='/images/home/arrow.png' id='arrow'/></div></a>\n</div>\n";
 					
 					
 			}
@@ -376,7 +375,7 @@ class Alert_w_txt {
 		$title = "<p class='alert_title'>$title</p>";
 		$activity_name = "<p id='alert_activity_name' class='alert_toggle'></p>";
 		$time = "<p id='alert_what_time' class=''>What time would you like your reservation?</p>";
-		$form = new Form('calendar_ajax.php','POST');
+		$form = new Form('/member/ajax_calls/calendar_ajax.php','POST');
 		$select_hours = "<select id='alert_hours' name='alert_hours' class='alert_toggle'>
 							<option>12</option>";
 			for($i=1;$i<12;$i++) {
@@ -398,7 +397,7 @@ class Alert_w_txt {
 		
 		
 		echo $title.$activity_name.$time;
-		$form = new Form('db_ajax.php','POST');
+		$form = new Form('/member/ajax_calls/db_ajax.php','POST');
 		echo $select_hours.$select_minutes.$select_ampm.$date;
 		$form->input('image','alert_button','alert_toggle',$file_adj.$button_src);
 		$form->input('hidden','aid','');
@@ -413,8 +412,8 @@ class Alert_w_txt {
 		
 		$block .= "<p class='alert_main_val'></p>";
 		
-		$block .= "<img src='" . $GLOBALS['file_adj'] . "images/change/yes_button.png' class='yes button'/>
-					<img src='" . $GLOBALS['file_adj'] . "images/change/no_button.png' class='no button' onclick='$(\".$this->name\").toggle()'/>";
+		$block .= "<img src='/images/change/yes_button.png' class='yes button'/>
+					<img src='/images/change/no_button.png' class='no button' onclick='$(\".$this->name\").toggle()'/>";
 		
 		echo $block;
 		
@@ -471,7 +470,7 @@ class Body_signup extends Body {
 			}
 				
 			$background = "<div id='background_$smallorbig'>";
-			$status = "<img src='" . $GLOBALS['file_adj'] . "images/signup/signup_$position.png' alt='Step $position of 4' class='position'/>";
+			$status = "<img src='/images/signup/signup_$position.png' alt='Step $position of 4' class='position'/>";
 			
 			if($position==0)
 				$status='';
@@ -531,8 +530,8 @@ class Body_signup extends Body {
 			$form->input('image','submitter','next_button',$GLOBALS['file_adj'] . 'images/change/update_button.png');
 			$form->close();
 			
-			//return up one directory to parent file (ie account/change.php routes to account.php)
-			$refering_url = dirname($_SERVER['PHP_SELF']) . '.php';
+			//return up one directory to parent file (ie account/change.php routes to account/)
+			$refering_url = str_replace('application/','',dirname($_SERVER['PHP_SELF']));
 			
 			echo "<a href='$refering_url' class='back text'>Back</a>";
 	}

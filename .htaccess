@@ -1,9 +1,103 @@
 RewriteEngine On  
+RewriteBase /
 
+#append all non-files with .php extensions
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_URI} ^signup/step
 
-RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteRule ^(.*)/step(\d+)$ index.php?route=$1&action=$2 [L,QSA]
+
+#append all non-files with .php extensions
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+
+#RewriteRule ^(.*)$ index.php?route=$1 [L,QSA]
+
+#first round through, prepend 'application/' to request
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_URI} !^/application
+#RewriteCond %{DOCUMENT_ROOT}/application/$0 -d
+
+#RewriteRule ^(.*)$ application/$1/index.php [L]
+
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_URI} !^/application
+
+#RewriteRule ^(.*)$ application/$1.php [L]
+
+#second round through, if the new url is not directory or file, append .php
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_FILENAME} !-f
+
+#RewriteRule ^(.*)$ $1.php [L]
+
+#rewrite variables for individual activity pages
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI}  activity
+
+RewriteRule ^(.*)/(\d+)$ $1/index.php?activity=$2 [L]
+
+#rewrite variables for account and subscription change
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI}  (?:account|subscription)/change
+
+RewriteRule ^(.*)/(account|subscription)/change/(\w+)$ $1/$2/change.php?type=$3 [L]
+
+#rewrite variables for signup pages
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI}  signup/step
+
+RewriteRule ^(.*)/step(\d+)|(unavailable)$ application/$1/signup.php?page=$2$3 [L]
 
 
-RewriteRule ^(.+)$ $1.php [L,QSA]
+# Append trailing slash
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !(?:\.\w+|/)$
+RewriteRule ^(.*)$ /$1/ [L]
+
+# First round through, prepend 'application/' to request
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !^/application
+RewriteRule ^(.*)$ application/$1 [L]
+
+# Second round through, if the new url is not directory or file, append .php
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !\.\w+$
+RewriteRule ^(.*)/$ $1.php [L]
+
+
+
+
+
+
+#silently rewrite url to point to application folder
+#RewriteCond application%{REQUEST_URI} !-d
+
+#RewriteRule ^(.*)$ application/$1.php [L,S=2]
+
+#RewriteCond application%{REQUEST_URI} -d
+
+#RewriteRule ^(.*)$ /application/$1.php [L,S=2]
+
+#silently rewrite url to point to application folder
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !^application
+
+#RewriteRule ^(.*)$ application/$1 [L]
+
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_FILENAME} !-f
+
+#RewriteRule ^(.*)$ $1.php [L]
+
+
+php_value auto_prepend_file "X:/Program Files (x86)/wamp/www/Local_site/cityvate/bootstrap.php"
+
+
 
