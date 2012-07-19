@@ -418,33 +418,57 @@ class Activities extends User {
 			
 	}
 	
-	function activity_desc($activity_aid) {
+	function activity_desc($activity_aid, $business_info = 0) {
 		
-			$query = "SELECT `activities`.name,
-							DATE_FORMAT(`activities`.expire,'%m/%d/%Y') as expire,
-							`activities`.g_maps,
-							`activities`.type,
-							`activities`.cost,
-							`activities`.tokens,
-							`activities`.reserve_needed,
-							`activities`.month_in_use,
-							`activities`.save,
-							`activities`.desc,
-							`activities`.aID,
-							`u_activities`.done,
-							DATE_FORMAT(`u_activities`.reserve_date,'%m/%d/%Y') as reserve_date
-					FROM activities
-					INNER JOIN u_activities
-					ON `u_activities`.aID = `activities`.aID
-					WHERE `u_activities`.`uID` = '".$_SESSION['user']['uID']."'
-						AND activities.aID = '".$activity_aid."'";
-						
+			$query = "SELECT `a`.name,
+							DATE_FORMAT(`a`.expire,'%m/%d/%Y') as expire,
+							`a`.g_maps,
+							`a`.type,
+							`a`.cost,
+							`a`.tokens,
+							`a`.reserve_needed,
+							MONTH(`a`.month_in_use) as month_in_use,
+							`a`.save,
+							`a`.aID,
+							`u_a`.done,
+							DATE_FORMAT(`u_a`.reserve_date,'%m/%d/%Y') as reserve_date";
+			//if looking for business info also ($business info > 0)
+			if($business_info != 0){
+				$query .= ",`b`.`name` as business_name,
+							`b`.`email` as business_email,
+							`b`.`phone` as business_phone,
+							`b`.`street_address` as business_street_address,
+							`b`.`city_address` as business_city_address,
+							`b`.`website` as business_website,
+							`b`.`yelp_address` as business_yelp_address,
+							`b`.`yelp_rating` as business_rating";
+			}
+			$query .= " FROM activities a
+						INNER JOIN u_activities u_a
+						ON `u_a`.aID = `a`.aID ";
+			
+			//join businesses table if looking for business info		
+			if($business_info != 0){
+				$query .= "JOIN businesses b 
+							ON `u_a`.`aID` = `b`.`aID` ";
+			}
+			$query .= "WHERE `u_a`.`uID` = '".$_SESSION['user']['uID']."'
+						AND a.aID = '".$activity_aid."'";
+			
 			$this->result = $this->con->query($query);
 			
 			$array = array('name','aID','expire','g_maps','type','cost',
 							'tokens','reserve_needed','month_in_use',
-							'save','desc','done','reserve_date');
+							'save','done','reserve_date');
 							
+			if($business_info != 0){
+				$array_add = array('business_name','business_email','business_street_address',
+									'business_city_address','business_website',
+									'business_yelp_address','business_rating','business_phone');
+									
+				$array = array_merge($array,$array_add);
+			}
+										
 			return $this->loop_results($array);
 			
 			/*

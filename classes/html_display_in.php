@@ -64,6 +64,7 @@ class Body_member extends Body {
                                   $reserve_date = '<a href="/member/calendar"><img src="../images/member/plus.png" title="Add to Calendar" class="activity_reserve plus"/></a>';
 							  }
 							  else{
+								  //change date to format Mon dd
                                   $date = DateTime::createFromFormat('Y-m-d', substr($activities[$i]['reserve_date'],0,10));
                                   $reserve_date = "<a href='/member/calendar'><p class='activity_reserve' title='Change Reservation'>".$date->format('M j')."</p></a>";
 							  }
@@ -597,24 +598,67 @@ class Calendar {
 		}
 	}
 }
-//----------------------------------------------------------------------------------------------------------------------------
+
 class Body_individual_activity extends Body {
 	
-	var $details = array('The short'=>false,
-						'The details'=>array('Yelp rating'=>array('yelp_rating',
-																	'yelp_address'),
-												'Location'=>array('street_address',
-																	'city_address'),
-												'Contact info'=>array('phone',
-																		'email'),
-												'Website'=>'website',
-												'Expires'=>'expire',
-												'Pro-tip'=>false
-												),
-						'The redemption'=>false
-						
-						);
+	//cancel parent's construct call 
+	function __construct() {
+	}
 	
+	//function to display body_main
+	function display_body() {
+		
+		parent::__construct();
+	}
+	
+	function get_activity_desc($aid) {
+		
+		$activity_call = new Activities();
+		//store activity description + business info (ie 1 not 0) in the $a var
+		$this->a = $activity_call->activity_desc($aid,1);
+		return $this->a;
+		
+	}
+	
+	function txt_file($type) {
+		
+			//change month to folder_friendly (eg 07 not 7)
+			$this->a['month_in_use'] = str_pad($this->a['month_in_use'],2,'0',STR_PAD_LEFT);
+			//change name to file_friendly
+			$this->a_name = $a_name = str_replace(' ','_',$this->a['name']);
+
+			//retrieve .txt doc of activity description
+			//located in /txt/descriptions/month(int)/activity_name.txt
+			  $filename = $_SERVER['DOCUMENT_ROOT'] . '/txt/' . $type . '/' . $this->a['month_in_use'] . '/' . $a_name . '.txt';
+			  
+			  if(!file_exists($filename)){
+				  //if activity file does not exist, display default txt
+				  $filename = $_SERVER['DOCUMENT_ROOT'] . '/txt/' . $type . '/default.txt';
+				
+				  $file = fopen($filename,'r');
+				  $contents = fread($file, filesize($filename));
+			  }
+				  
+			  else{
+				  //elseif file exists, display activity's text
+				  $file = fopen($filename,'r');
+				  $contents = fread($file, filesize($filename));
+			  }
+			  
+			  return $contents;
+	}
+	
+	function what() {
+						
+			$block = "<p class='box_name text'>";
+			
+			$block .= $this->txt_file('what');
+			
+			$block .= "</p>";
+			
+			return $block;
+	}
+		
 }
 						
 

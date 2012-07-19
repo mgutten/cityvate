@@ -418,7 +418,7 @@ function body_right_populate(array){
 			$('#activity_expire').html(array.expire);
 			
 			//change link to full activity page
-			$('#activity_full_info').html('<a href="activity.php?num='+array.aID+'">here</a>');
+			$('#activity_full_info').html('<a href="/member/activity/'+array.aID+'">here</a>');
 			
 			//change selected aid for use in cancel reservation button
 			selected_aid = array.aID;
