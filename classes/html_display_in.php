@@ -318,7 +318,8 @@ class Body_member_past extends Body_member {
 //class to use template from Body_member class in account/subscription.php
 class Body_account extends Body_member {
 	var $links = array("My Account"=>'/member/account',
-						"Subscription"=>'/member/subscription'
+						"Subscription"=>'/member/subscription',
+						"Preferences"=>'/member/preferences'
 						);
 						
 	var $title_array = array("Account Info"=>array(
@@ -616,19 +617,23 @@ class Body_individual_activity extends Body {
 		$activity_call = new Activities();
 		//store activity description + business info (ie 1 not 0) in the $a var
 		$this->a = $activity_call->activity_desc($aid,1);
+		
+		//change name to file_friendly
+		$this->a_name = str_replace(' ','_',$this->a['name']);
+		//change month to folder_friendly (eg 07 not 7)
+		$this->a['month_in_use'] = str_pad($this->a['month_in_use'],2,'0',STR_PAD_LEFT);
+		
 		return $this->a;
 		
 	}
 	
 	function txt_file($type) {
 		
-			//change month to folder_friendly (eg 07 not 7)
-			$this->a['month_in_use'] = str_pad($this->a['month_in_use'],2,'0',STR_PAD_LEFT);
-			//change name to file_friendly
-			$this->a_name = $a_name = str_replace(' ','_',$this->a['name']);
+			
+			$a_name = $this->a_name;
 
 			//retrieve .txt doc of activity description
-			//located in /txt/descriptions/month(int)/activity_name.txt
+			//located in /txt/$type/month(int)/activity_name.txt
 			  $filename = $_SERVER['DOCUMENT_ROOT'] . '/txt/' . $type . '/' . $this->a['month_in_use'] . '/' . $a_name . '.txt';
 			  
 			  if(!file_exists($filename)){
@@ -637,6 +642,7 @@ class Body_individual_activity extends Body {
 				
 				  $file = fopen($filename,'r');
 				  $contents = fread($file, filesize($filename));
+				  
 			  }
 				  
 			  else{

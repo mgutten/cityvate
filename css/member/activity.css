@@ -1,6 +1,10 @@
 @charset "utf-8";
 /* css for individual activity /application/member/activity/index.php */
 
+a {
+	text-decoration:underline;
+}
+
 #body_main {
 	width:900px;
 	height:700px;
@@ -79,7 +83,6 @@
 .subtitle {
 	float:left;
 	margin:0px;
-	color:#FCDD03;
 	font-size:17px;
 	width:140px;
 }
@@ -93,12 +96,24 @@
 	font-size:15px;
 }
 
+
+.details_left {
+	float:left;
+}
+
+.details_right {
+	float:right;
+	width:190px;
+	display:none;
+}
+
 .details_title,.details_subtitle{
 	float:left;
-	clear:both;
-	width:95px;
+	clear:left;
+	width:80px;
 	margin:15px 0px 0px 0px;
 	font-size:14px;
+	color:#FCDD03;
 }
 
 .details_title:first-child {
@@ -107,25 +122,29 @@
 
 .details_subtitle {
 	clear:none;
-	width:264px;
-	margin:17px 0px 0px 5px;
+	width:130px;
+	margin:17px 0px 0px 0px;
 	font-size:12px;
+	color:#fff;
 }
 
 .details_second_line {
 	margin-top:2px;
-	margin-left:101px;
+	margin-left:80px;
+	clear:both;
 }
+	
 
 /*code for Directions link in details section*/
 a.details_subtitle {
 	color:#FCDD03;
 	text-decoration:underline;
+	width:auto;
 }
 
 .rating {
 	float:left;
-	margin:-1px 0px 0px 5px;
+	margin:-1px 0px 0px 0px;
 }
 
 .details_link {
@@ -161,16 +180,17 @@ a.details_subtitle {
 	float:right;
 	margin:110px 30px 0px 0px;
 	width: 280px;
-	border:1px solid #999;
+	border:2px solid #fff;
 }
 
 #maps_image {
 	float:right;
 	clear:both;
 	margin:20px 30px 0px 0px;
-	opacity:.85;
-	filter:alpha(opacity=85);
+	opacity:.8;
+	filter:alpha(opacity=80);
 }
+
 
 /*main selectable box with what,details,need*/
 .box_deselect {
@@ -207,11 +227,101 @@ a.details_subtitle {
 }
 
 .box_name {
-	color:#FCDD03;
-	font-size:15px;
-	text-align:justify;
 	float:left;
 	margin:30px 0px 0px 20px;
 	padding-bottom:30px;
 	width: 400px;
+	display:none;
+}
+
+.box_inner {
+	float:left;
+	clear:both;
+	margin: 0px 0px 0px 0px;
+	font-size:15px;
+	text-align:justify;
+}
+
+.box_need_container{
+	width:200px;
+	float:left;
+}
+
+#box_need_right {
+	font-size:13px;
+}
+
+#box_need_left {
+	font-size:17px;
+}
+
+.box_need_title, .box_need_title_right {
+	float:left;
+	margin:0px 0px 0px 0px;
+	width:130px;
+	font-size:inherit;
+}
+
+.box_need_title_right {
+	float:left;
+	clear:both;
+	margin:7px 0px 0px 15px;
+	width:75px;
+}
+
+.box_need_title_right:first-child {
+	margin-top:3px;
+}
+
+.box_need_val,.box_need_val_right {
+	float:left;
+	clear:both;
+	margin:10px 0px 0px 15px;
+	font-size:14px;
+	width:180px;
+}
+
+.box_need_val_right {
+	clear:none;
+	font-size:inherit;
+	width:105px;
+	margin: 7px 0px 0px 5px;	
+}
+
+#reservation_needed {
+	margin-top:3px;
+}
+
+.box_second_line {
+	margin-top:15px;
+}
+
+/*qualifiers for text*/
+.yellow {
+	color:#FCDD03;
+}
+
+.small {
+	font-size:13px;
+}
+
+.select {
+	display:block;
+}
+
+#the_box {
+	height:350px;
+}
+
+.reservation_date {
+	float:right;
+	clear:both;
+	font-size:14px;
+	margin:5px 35px 0px 0px;
+	color: #D00/*#44b20f green*/;
+	padding-left:3px;
+}
+
+.alert_main_val {
+	color:#D00;
 }

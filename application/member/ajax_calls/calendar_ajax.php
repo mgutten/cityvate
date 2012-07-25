@@ -43,6 +43,6 @@ if(!empty($_POST['aid'])){
 if(!empty($_GET['aID'])){
 	$activities_call->change_reserve($_GET['aID'],'NULL');
 	
-	header('location:/member/calendar');
+	header('location:' . $_SERVER['HTTP_REFERER']);
 	exit;
 }

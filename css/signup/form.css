@@ -60,7 +60,7 @@
 }
 
 /*title for text boxes*/
-.box_title,.box_title_close {
+.box_title,.box_title_close,.box_title_one {
 	margin: 45px 0px 0px 0px;
 	float:left;
 	clear:both;
@@ -79,6 +79,10 @@
 
 .box_title:first-child {
 	margin-top:50px;
+}
+
+.box_title_one{
+	margin-top:90px;
 }
 
 
@@ -310,48 +314,7 @@ select#when {
 }
 
 .red_back {
-	background-color:#950000;
-}
-
-#alert_confirm {
-	background:#000;
-	width:600px;
-	height:200px;
-	border:#0C3 solid 1px;
-}
-
-.alert_main {
-	float:left;
-	clear:both;
-	width:500px;
-	margin: 20px 0px 0px 50px;
-	text-align:center;
-	font-size:15px;
-}
-
-.alert_main_val {
-	float:left;
-	clear:both;
-	width:600px;
-	height:16px;
-	font-size:16px;
-	color:#FF3;
-}
-
-.button {
-	float:left;
-	cursor:pointer;
-	margin:40px 0px 0px 50px;
-}
-
-.button:hover {
-	opacity:.85;
-	filter:alpha(opacity=85);
-}
-
-.yes {
-	clear:both;
-	margin-left:190px;
+	background-color:#950000 !important;
 }
 
 .fail {

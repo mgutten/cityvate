@@ -39,7 +39,7 @@ $(function() {
 	})
 	
 	//change any input back to regular colors if they are red
-	$('input').focus(function() {
+	$('input, textarea').focus(function() {
 		if($(this).is('.red_back')){
 			$(this).removeClass('red_back');
 		}
@@ -48,12 +48,12 @@ $(function() {
 	
 	/*code for change.php*/
 	//yes button clicked on form in change.php
-	$('.yes').click(function(){
+	$('#yes').click(function(){
 			$('#change_info').submit();
 	});
 	
 	//hide alert box on load change.php
-	$('.confirm').hide();
+	$('.confirmation').hide();
 	
 	//return validate function when click submit button
 	$('#input_submitter').click(function() {
@@ -92,7 +92,7 @@ function body_resize() {
 function validate(form_name) {
 		var returning = 1;
 		
-		$('#' + form_name + ' input[type=text],input[type=password]').each(function(){
+		$('#' + form_name + ' input[type=text],input[type=password],textarea').each(function(){
 			
 			if($.trim($(this).val()) == ''){
 				returning = 0;
@@ -116,7 +116,7 @@ function validate(form_name) {
 					text = '*********';
 					
 				$('.alert_main_val').text(text);
-				$('.confirm').toggle();
+				$('.confirmation').toggle();
 				return false;
 			}
 			

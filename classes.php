@@ -23,7 +23,7 @@ class Head {
 				date_default_timezone_set('America/Los_Angeles');
 				
 				global $login;
-
+				
 				
 				//if login status "in" then check to see if sessione
 				//vars are set.  If no, send to login page
@@ -200,12 +200,13 @@ class Header {
 			//if logged in, change dropdown variable
 			else {
 					$this->drop['My Account'] = 'member/account';
+					$this->links['Calendar'] = 'member/calendar';
 					$this->links['Contact'] = 'member/contact';
 					$this->links['Home'] = 'member';
 			}
 					
 			//display components of header as well as background img
-			echo "<body>\n<img src='".$file_adj."images/city_back.jpg' class='bg'/><div id='header_back'></div><div id='body'>\n<div id='header_bar'>";
+			echo "<body>\n<img src='/images/city_back.jpg' class='bg'/><div id='header_back'></div><div id='body'>\n<div id='header_bar'>";
 			
 			//create links
 			$this->link();
@@ -217,19 +218,19 @@ class Header {
 			echo "<div id='dropdown_container'><div id='dropdown'>\n";
 			//if not logged in, display form
 			if(!empty($this->drop['Login'])) {
-				$form = new Form($file_adj.'login/login_authenticate.php','POST','return validate("")');
+				$form = new Form('/login/login_authenticate.php','POST','return validate("login_top")','login_top');
 				$form->input('text','username','username','','Username/email');
 				$form->input('password','password','username','','password');
-				echo "<a href='forgot' id='forgot'>Forgot?</p></a>";
-				$form->input('image','login','',$file_adj.'images/login_button.png');
+				echo "<a href='/forgot' id='forgot'>Forgot?</p></a>";
+				$form->input('image','login','','/images/login_button.png');
 				$form->close();
 			}
 			else {
-				$my_activities = "<a href='/member/account' alt='My Deals'><p class='my_account text'>Account Info</p></a>";
-				$calendar = "<a href='/member/calendar' alt='Calendar'><p class='my_account text'>Calendar</p></a>";
+				$my_activities = "<a href='/member/account' alt='My Account'><p class='my_account text'>Account Info</p></a>";
+				$preferences = "<a href='/member/preferences' alt='Prefences'><p class='my_account text'>Preferences</p></a>";
 				$subscription = "<a href='/member/subscription' alt='Subscription'><p class='my_account text'>Subscription</p></a>";
 				$logout = "<a href='/member/logout' alt='Logout'><p class='my_account text logout'>Logout</p></a>";
-				echo $my_activities.$calendar.$subscription.$logout;
+				echo $my_activities.$subscription.$preferences.$logout;
 			}
 			echo "</div></div>\n";
 			
@@ -253,7 +254,7 @@ class Header {
 					if($key == 'Home') 
 							$class .= ' header_first';
 												
-					echo "<a href='/" . $value . "' alt='$key'><div class='$class'>$key</div></a>\n";
+					echo "<a href='/" . $value . "' alt='$key'><div class='$class'>" . $key . "</div></a>\n";
 					
 					
 			}
@@ -261,8 +262,9 @@ class Header {
 			//create dropdown menu and close header_bar div
 			foreach($this->drop as $key=>$value) {
 				//if dropdown is myaccount, do not adjust out of member folder
+				$class = 'header_link';
 				
-					echo "<a href='/". $value . "'><div class='$class' id='drop'>".$key."<img src='/images/home/arrow.png' id='arrow'/></div></a>\n</div>\n";
+					echo "<a href='/". $value . "'><div class='$class' id='drop'>" . $key . "<img src='/images/home/arrow.png' id='arrow'/></div></a>\n</div>\n";
 					
 					
 			}
@@ -298,6 +300,43 @@ class Body {
 	}
 	
 	
+}
+
+class Information {
+	
+	function __construct($title, $page_title, $own_js = 1) {
+		
+		$this->head($title,$own_js);
+		
+		$this->header_body($page_title);
+		
+	}
+	
+	function head($title, $own_js = 1){
+		
+		$this->head = new Head($title,$own_js);
+		$this->head->script('information');
+		$this->head->style('information');
+		$this->head->close();
+		
+	}
+	
+	function header_body($page_title) {
+		
+		global $login;
+		
+		//create header
+		$this->header = new Header();
+		
+		//create top title for page
+		echo "<div class='information_title text'>" . $page_title . "</div>";
+		
+		//display questions info at bottom
+
+			$this->body = new Body();
+		
+	}
+		
 }
 
 
@@ -360,7 +399,7 @@ class Alert_w_txt {
 		$this->name = $name;
 			
 		$darken = "<div class='darken $name' onclick='$(\".$name\").toggle()'></div>";
-		$div = "<div class='$name text centered' id='alert_$name'>";
+		$div = "<div class='$name text centered alert_back' id='alert_$name'>";
 		
 		echo $darken.$div;
 	}
@@ -408,12 +447,12 @@ class Alert_w_txt {
 	function confirm($type) {
 		$block = "<p class='alert_title	text'>Confirmation</p>";
 		
-		$block .= "<p class='alert_main text'>Are you sure you want to change your " . $type . " to:";
+		$block .= "<p class='alert_main_confirm text'>Are you sure you want to change your " . $type . " to:</p>";
 		
 		$block .= "<p class='alert_main_val'></p>";
 		
-		$block .= "<img src='/images/change/yes_button.png' class='yes button'/>
-					<img src='/images/change/no_button.png' class='no button' onclick='$(\".$this->name\").toggle()'/>";
+		$block .= "<img src='/images/change/yes_button.png' class='confirm_button' id='yes'/>
+					<img src='/images/change/no_button.png' class='confirm_button' onclick='$(\".$this->name\").toggle()'/>";
 		
 		echo $block;
 		
@@ -439,7 +478,7 @@ class Alert_w_txt {
 		
 		$x = "<div class='x $this->name text' onclick='$(\".$this->name\").toggle()'>X</div>";
 		
-		echo "</div></div>" . $x;
+		echo "</div>" . $x;
 	}
 }
 
@@ -481,9 +520,9 @@ class Body_signup extends Body {
 			
 	}
 	
-	function create_input($array,$action,$onsubmit = '',$id = '') {
+	function create_input($array,$action,$button_type = 'update',$onsubmit = '',$id = '') {
 			
-			$form = new Form($action,'POST',$onsubmit,$id);
+			$this->form = $form = new Form($action,'POST',$onsubmit,$id);
 			$input_cnt = count($array);
 			
 			foreach($array as $title => $box_type){
@@ -494,6 +533,8 @@ class Body_signup extends Body {
 				//if we have more than 2 input boxes, make distance closer
 				if($input_cnt > 2)
 					$title_class = 'box_title_close';
+				elseif($input_cnt < 2)
+					$title_class = 'box_title_one';
 				
 				//create title for input box
 				echo "<div class='$title_class text'>$title</div>";
@@ -527,11 +568,16 @@ class Body_signup extends Body {
 				echo "<p class='$lower_class'>" . $box_type['lower'] . "</p>";
 			}
 			
-			$form->input('image','submitter','next_button',$GLOBALS['file_adj'] . 'images/change/update_button.png');
+			$form->input('image','submitter','next_button','/images/change/' . $button_type . '_button.png');
 			$form->close();
 			
 			//return up one directory to parent file (ie account/change.php routes to account/)
-			$refering_url = str_replace('application/','',dirname($_SERVER['PHP_SELF']));
+			if(strpos($_SERVER['PHP_SELF'],'index.php') == true){
+				$refering_url = '../';
+			}
+			else{
+				$refering_url = str_replace('application/','',dirname($_SERVER['PHP_SELF']));
+			}
 			
 			echo "<a href='$refering_url' class='back text'>Back</a>";
 	}

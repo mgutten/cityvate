@@ -47,5 +47,5 @@ $body->create_input($final_array,'/member/account/change_authenticate.php?type='
 
 
 $body->close();
-$alert = new Alert_w_txt('confirm');
+$alert = new Alert_w_txt('confirmation');
 $alert->confirm($type);

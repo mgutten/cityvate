@@ -12,7 +12,7 @@
 	$body->background('Login',$pos);
 	
 	//create form for login that will run js fn validate() for id _main
-	$form = new Form("login/login_authenticate.php","POST","return validate(\"_main\")");
+	$form = new Form("login/login_authenticate.php","POST","return validate(\"login_main\")","login_main");
 	
 	$class = 'drop text';
 	
@@ -62,7 +62,7 @@ $form->close();
 
 //empty fail session vars
 if(!empty($_SESSION['user']['username_fail']))
-	$_SESSION['user']['username_fail'];
+	unset($_SESSION['user']['username_fail']);
 
 if(!empty($_SESSION['user']['password_fail']))
 	unset($_SESSION['user']['password_fail']);

@@ -62,7 +62,7 @@ a {
 	width:100px;
 	height:22px;
 	text-align: center;
-	margin-left:30px;
+	margin-left:10px;
 	color:#CCC;
 	font-size:13px;
 	font-family:"Neon 80s";
@@ -93,7 +93,7 @@ a {
 
 #dropdown_container {
 	float:left;
-	margin:0px 0px 0px 477px;
+	margin:0px 0px 0px 557px;
 	height:100px;
 	width:115px;
 	overflow:hidden;
@@ -147,6 +147,47 @@ a {
 	cursor:pointer;
 	color:#0C3;
 	font-size:18px;
+}
+
+#alert_confirmation {
+	background:#000;
+	width:600px;
+	height:200px;
+	border:#0C3 solid 1px;
+}
+
+.confirm_button {
+	float:left;
+	cursor:pointer;
+	margin:40px 0px 0px 50px;
+}
+
+.confirm_button#yes {
+	clear:both;
+	margin-left:190px;
+}
+
+.confirm_button:hover {
+	opacity:.85;
+	filter:alpha(opacity=85);
+}
+
+.alert_main_confirm {
+	float:left;
+	clear:both;
+	width:500px;
+	margin: 20px 0px 0px 50px;
+	text-align:center;
+	font-size:15px;
+}
+
+.alert_main_val {
+	float:left;
+	clear:both;
+	width:600px;
+	height:16px;
+	font-size:16px;
+	color:#FF3;
 }
 
 .my_account {
@@ -217,6 +258,10 @@ a {
 	color:#CA0000;
 }
 
+.yellow {
+	color:#ff3;
+}
+
 /*overlapping classes for alert_w_txt classes (change.php and calendar.php)*/
 .alert_title {
 	float:left;
@@ -251,4 +296,14 @@ a {
 	text-align:center;
 	padding-top:5px;
 	cursor:default;
+}
+
+/*alert box back for account and contact*/
+.alert_back {
+	background:#000;
+	width:600px;
+	height:auto;
+	min-height:100px;
+	padding-bottom:50px;
+	border:#0C3 solid 1px;
 }

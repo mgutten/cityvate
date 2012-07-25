@@ -455,6 +455,7 @@ class Activities extends User {
 			$query .= "WHERE `u_a`.`uID` = '".$_SESSION['user']['uID']."'
 						AND a.aID = '".$activity_aid."'";
 			
+			
 			$this->result = $this->con->query($query);
 			
 			$array = array('name','aID','expire','g_maps','type','cost',

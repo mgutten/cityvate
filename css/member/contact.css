@@ -1,0 +1,12 @@
+@charset "utf-8";
+/* CSS Document */
+
+#body_main {
+	width:700px;
+	height:400px;
+	background:#000;
+	opacity:.85;
+	float:left;
+	clear:both;
+	margin:20px 0px 0px 23px;
+}

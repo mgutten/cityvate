@@ -51,12 +51,6 @@
 	text-decoration:underline;
 }
 
-#alert_success {
-	background:#000;
-	width:600px;
-	height:150px;
-	border:#0C3 solid 1px;
-}
 
 .alert_main {
 	margin-top:40px;
