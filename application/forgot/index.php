@@ -12,4 +12,7 @@ $array = array('Username'=>array('type'=>'text',
 									'lower'=>'Enter your username/email'
 								)
 				);
-$body->create_input($array, '/mail', 'submit', 'return validate("forgot")','forgot');
+$body->create_input($array, '/mail/from_cv.php', 'submit', 'return validate("forgot",true)','forgot');
+
+$alert = new Alert_w_txt('forgot');
+$alert->confirm('password');

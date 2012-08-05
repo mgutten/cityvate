@@ -1,10 +1,10 @@
 // JavaScript Document
 $(function() {
-
-//resize body onload
+	
+	//resize body onload
 		body_resize();
-
-//code to deal with header dropdown
+	
+	//code to deal with header dropdown
 	//header dropdown animation	
 	$("#drop,#dropdown").hover(
 	
@@ -20,7 +20,8 @@ $(function() {
 						$("#dropdown").css('z-index','-1');
 						$("#dropdown").stop().animate({top:'-70px'},300);
 				}
-	})
+		}
+	)
 	
 	//expand div when focus on username
 	//textbox
@@ -38,10 +39,12 @@ $(function() {
 	
 	//change background color of input boxes in case they have been
 	//turned red due to validate()
-	$('input[type=text],input[type=password]').focus(function(){
+	$('input[type=text],input[type=password]').focus(function() {
 			$(this).removeClass('red_back');
 		});
 	
+	//hide confirmation box for forgot password page
+	$('.forgot').toggle();
 
 //end "ready" function
 });
@@ -49,8 +52,8 @@ $(function() {
 
 //resize bottom body bar on window resize
 $(window).resize(function() {
-	body_resize()
-	});	
+	body_resize();
+});	
 	
 
 //variable height of body bottom bar so
@@ -58,19 +61,24 @@ $(window).resize(function() {
 function body_resize() {
 				var height = $(window).height();
 				if(height >854) {
-				//calculate the height of the rest of visible components
-				var subtract = parseInt($("#body_main").css("height"),10)+parseInt($("#body_main").css("margin-top"),10)+114;
-				var div_height = height - subtract;
-				$("#body_bottom").css('height',div_height);
+					//calculate the height of the rest of visible components
+					var subtract = parseInt($("#body_main").css("height"),10)+parseInt($("#body_main").css("margin-top"),10)+114;
+					var div_height = height - subtract;
+					$("#body_bottom").css('height',div_height);
 				
 				}
 				
-		}
-				
+}
+			
 //validate function for various login boxes
-function validate(form_name) {
+function validate(form_name, confirm) {
+	
+	//give confirm a default value of false except if specified
+	confirm = typeof confirm !== 'undefined' ? confirm : false;
+	
 	
 	var returning = 1;
+	
 
 		$('#' + form_name + ' input[type=text],#' + form_name + ' input[type=password],textarea').each(function(){
 			
@@ -88,7 +96,7 @@ function validate(form_name) {
 		else{
 			
 			//if on change.php form, toggle confirmation box
-			if(form_name == 'change_info'){
+			if(form_name == 'change_info' || confirm == true){
 				//get first box' selector
 				var change_box = $('#change_info :input:first');
 				var text = change_box.val();
@@ -105,6 +113,4 @@ function validate(form_name) {
 			return true;
 		}
 	
-}
-		
-		
+}		

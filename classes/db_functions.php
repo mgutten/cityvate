@@ -25,6 +25,29 @@ class User {
 			$array = array('uID','username','fname','lname','neighborhood','city','tokens_balance');
 			$last = end($array);
 			
+			//check if username exists in database
+			$user_exists = $this->check_username($username);
+			
+			//if doesn't exist, set fail session and redirect to login.php
+			if($user_exists === false && $checking == 0) {
+				header('location:/login');
+				exit;
+			}
+			elseif($user_exists === true && $checking != 0){
+				//if found results and not checking for pw ($checking==1),
+				//then username is taken, send back to signup page
+					$_SESSION['exists']=TRUE;
+					header('location:step2');
+					exit;
+			}
+			else{
+				//case when username exists but password entered later is incorrect
+				//notify user that it is wrong password
+				$_SESSION['user']['password_fail'] = true;
+
+			}
+			
+			
 			//start building query
 			$query = "SELECT ";
 			
@@ -36,7 +59,8 @@ class User {
 			}
 			
 			$query .= " FROM users WHERE username='".$username."' ";
-						
+			
+			/*			
 			//make first query to see if username exists in db
 			$result = $this->con->query($query);
 			
@@ -60,6 +84,7 @@ class User {
 				$_SESSION['user']['password_fail'] = true;
 
 			}
+			*/
 
 			//if we arent simply checking if username exists, test password also
 			if($checking==0)
@@ -103,6 +128,19 @@ class User {
 			
 			$result->free();
 			
+	}
+	
+	function check_username($username) {
+		
+		$query = "SELECT uID FROM users WHERE username = '" . $username . "'";
+		$result = $this->con->query($query);
+		
+		if($result->num_rows > 0)
+			return true;
+		else{
+			$_SESSION['user']['username_fail'] = $username;
+			return false;
+		}
 	}
 	
 	function check_password($password) {

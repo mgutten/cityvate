@@ -3,9 +3,9 @@
 //check login var to see whether logged in or not
 //then include corresponding class file
 if($login == 'in')
-	include('/classes/html_display_in.php');
+	include($_SERVER['DOCUMENT_ROOT'] . '/classes/html_display_in.php');
 else
-	include('/classes/html_display_out.php');
+	include($_SERVER['DOCUMENT_ROOT'] . '/classes/html_display_out.php');
 	
 
 //declare common classes between logged in vs. logged out

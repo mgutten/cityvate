@@ -271,7 +271,7 @@ function change_picture() {
 			
 		
 			//change first shown image
-			$('#picture_hidden').attr('src','../images/activities/'+month+'/'+a_array[2]['name'].replace(/ /g,'_')+'.jpg');
+			$('#picture_hidden').attr('src','../images/activities/'+month+'/'+a_array[2]['name'].replace(/ /g,'_').toLowerCase()+'.jpg');
 			
 			image_fade(a_array[2]['name']);
 								
@@ -468,7 +468,7 @@ function bar_select(tag) {
 function image_fade(header) {
 		
 		//replace spaces with underscore to use id identifiers
-		header = header.replace(/ /g,'_');
+		header = header.replace(/ /g,'_').toLowerCase();
 		//find selected month from id of activity_month
 		var month = $('.activity_month').attr('id').substr(0,2);
 		//change source of hidden

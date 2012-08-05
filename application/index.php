@@ -2,8 +2,9 @@
 	/*location of file: application/index.php 
 				HOMEPAGE
 	*/
-
+	
 require_once($_SERVER['DOCUMENT_ROOT'] . '/classes.php');
+
 
 $head = new Head('Home');
 $head->close();

@@ -190,7 +190,7 @@ if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/txt/additional/" . $body->a['month_
 	}
 ?>
 
-<img src="/images/activities/<?php echo $body->a['month_in_use'];?>/<?php echo $body->a_name;?>.jpg" id='activity_image' />
+<img src="/images/activities/<?php echo $body->a['month_in_use'];?>/<?php echo strtolower($body->a_name);?>.jpg" id='activity_image' />
 
 <a href='http://www.maps.google.com/maps?q=<?php echo $business_address;?>' target='_blank'
                           ><img src='http://maps.googleapis.com/maps/api/staticmap?center=<?php echo $business_address;?>&zoom=13&size=280x180&maptype=roadmap

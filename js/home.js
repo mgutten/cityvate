@@ -2,7 +2,6 @@
 
 $(function() {
 		
-		
 		//delay "fade" on mouseover so do not
 		//accidentally trigger onload
 		setTimeout('delay_fade("what")',1500);
@@ -18,6 +17,7 @@ $(function() {
 			},
 			function() {
 				$(this).css('opacity','1');
+				
 			})
 			
 		

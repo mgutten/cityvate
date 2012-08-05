@@ -97,7 +97,5 @@ RewriteRule ^(.*)/$ $1.php [L]
 #RewriteRule ^(.*)$ $1.php [L]
 
 
-php_value auto_prepend_file "X:/Program Files (x86)/wamp/www/Local_site/cityvate/bootstrap.php"
-
 
 

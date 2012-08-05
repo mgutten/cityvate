@@ -32,7 +32,7 @@ $upcoming_event = $activities_call->upcoming();
                   <div id='picture_shown_outer'>
                       <img src='<?php
          if(!empty($activities))
-		 	echo "/images/activities/" . date('m') . "/" . str_replace(' ','_',$activities[0]['name']) . ".jpg";
+		 	echo "/images/activities/" . date('m') . "/" . str_replace(' ','_',strtolower($activities[0]['name'])) . ".jpg";
 		else
 			echo "/images/activities/no_activities.png";?>' class='activity_picture shown' id='picture_shown'/>
                    </div>

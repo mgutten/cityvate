@@ -5,8 +5,6 @@ if(empty($_GET['route']))
 else
 	$route = $_GET['route'];
 	
-	echo $_GET['route'];
-
 
 if(file_exists('application/' . rtrim($route . '.php'))){
 	$file = 'application/' . rtrim($route,'/') . '.php';
@@ -19,6 +17,6 @@ if(file_exists('application/' . rtrim($route . '.php'))){
 }
 elseif(is_dir('application/' . $route)){
 	$file = 'application/' . rtrim($route,'/') . '/index.php';
-	echo $file;
+	
 	include_once($file);
 }
