@@ -3,7 +3,13 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/db_functions.php');
 
 $password = trim($_POST['password']);
 $type = trim($_GET['type']);
-$change = trim($_POST[$type]);
+
+//differentiate between new and old password when changing pw
+if($type == 'password')
+	$change = trim($_POST['new_password']);
+else
+	$change = trim($_POST[$type]);
+
 
 //create column array for change fn below
 $column_array = array($type=>$change);
@@ -35,7 +41,7 @@ if($user->check_password($password) === true){
 	
 	//change db value of column to new value
 	$user->change($column_array);
-	
+
 	$_SESSION['user']['change_success'] = $type;
 
 	header('location:/member/account');

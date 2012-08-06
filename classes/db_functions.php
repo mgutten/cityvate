@@ -135,8 +135,12 @@ class User {
 		$query = "SELECT uID FROM users WHERE username = '" . $username . "'";
 		$result = $this->con->query($query);
 		
-		if($result->num_rows > 0)
-			return true;
+		if($result->num_rows > 0){
+			while($row = $result->fetch_array()){
+				
+				return $row['uID'];
+			}
+		}
 		else{
 			$_SESSION['user']['username_fail'] = $username;
 			return false;
@@ -212,7 +216,7 @@ class User {
 		
 	}
 	
-	//fn to change value of column for individual user from change_authenticate.php
+	//fn to change value of column for individual user from change_authenticate.php and from_cv.php
 	function change($column_array){
 		
 		$query = "UPDATE users 
@@ -221,6 +225,7 @@ class User {
 		$last_key = end(array_keys($column_array));			
 		
 		foreach($column_array as $column => $new){
+			
 			//hash pw
 			if($column == 'password')
 				$new = $this->password($new);
@@ -235,7 +240,7 @@ class User {
 			
 		}
 		$query .= " WHERE uID = '" . $_SESSION['user']['uID'] . "'";
-									
+		
 		$result = $this->con->query($query);
 		
 	}

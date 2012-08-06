@@ -54,11 +54,12 @@
 </p>
 <p class='text inspire'>"It is never too late to be what you might have been."</p>
 <p class='text inspire' id='author'>-George Eliot</p>
-<a href='/application/forgot' class='forgot text'>Forgot your password?</a>
+<a href='/application/forgot' class='forgot_link text'>Forgot your password?</a>
 
 <?php
-$form->input('image','submit','submit','/images/login_button_green.png');
+$form->input('image','submit','next_button','/images/login_button_green.png');
 $form->close();
+
 
 //empty fail session vars
 if(!empty($_SESSION['user']['username_fail']))

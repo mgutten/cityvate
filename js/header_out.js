@@ -2,7 +2,7 @@
 $(function() {
 	
 	//resize body onload
-		body_resize();
+	body_resize();
 	
 	//code to deal with header dropdown
 	//header dropdown animation	
@@ -17,7 +17,7 @@ $(function() {
 				//if focused on username textbox,
 				//don't animate div to closed
 				if(!$('.username').is(':focus')){
-						$("#dropdown").css('z-index','-1');
+						$("#dropdown").css('z-index','1');
 						$("#dropdown").stop().animate({top:'-70px'},300);
 				}
 		}
@@ -44,7 +44,17 @@ $(function() {
 		});
 	
 	//hide confirmation box for forgot password page
-	$('.forgot').toggle();
+	$('.confirmation').hide();
+	
+	//submit forgot password when click yes of confirmation box
+	$('#yes').click(function() {
+		$('form:eq(1)').submit();
+	})
+	
+	//run validate function when click on submit button for form
+	$('#input_submitter').click(function() {
+		return validate($(this).parent('form').attr('id'),true);
+	})
 
 //end "ready" function
 });
@@ -71,10 +81,10 @@ function body_resize() {
 }
 			
 //validate function for various login boxes
-function validate(form_name, confirm) {
+function validate(form_name, confirmation) {
 	
 	//give confirm a default value of false except if specified
-	confirm = typeof confirm !== 'undefined' ? confirm : false;
+	confirmation = typeof confirmation !== 'undefined' ? confirmation : false;
 	
 	
 	var returning = 1;
@@ -95,8 +105,8 @@ function validate(form_name, confirm) {
 			return false;
 		else{
 			
-			//if on change.php form, toggle confirmation box
-			if(form_name == 'change_info' || confirm == true){
+			//toggle confirmation box if confirmation var is set to true
+			if(confirmation === true){
 				//get first box' selector
 				var change_box = $('#change_info :input:first');
 				var text = change_box.val();
@@ -104,9 +114,11 @@ function validate(form_name, confirm) {
 				//test if it's a password and change to *** not letters
 				if(change_box.is('input[type=password]'))
 					text = '*********';
-					
+				
+				
 				$('.alert_main_val').text(text);
-				$('.confirmation').toggle();
+				$('.confirmation').show();
+				
 				return false;
 			}
 			

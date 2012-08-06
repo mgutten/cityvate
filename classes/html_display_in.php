@@ -33,7 +33,7 @@ class Body_member extends Body {
 			parent::__construct();
 	}
 	
-	//populate member.php with current activity bars
+	//populate member/index.php with current activity bars
 	function member_activity($activities){
 		
 			echo "<div id='top_right_activities' class='top_right_activities'>";

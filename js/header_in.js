@@ -33,7 +33,7 @@ $(function() {
 				//if focused on username textbox,
 				//don't animate div to closed
 				if(!$('.username').is(':focus')){
-						$("#dropdown").css('z-index','-1');
+						$("#dropdown").css('z-index','1');
 						$("#dropdown").stop().animate({top:'-100px'},300);
 				}
 	})

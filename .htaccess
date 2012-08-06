@@ -73,9 +73,6 @@ RewriteRule ^(.*)/$ $1.php [L]
 
 
 
-
-
-
 #silently rewrite url to point to application folder
 #RewriteCond application%{REQUEST_URI} !-d
 
@@ -97,5 +94,5 @@ RewriteRule ^(.*)/$ $1.php [L]
 #RewriteRule ^(.*)$ $1.php [L]
 
 
-
+php_value auto_prepend_file "X:/Program Files (x86)/Wamp/www/Local_site/cityvate/bootstrap.php"
 

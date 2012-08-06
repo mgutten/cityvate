@@ -168,7 +168,8 @@ if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/txt/additional/" . $body->a['month_
 <div id='body_right'>
 <?php
 	//determine which button to display
-	if($body->a['reserve_date'] != ''){
+	//if reserve_date is set and coupon not expired
+	if($body->a['reserve_date'] != '' && strtotime($a['expire']) > (time()-60*60*24)){
 		//display cancel button and current reservation date
 		echo "<img src='/images/activity/cancel_reserve_button.png' class='button' id='cancel'/>";
 		

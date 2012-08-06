@@ -444,10 +444,10 @@ class Alert_w_txt {
 		$form->close();
 	}
 					
-	function confirm($type) {
+	function confirm($message) {
 		$block = "<p class='alert_title	text'>Confirmation</p>";
 		
-		$block .= "<p class='alert_main_confirm text'>Are you sure you want to change your " . $type . " to:</p>";
+		$block .= "<p class='alert_main_confirm text'>Are you sure you want to $message</p>";
 		
 		$block .= "<p class='alert_main_val'></p>";
 		

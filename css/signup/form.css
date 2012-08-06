@@ -277,11 +277,11 @@ select#when {
 	margin:50px 20px 0px 0px;
 }
 
-.forgot {
+.forgot_link {
 	float:left;
 	clear:both;
 	color:#0C3;
-	margin:78px 0px 0px 20px;
+	margin:70px 0px 0px 20px;
 	font-size:11px;
 	
 }

@@ -110,8 +110,6 @@ function ready_functions() {
 	
 	//preload new images for smoother fade effect
 	preload_images();
-	
-	
 		
 	
 }
@@ -260,9 +258,13 @@ function change_picture() {
 			$('.picture_toggle').css('display','none');
 			$('#picture_shown').stop().css('opacity',1);
 			$('#picture_shown').attr('src','../images/activities/no_activities.png');
-
+			//disable linking when clicking on picture
+			$('#picture_link').attr('onclick','return false');
 		}
 		else {
+			
+			//enable linking when clicking on picture
+			$('#picture_link').attr('onclick','return true');
 			
 			$('.picture_toggle').css('display','block');
 			

@@ -152,6 +152,42 @@ p {
 	z-index:15;
 }
 
+#alert_confirmation {
+	background:#000;
+	width:600px;
+	height:200px;
+	border:#0C3 solid 1px;
+}
+
+.alert_title {
+	float:left;
+	font-size:16px;
+	color:#0C3;
+	font-size:20px;
+	margin:10px 0px 0px 10px;
+	text-align:left;
+	width:300px;
+}
+
+.alert_main {
+	float:left;
+	clear:both;
+	width:500px;
+	margin: 50px 0px 0px 50px;
+	text-align:center;
+	font-size:16px;
+}
+
+.alert_main_confirm {
+	float:left;
+	clear:both;
+	width:500px;
+	min-height:50px;
+	margin: 30px 0px 0px 50px;
+	text-align:center;
+	font-size:15px;
+}
+
 .x {
 	position:fixed;
 	top:308px;
@@ -161,6 +197,24 @@ p {
 	width:25px;
 	height:25px;
 	cursor:pointer;
+	color:#0C3;
+	font-size:18px;
+}
+
+.confirm_button {
+	float:left;
+	cursor:pointer;
+	margin:40px 0px 0px 50px;
+}
+
+.confirm_button#yes {
+	clear:both;
+	margin-left:190px;
+}
+
+.confirm_button:hover {
+	opacity:.85;
+	filter:alpha(opacity=85);
 }
 
 .username {
