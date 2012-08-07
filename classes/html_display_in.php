@@ -33,6 +33,17 @@ class Body_member extends Body {
 			parent::__construct();
 	}
 	
+	//check if there are new activities available
+	function check_new_activities() {
+		
+		//if today is within the last 7 days of month
+		if(date('j') >= (date('t')-27))
+			return true;
+		else
+			return false;
+			
+	}
+	
 	//populate member/index.php with current activity bars
 	function member_activity($activities){
 		
@@ -40,7 +51,13 @@ class Body_member extends Body {
 			$this->activities = $activities;
 			
 			if(empty($this->activities)){
-				echo "<div class='text no_activity'>There are no activities for this month.</div></div>
+				//check if there are new activities available
+				if($this->check_new_activities() === true)
+					echo "<a href='/member/new'><img src='/images/member/new_activities_button.png' class='new_activity' /></a></div>
+						<div id='pag_nums'></div>";
+				//else there are no activities and no new activities
+				else
+					echo "<div class='text no_activity'>There are no activities for this month.</div></div>
 						<div id='pag_nums'></div>";
 				return;
 			}

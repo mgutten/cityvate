@@ -321,6 +321,21 @@
 	float:left;
 	clear:both;
 	color:#999;
+	padding-top:3px;
+}
+
+.new_activity{
+	float:left;
+	clear:both;
+	width:200px;
+	height:70px;
+	margin:40px 0px 0px 100px;
+	
+}
+
+.new_activity:hover{
+	opacity:.85;
+	filter:alpha(opacity=85);
 }
 
 /*pagination*/
@@ -355,10 +370,4 @@
 .pag_nums_separate {
 	cursor:default;
 	margin-top:-2px;
-}
-
-/*no_activity*/
-.no_activity {
-	text-align:center;
-	padding-top:3px;
 }

@@ -12,10 +12,13 @@ if(!empty($_GET['month'])){
 	$activities_new = array();
 	$activities_done = array();
 	$activities_not = array();
+	//save spot for number of pagination pages
 	$activities_new[1] = 0;
+	//store subscription status/new activity status
+	$activities_new[2] = ($activities_call->check_subscription() === true && empty($activities) && $new_month > date('n') ? true : false);
 	
-	$b = 2;
-		
+	$b = 3;
+	
 	//convert date (e.g. 2012-05-19) to unix timestamp
 	for($i=0; $i < count($activities); $i++){
 		
@@ -31,29 +34,36 @@ if(!empty($_GET['month'])){
 	
 	//find ending amount (either 5 bars or til the end of array)
 	if(count($activities_not) - $start > 5){
-		 $end = 5;
-		 
+		 $end = 5;		 
 	}
 	else{
 		$end = count($activities_not);
-		$activities_new[1] = 0;
 	}
 	
 	for($i=$start; $i < $end; $i++) {
 		//convert old array to final array
 		$activities_new[$b] = $activities_not[$i];
+
 		$b++;
 		
 	}
+	
+	
 	//place done array in first index of final array
 	array_unshift($activities_new, $activities_done);
-	
+		
 	//if there are more than 5 activities, then set
 	//final array value to show that there are more pages
-		 $activities_new[1] = ceil(count($activities_not) / 5);
+	$activities_new[1] = ceil(count($activities_not) / 5);
 	
-	//var_dump($activities_new);
 	echo json_encode($activities_new);
+	
+	/*final organization of $activities_new
+		[0] = array of "done" activities
+		[1] = number of total pages for pagination in case of > 5 activities
+		[2] = subscription_status(false for not valid, true for valid/paid)
+		[3]+ = arrays of activities and their respective info
+	*/
 }
 
 //for retrieving information on clicked activity calendar.php

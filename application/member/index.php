@@ -14,9 +14,20 @@ $header = new Header();
 //selected(i.e. my_activities)
 $body = new Body_member(1);
 
+//if nearing end of current month, change to next month
+//and display new activities
+if($body->check_new_activities() === true){
+	$time = strtotime('+1 month');
+	$selected_month = date('m',strtotime('+1 month'));
+}
+else{
+	$time = time();
+	$selected_month = date('m');
+}
+
 //make call to retrieve activities list
 $activities_call = new Activities();
-$activities = $activities_call->activities();
+$activities = $activities_call->activities($selected_month);
 //store upcoming events for coming week
 $upcoming_event = $activities_call->upcoming();
 
@@ -31,8 +42,16 @@ $upcoming_event = $activities_call->upcoming();
           <div id='picture'>
                   <div id='picture_shown_outer'>
                       <img src='<?php
-         if(!empty($activities))
+		//standard case when activities were purchased, display first activities picture
+        if(!empty($activities))
 		 	echo "/images/activities/" . date('m') . "/" . str_replace(' ','_',strtolower($activities[0]['name'])) . ".jpg";
+			
+		//case when we are in last 5 days of month and their subscription is still valid
+		elseif(empty($activities) && $time > time() && $activities_call->check_subscription() === true)
+			echo "/images/activities/new_activities.png";
+			
+		//case when no activities exist and either subscription no longer valid
+		//or no activities were purchased
 		else
 			echo "/images/activities/no_activities.png";?>' class='activity_picture shown' id='picture_shown'/>
                    </div>
@@ -72,7 +91,7 @@ $upcoming_event = $activities_call->upcoming();
          <div id='top_right_month'>
                   <div id='left_arrow' class='arrow' onclick='arrow_click(-1)'></div>
                   <div id='right_arrow' class='arrow' onclick='arrow_click(1)' style='display:none'></div>
-          		  <p id='<?php echo date('m').date('F');?>' class='text activity_month'><?php echo date('F');?>'s Activities</p>
+          		  <p id='<?php echo date('m',$time).date('F',$time);?>' class='text activity_month'><?php echo date('F',$time);?>'s Activities</p>
       
           </div>
           

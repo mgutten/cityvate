@@ -244,6 +244,24 @@ class User {
 		$result = $this->con->query($query);
 		
 	}
+	
+	//check if subscription is still good next month
+	function check_subscription() {
+		
+		$query = 'SELECT pID FROM u_subscriptions 
+					WHERE uID = "' . $_SESSION['user']['uID'] . '" AND
+					(MONTH(end_date) > MONTH(CURDATE()) AND
+					MONTH(start_date) <= MONTH(CURDATE())) OR
+					auto_renew = "1"';
+		
+		$result = $this->con->query($query);
+		
+		if($result->num_rows > 0)
+			return true;
+		else
+			return false;
+			
+	}
 		
 	
 	function loop_results($array,$counter = 0) {

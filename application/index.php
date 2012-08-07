@@ -38,7 +38,7 @@ $text=array('what'=>array(
 		how_what('how');
 		
 	?>
-<a href="signup.php" alt="Signup"><img src="images/home/button_pricing.png" id="pricing" /></a>
+<a href="signup.php" alt="Signup"><img src="/images/home/button_pricing.png" id="pricing" /></a>
 
 <?php
 		quote_box('first',"I found myself caught in a rut, sitting around bored out of my mind.  But then I signed up for Cityvate, and now have something to look forward to every week!","John B");

@@ -1,9 +1,13 @@
 // JavaScript Document
 var timeout=[];
 var reset_list;
+
 var date = new Date();
+//if within last 5 days of month, change to new activities for next month
 var cur_month = date.getMonth()+1;
 var cur_month_str = (cur_month < 10 ? '0' + cur_month : cur_month);
+var start_month;
+
 //convert date time to seconds, not milli
 //subtract a day to make sure coupon is truly expired
 var cur_time = Math.round(date.getTime()/1000)-(60*60*24);
@@ -26,8 +30,14 @@ var image_array = new Array;
 
 
 $(function(){
-	ready_functions();	
+	if(parseInt($('.activity_month').attr('id').substr(0,2),10) != cur_month)
+		cur_month += 1;
 	
+	//starting_month
+	start_month = cur_month;
+	
+	ready_functions();	
+
 	//start image scrolling onload
 	set_fade_effect();
 	
@@ -37,7 +47,7 @@ $(function(){
 //(and rerun for ajax calls)
 function ready_functions() {
 	
-	
+
 	//perform custom image fade onclick
 	$('.activity').click(function() {
 		reset_list = 0;
@@ -140,7 +150,8 @@ function arrow_click(val) {
 		//reset selected pag num to 1
 		selected_pag = 1;
 		selected_pag_done = 1;
-	
+		
+		
 		cur_month += val;
 		
 		//deal with january,dec switch
@@ -155,8 +166,8 @@ function arrow_click(val) {
 		
 		//if there are no activities for this month, say so
 		timeout[2] = setTimeout(function() {
-			   if(a_array.length < 3)
-				   empty = 1;
+			    if(a_array.length < 4)
+				    empty = 1;
 				else
 					empty = 0;
 				
@@ -238,12 +249,10 @@ function populate_html(array) {
 		$('.activity_month').text(month_array[month_num]+"'s Activities")
 		
 		//change the pic	
-		change_picture()
+		change_picture();
 		
 		//show arrow if before current month
-		var date = new Date();
-		var n = date.getMonth()+1;
-			(n != month ? $('#right_arrow').css('display','block') : $('#right_arrow').css('display','none'))
+			(start_month != month ? $('#right_arrow').css('display','block') : $('#right_arrow').css('display','none'))
 		
 }
 
@@ -251,15 +260,26 @@ function change_picture() {
 		
 		var month = cur_month_str;
 		var month_num=cur_month;
-				
+		var src;
+		
+		//if no activities purchased for cur_month
 		if(empty == 1) {
 			
 			clearTimeout(timeout[0]);
 			$('.picture_toggle').css('display','none');
 			$('#picture_shown').stop().css('opacity',1);
-			$('#picture_shown').attr('src','../images/activities/no_activities.png');
-			//disable linking when clicking on picture
-			$('#picture_link').attr('onclick','return false');
+			
+			//if returned value from change_month shows that valid subscription and
+			//no activities have been purchased yet, display new activities info
+			if(a_array[2] === true)
+				new_activities();
+			//else there are simple no activities for this month
+			else{
+				$('#picture_shown').attr('src','../images/activities/no_activities.png');
+				//disable linking when clicking on picture
+				$('#picture_link').attr('onclick','return false');
+			}
+			
 		}
 		else {
 			
@@ -269,16 +289,16 @@ function change_picture() {
 			$('.picture_toggle').css('display','block');
 			
 			//change url of image
-			$('#picture_link').attr('href','/member/activity/'+a_array[2]['aID']);
+			$('#picture_link').attr('href','/member/activity/'+a_array[3]['aID']);
 			
 		
 			//change first shown image
-			$('#picture_hidden').attr('src','../images/activities/'+month+'/'+a_array[2]['name'].replace(/ /g,'_').toLowerCase()+'.jpg');
+			$('#picture_hidden').attr('src','../images/activities/'+month+'/'+a_array[3]['name'].replace(/ /g,'_').toLowerCase()+'.jpg');
 			
-			image_fade(a_array[2]['name']);
+			image_fade(a_array[3]['name']);
 								
 			//change banner title to first of array
-			$("#picture_banner_text").text(a_array[2]['name'])
+			$("#picture_banner_text").text(a_array[3]['name'])
 			
 		}
 }
@@ -296,17 +316,24 @@ function looping_act() {
 	
 	if(empty == 1) {
 		
-		$('#top_right_activities').html(
-					"<p class='text no_activity' id='no_activity'>There are no activities for this month.</p>"
+		if(a_array[2] === true){
+			$('#top_right_activities').html(
+					"<p class='text no_activity' id='no_activity'>New Activities Available!</p>"
 					)
-		$('#pag_nums').html('');
+		}
+		else{
+			$('#top_right_activities').html(
+						"<p class='text no_activity' id='no_activity'>There are no activities for this month.</p>"
+						)
+			$('#pag_nums').html('');
+		}
 	}
 	else {
 		
 	//start at 2 because 0 is reserved for done and pag_num
-	for(i=2;i<array.length;i++) {
+	for(i=3;i<array.length;i++) {
 		//if first bar, then give it selected class
-		if(i==2) {
+		if(i==3) {
 			classy = "activity text selected";
 		}
 		else {
@@ -502,5 +529,10 @@ $('#picture_shown').css('opacity',1);
 //reset timeout check
 timeout_check = 0;
 
+}
+
+function new_activities() {
+	$('#picture_shown').attr('src','../images/activities/new_activities.png');
+	$('#picture_link').attr('href','/member/new').attr('onclick','');
 }
 
