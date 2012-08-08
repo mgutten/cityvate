@@ -248,16 +248,21 @@ class User {
 	//check if subscription is still good next month
 	function check_subscription() {
 		
-		$query = 'SELECT pID FROM u_subscriptions 
+		$query = 'SELECT package FROM u_subscriptions 
 					WHERE uID = "' . $_SESSION['user']['uID'] . '" AND
 					(MONTH(end_date) > MONTH(CURDATE()) AND
-					MONTH(start_date) <= MONTH(CURDATE())) OR
-					auto_renew = "1"';
+					MONTH(start_date) <= MONTH(CURDATE()) OR
+					auto_renew = "1")';
 		
 		$result = $this->con->query($query);
 		
-		if($result->num_rows > 0)
+		//if there is a result, store package type in session
+		if($result->num_rows > 0){
+			while($row = $result->fetch_array()){
+				$_SESSION['user']['package'] = $row['package'];
+			}
 			return true;
+		}
 		else
 			return false;
 			
@@ -439,6 +444,56 @@ class Activities extends User {
 		return $upcoming_event;
 		*/
 	
+	}
+	
+	function new_activities($month) {
+		
+		//if package type is not stored and subscription 
+		//check fails (ie no valid subscription) redirect to homepage
+		if(empty($_SESSION['user']['package']) && $this->check_subscription() === false)
+			header('location:/member');
+		
+		$package = $_SESSION['user']['package'];
+		
+		//set token limit for activities used in sql statemnt
+		//(ie activity that costs 30 can not be seen by budget)
+		if($package == 'budget')
+			$token_limit = 20;
+		elseif($package == 'basic')
+			$token_limit = 45;
+		elseif($package == 'premium')
+			$token_limit = 400;
+			
+		
+		$query = "SELECT a.aID as aID, 
+							GROUP_CONCAT(a_p.preference) as preference,
+							a.name as name,
+							a.tokens as tokens,
+							a.save as save
+					FROM 
+						u_preferences as u_p,a_preferences as a_p  
+					JOIN 
+						activities as a
+					ON 
+						a_p.aID = a.aID
+					WHERE 
+						u_p.uID = '" . $_SESSION['user']['uID'] . "' 
+					AND 
+						MONTH(a.month_in_use) = (MONTH(CURDATE()) + 1)
+					AND
+						(a.tokens < " . $token_limit . ")
+					GROUP BY 
+						a_p.aID
+					ORDER BY
+						a.tokens DESC";
+					
+		$this->result = $this->con->query($query);
+		
+		$array = array('aID','name','tokens','save');
+		
+		return $this->loop_results($array,1);
+				
+			
 	}
 	
 	function remove_activity($aid,$to_current = '1'){

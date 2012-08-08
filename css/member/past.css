@@ -9,7 +9,7 @@ p {
 #body_main {
 	width:865px;
 	height:618px;
-	background:url(../../images/past/back.png) repeat-y;
+	background:url(/images/past/back.png) repeat-y;
 	float:left;
 	clear:both;
 	margin: -1px 0px 0px 30px;
@@ -28,12 +28,12 @@ p {
 	width:250px;
 	height:45px;
 	float:left;
-	background:url(../../images/past/never.png);
+	background:url(/images/past/never.png);
 	margin:20px 0px 0px 100px;
 }
 
 #did_container {
-	background:url(../../images/past/did.png);
+	background:url(/images/past/did.png);
 	margin-left:175px;
 }
 
@@ -44,7 +44,7 @@ p {
 	width:860px;
 	height:30px;
 	margin:20px 0px 0px 2px;
-	background:url(../../images/past/month_back.png);
+	background:url(/images/past/month_back.png);
 }
 
 .month_title{

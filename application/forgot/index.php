@@ -14,8 +14,16 @@ $array = array('Username'=>array('type'=>'text',
 				);
 $body->create_input($array, '/mail/from_cv.php', 'submit', '','forgot');
 $body->close();
+
 $alert = new Alert_w_txt('confirmation');
 $alert->confirm('reset your password?');
 
+if(!empty($_SESSION['mail']['success'])){
+	$success = new Alert_w_txt('success');
+	$success->generic('Success!',
+						'Your password was reset.  An email has been sent to ' . $_SESSION["mail"]["success"] . '.');
+	unset($_SESSION['mail']['success']);
+}
+	
 
 

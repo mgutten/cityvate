@@ -3,7 +3,7 @@
 
 $body = new Information('Member Contact', 'Contact Us');
 
-$form = new Form('/mail','POST','return validate("contact")','contact');
+$form = new Form('/mail/to_cv.php','POST','return validate("contact")','contact');
 ?>
 
 <p class='text information_section_title center'>

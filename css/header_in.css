@@ -262,6 +262,11 @@ a {
 	color:#ff3;
 }
 
+.green {
+	/*color:#44b20f;*/
+	color:#04B30D;
+}
+
 /*overlapping classes for alert_w_txt classes (change.php and calendar.php)*/
 .alert_title {
 	float:left;
@@ -304,6 +309,6 @@ a {
 	width:600px;
 	height:auto;
 	min-height:100px;
-	padding-bottom:50px;
+	padding-bottom:40px;
 	border:#0C3 solid 1px;
 }

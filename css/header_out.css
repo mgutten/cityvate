@@ -152,6 +152,15 @@ p {
 	z-index:15;
 }
 
+.alert_back {
+	background:#000;
+	width:600px;
+	height:auto;
+	min-height:100px;
+	padding-bottom:50px;
+	border:#0C3 solid 1px;
+}
+
 #alert_confirmation {
 	background:#000;
 	width:600px;

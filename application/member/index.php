@@ -14,9 +14,12 @@ $header = new Header();
 //selected(i.e. my_activities)
 $body = new Body_member(1);
 
+
+//make call to retrieve activities list
+$activities_call = new Activities();
 //if nearing end of current month, change to next month
 //and display new activities
-if($body->check_new_activities() === true){
+if($body->check_new_activities() === true && $activities_call->check_subscription() === true){
 	$time = strtotime('+1 month');
 	$selected_month = date('m',strtotime('+1 month'));
 }
@@ -25,11 +28,11 @@ else{
 	$selected_month = date('m');
 }
 
-//make call to retrieve activities list
-$activities_call = new Activities();
 $activities = $activities_call->activities($selected_month);
 //store upcoming events for coming week
 $upcoming_event = $activities_call->upcoming();
+
+
 
 ?>
 

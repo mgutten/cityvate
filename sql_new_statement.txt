@@ -1,0 +1,24 @@
+//selects activities where 
+//1)preference matches users preference 
+//2)month in use is next month
+SELECT a.aID, GROUP_CONCAT(a_p.preference) as preference,a.name as aID FROM u_preferences as u_p 
+JOIN a_preferences as a_p 
+ON u_p.preference = a_p.preference
+JOIN activities as a
+ON a_p.aID = a.aID
+WHERE u_p.uID = '1' 
+AND MONTH(a.month_in_use) = (MONTH(CURDATE()) + 1)
+GROUP BY a_p.aID
+
+//selects activities where
+//1)preferences match activity preference 
+//2)cost of activity is below certain level (to be adjusted in file)
+//3)month in use is next month
+SELECT a.aID as aID, GROUP_CONCAT(a_p.preference) as preference,a.name as name FROM u_preferences as u_p,a_preferences as a_p  
+JOIN activities as a
+ON a_p.aID = a.aID
+WHERE u_p.uID = '1' 
+AND MONTH(a.month_in_use) = (MONTH(CURDATE()) + 1)
+AND(a.cost < 25)
+GROUP BY a_p.aID
+

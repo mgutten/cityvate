@@ -37,6 +37,7 @@ class Body_member extends Body {
 	function check_new_activities() {
 		
 		//if today is within the last 7 days of month
+		/*TESTING, CHANGE 27 TO 7*/
 		if(date('j') >= (date('t')-27))
 			return true;
 		else
@@ -711,4 +712,59 @@ function calendar_my_activities($array) {
 					<span id='".date('md',strtotime($array[$i]['expire']))."'></span>
 					</div>";
 		}
+}
+
+class New_activities {
+	
+	function get_activities() {
+		
+		$this->activities_call = new Activities();
+		$this->activities = $this->activities_call->new_activities(date('n',strtotime("+1 month")));
+		
+	}
+	
+	function create_bars() {
+		
+		$block = '';
+		
+		for($i = 0; $i < count($this->activities); $i++){
+			
+			$block .= "<div class='body_left_bar' id='" . $this->activities[$i]['aID'] . "'>";
+			
+			$block .= "<input type='checkbox' autocomplete='off' class='body_left_checkbox' value='" . $this->activities[$i]['aID'] . "' name='activities_list[]'/>";
+			
+			$block .= "<p class='text green body_left_val'>" . $this->activities[$i]['name'] . "</p>";
+			$block .= "<p class='text body_left_val body_left_cost'>" . 
+						($this->activities[$i]['tokens'] == 0 ? 'Free' : $this->activities[$i]['tokens']) . "</p>";
+			$block .= "<p class='text green body_left_val body_left_save'>" . 
+						($this->activities[$i]['save'] > 100 ? "N/A" : $this->activities[$i]['save'] . "%") . "</p>";
+			$block .= "<p class='text body_left_val body_left_details'>Read about it</p>";
+			
+			$block .= "</div>";
+			
+		}
+		
+		return $block;
+		
+		foreach($this->activities as $num=>$inner){
+				
+				//counter to be used for assigning proper classes within inner foreach
+				$i = 1;
+				
+				$block .= "<div class='body_left_bar'>";
+				
+				foreach($inner as $key=>$val){
+					$class = 'text body_left_val';
+					
+					if($i & 1)
+						$class .= ' green';
+						
+					$block .= "<p class='$class'>$val</p>";
+				}
+				$block .= "</div>";
+		}
+		
+		return $block;
+			
+	}
 }

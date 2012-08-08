@@ -46,13 +46,13 @@ function genPassword($length=8)
 
 if(mail($to, $subject, $message, implode("\r\n", $headers)) == true){
 	
-	$_SESSION['mail']['success'] = true;
+	$_SESSION['mail']['success'] = $_REQUEST['username'];
 	
 	//change password in db
 	$user->change(array('password'=>$password));
 	header('location:' . $_SERVER['HTTP_REFERER']);
 }
 else{
-	$_SESSION['mail']['success'] = 'fail';
+	$_SESSION['mail']['fail'] = true;
 	header('location:' . $_SERVER['HTTP_REFERER']);
 }
