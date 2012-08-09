@@ -32,7 +32,10 @@ class Form_signup extends Form {
 	}
 	
 	function next_button() {			
-			$this->input('image','next','next_button',$GLOBALS['file_adj'] . 'images/signup/next_button.png');
+			echo $this->input(array('type'=>'image',
+								'id'=>'next',
+								'class'=>'next_button',
+								'src'=>'/images/signup/next_button.png'));
 	}
 	
 	function radio($name,$value) {
@@ -115,7 +118,9 @@ function signup_boxes($title_array) {
 						
 						//if it's password box, make password text
 						if($key=='Password')
-							$form->input('password','password2',$class);
+							echo $form->input(array('type'=>'password',
+													'id'=>'password2',
+													'class'=>$class));
 						else{
 							//case when username is not in email format
 							if($key=='Username/email' && 
@@ -128,7 +133,10 @@ function signup_boxes($title_array) {
 							if($lower == ' red' && !empty($_SESSION['exists']))
 								$value = 'That username is already taken';
 								
-							$form->input('text',$id,$class,'',$val);
+							echo $form->input(array('type'=>'text',
+													'id'=>$id,
+													'class'=>$class,
+													'value'=>$val));
 						}
 						
 						//lower title caption for textbox	
@@ -161,7 +169,7 @@ function signup_review($textarray) {
 			}
 			
 			//display "edit" button for each page
-			echo "<a href='signup_$edit_cnt.php' alt='Edit $title information' class='text edit'>edit</a>";
+			echo "<a href='step$edit_cnt' alt='Edit $title information' class='text edit'>edit</a>";
 			
 		}
 		

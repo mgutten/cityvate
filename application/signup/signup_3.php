@@ -33,7 +33,10 @@ $form->radio('package','premium');
 </select>
 
 <?php
-$form->input('checkbox','auto_renew','auto','','Yes');
+echo $form->input(array('type'=>'checkbox',
+					'id'=>'auto_renew',
+					'class'=>'auto',
+					'value'=>'Yes'));
 ?>
 <p class='text renew'>Automatically Renew</p>
 

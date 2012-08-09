@@ -218,11 +218,22 @@ class Header {
 			echo "<div id='dropdown_container'><div id='dropdown'>\n";
 			//if not logged in, display form
 			if(!empty($this->drop['Login'])) {
-				$form = new Form('/login/login_authenticate.php','POST','return validate("login_top")','login_top');
-				$form->input('text','username','username','','Username/email');
-				$form->input('password','password','username','','password');
+				$form = new Form(array('action'=>'/login/login_authenticate.php',
+										'method'=>'POST',
+										'onsubmit'=>'return validate("login_top")',
+										'id'=>'login_top'));
+				echo $form->input(array('type'=>'text',
+										'id'=>'username',
+										'class'=>'username',
+										'value'=>'Username/email'));
+				echo $form->input(array('type'=>'password',
+										'id'=>'password',
+										'class'=>'username',
+										'value'=>'password'));
 				echo "<a href='/forgot' id='forgot'>Forgot?</p></a>";
-				$form->input('image','login','','/images/login_button.png');
+				echo $form->input(array('type'=>'image',
+										'id'=>'login',
+										'src'=>'/images/login_button.png'));
 				$form->close();
 			}
 			else {
@@ -343,29 +354,51 @@ class Information {
 class Form {
 	
 	//create form tag
-	function __construct($action, $method, $onsubmit='',$id = '') {
+	function __construct($array) {
 		
-			echo "<form action='$action' method='$method' onsubmit='$onsubmit' id = '$id'>\n";
+			$block = "<form ";
+			
+			foreach($array as $key=>$val){
+				$block .= $key . "='" . $val . "'";
+			}
+			
+			$block .= ">";
+			
+			echo $block;
 			
 	}
 	
 	//create custom input for form
-	function input($type,$name,$class='',$src='',$value=''){
+	function input($array){
 					
-					if($type=='checkbox' && !empty($_SESSION['signup']['auto_renew']) && $_SESSION['signup']['auto_renew']=='Yes')
-						$checked = 'checked';
-					else
-						$checked='';
-			echo "<input type='$type' name='$name' id='input_$name' class='$class' src='$src' value='$value' $checked/>\n";
-					
+			if($array['type']=='checkbox' && !empty($_SESSION['signup']['auto_renew']) && $_SESSION['signup']['auto_renew']=='Yes')
+				$checked = 'checked';
+			else
+				$checked='';
+				
+			$name_checker = false;
+			
+			$block= "<input ";
+			
+			foreach($array as $key=>$val){
+				if($key == 'name')
+					$name_checker === true;
+				if($key == 'id')
+					$val = 'input_' . $val;
+				
+				$block .= $key . "='" . $val . "' ";
+			}
+			
+			if($name_checker === false)
+				$block .= "name='" . $array['id'] . "'";
+			
+			$block .= $checked;
+			
+			$block .= "/>";
+			
+			return $block;
 	}
 	
-	//create input with diff name/id
-	function input_diff($type,$name,$id,$class='',$src='',$value=''){
-					
-			echo "<input type='$type' name='$name' id='input_$id' class='$class' src='$src' value='$value'/>\n";
-					
-	}
 	
 	function close() {
 			echo "</form>";
@@ -407,14 +440,12 @@ class Alert_w_txt {
 	function calendar_alert($title, $button_src){
 		$class = $this->name;
 		//adjust for being out of root directory (within /member)
-		$file_adj ='';
-		if(!empty($GLOBALS['file_adj']))
-				$file_adj = $GLOBALS['file_adj'];
 				
 		$title = "<p class='alert_title'>$title</p>";
 		$activity_name = "<p id='alert_activity_name' class='alert_toggle'></p>";
 		$time = "<p id='alert_what_time' class=''>What time would you like your reservation?</p>";
-		$form = new Form('/member/ajax_calls/calendar_ajax.php','POST');
+		$form = new Form(array('action'=>'/member/ajax_calls/calendar_ajax.php',
+								'method'=>'POST'));
 		$select_hours = "<select id='alert_hours' name='alert_hours' class='alert_toggle'>
 							<option>12</option>";
 			for($i=1;$i<12;$i++) {
@@ -436,11 +467,15 @@ class Alert_w_txt {
 		
 		
 		echo $title.$activity_name.$time;
-		$form = new Form('/member/ajax_calls/db_ajax.php','POST');
 		echo $select_hours.$select_minutes.$select_ampm.$date;
-		$form->input('image','alert_button','alert_toggle',$file_adj.$button_src);
-		$form->input('hidden','aid','');
-		$form->input('hidden','date','');
+		echo $form->input(array('type'=>'image',
+								'id'=>'alert_button',
+								'class'=>'alert_toggle',
+								'src'=>$button_src));
+		echo $form->input(array('type'=>'hidden',
+								'id'=>'aid'));
+		echo $form->input(array('type'=>'hidden',
+								'id'=>'date'));
 		$form->close();
 	}
 					
@@ -522,7 +557,10 @@ class Body_signup extends Body {
 	
 	function create_input($array,$action,$button_type = 'update',$onsubmit = '',$id = '') {
 			
-			$this->form = $form = new Form($action,'POST',$onsubmit,$id);
+			$this->form = $form = new Form(array('action'=>$action,
+													'method'=>'POST',
+													'onsubmit'=>$onsubmit,
+													'id'=>$id));
 			$input_cnt = count($array);
 			
 			foreach($array as $title => $box_type){
@@ -560,7 +598,9 @@ class Body_signup extends Body {
 				//if not array, then display regular input box 
 				else{
 					
-					$form->input($box_type['type'],strtolower($title),$class);
+					echo $form->input(array('type'=>$box_type['type'],
+											'id'=>strtolower($title),
+											'class'=>$class));
 					
 				}
 				
@@ -568,7 +608,10 @@ class Body_signup extends Body {
 				echo "<p class='$lower_class'>" . $box_type['lower'] . "</p>";
 			}
 			
-			$form->input('image','submitter','next_button','/images/change/' . $button_type . '_button.png');
+			echo $form->input(array('type'=>'image',
+								'id'=>'submitter',
+								'class'=>'next_button',
+								'src'=>'/images/change/' . $button_type . '_button.png'));
 			$form->close();
 			
 			//return up one directory to parent file (ie account/change.php routes to account/)
@@ -612,6 +655,31 @@ class Body_signup extends Body {
 			
 	}
 	
+}
+
+//general function to open txt file given type of txt (ie description, tip) and activity name
+function txt_file($type, $month_in_use, $a_name) {
+	
+	$a_name = str_replace(' ','_',$a_name);
+	
+	$filename = $_SERVER['DOCUMENT_ROOT'] . '/txt/' . $type . '/' . $month_in_use . '/' . $a_name . '.txt';
+	
+	if(!file_exists($filename)){
+				  //if activity file does not exist, display default txt
+				  $filename = $_SERVER['DOCUMENT_ROOT'] . '/txt/' . $type . '/default.txt';
+				
+				  $file = fopen($filename,'r');
+				  $contents = fread($file, filesize($filename));
+				  
+			  }
+				  
+			  else{
+				  //elseif file exists, display activity's text
+				  $file = fopen($filename,'r');
+				  $contents = fread($file, filesize($filename));
+			  }
+			  
+	return $contents;
 }
 
 	

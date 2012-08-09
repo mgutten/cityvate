@@ -7,14 +7,19 @@
 	float:left;
 	clear:both;
 	margin:0px 0px 0px 30px;
-	background:url(/images/new/back.png);
+	
 }
 
 /*top_right section*/
-#top_right {
+#top_left {
 	width:285px;
-	height:165px;
-	float:right;
+	height:60px;
+	float:left;
+	background:#000;
+	opacity:.85;
+	filter:alpha(opacity=85);
+	-moz-opacity:0.85;
+	-khtml-opacity: 0.85;
 }
 
 .right_centered {
@@ -36,9 +41,10 @@
 	margin-top:2px;
 }
 
-#top_right_balance {
-	margin-top:50px;
-	font-size:16px;
+#top_left_balance {
+	margin:7px 0px 0px 125px;
+	float:left;
+	font-size:17px;
 }
 
 .red {
@@ -51,10 +57,13 @@
 	width:638px;
 	height:500px;
 	float:left;
-	margin:55px 0px 0px 0px;
+	clear:both;
+	margin:0px 0px 0px 0px;
 	background:#000;
 	opacity:.85;
 	filter:alpha(opacity=85);
+	-moz-opacity:0.85;
+	-khtml-opacity: 0.85;
 	position:relative;
 	z-index:-1;
 
@@ -69,7 +78,8 @@
 
 #body_left_directions {
 	float:left;
-	margin:7px 0px 0px 40px;
+	color:#999;
+	margin:9px 0px 0px 40px;
 }
 
 #body_left_title_bar {
@@ -78,7 +88,7 @@
 	height:20px;
 	padding:4px 0px 4px 0px;
 	background:#444;
-	margin:12px 0px 8px 0px;
+	margin:10px 0px 8px 0px;
 }
 
 .body_left_title {
@@ -118,6 +128,7 @@
 .body_left_checkbox {
 	float:left;
 	margin:5px 0px 0px 20px;
+	
 }
 
 .body_left_val {
@@ -179,10 +190,63 @@
 	float:right;
 	clear:none;
 	width:284px;
-	height:500px;
+	min-height:350px;
 	background:#000;
 	margin:0px 1px 0px 0px;
+	padding-bottom:20px;
 }
+
+.bottom_right_desc {
+	float:left;
+	margin:40px 0px 0px 40px;
+	color:#999;
+	font-size:14px;
+	width:205px;
+}
+
+#bottom_right_ajax {
+	display:none;
+}
+
+#bottom_right_name {
+	float:left;
+	margin-top:15px;
+	font-size:18px;
+}
+
+#bottom_right_type {
+	float:left;
+	margin-top:0px;
+	color:#FF3;
+}
+
+.bottom_right_img_container {
+	float:left;
+	clear:both;
+	width:240px;
+	height:160px;
+	margin:10px 0px 0px 22px;
+	overflow:hidden;
+}
+
+.bottom_right_img {
+	float:left;
+	height:160px;
+	width:auto;
+	margin-left:-15px;
+}
+
+#bottom_right_text {
+	float:left;
+	clear:both;
+	width:260px;
+	margin:10px 0px 0px 12px;
+	text-align:justify;
+	
+}
+
+
+
 /*end bottom_right section*/
 
 /*alert boxes*/

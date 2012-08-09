@@ -19,12 +19,14 @@ img.bg {
 	display:inline;
 }
 
-@media screen and (max-width: 1024px) { /* Specific to this particular image */
+/*
+@media screen and (max-width: 1024px) { /* Specific to this particular image 
 	img.bg {
 		left: 50%;
-		margin-left: -512px;   /* 50% */
+		margin-left: -512px;   /* 50% 
 	}
 }
+*/
 
 p {
 	cursor:default;
@@ -33,6 +35,10 @@ p {
 a {
 	text-decoration:none;
 	color:#CCC;
+}
+
+a img{
+	border:none;
 }
 
 .text {

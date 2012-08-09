@@ -534,20 +534,24 @@ class Activities extends User {
 			
 	}
 	
-	function activity_desc($activity_aid, $business_info = 0) {
+	function activity_desc($activity_aid, $business_info = 0, $user_info = 1) {
 		
 			$query = "SELECT `a`.name,
 							DATE_FORMAT(`a`.expire,'%m/%d/%Y') as expire,
-							`a`.g_maps,
 							`a`.type,
 							`a`.cost,
 							`a`.tokens,
 							`a`.reserve_needed,
 							MONTH(`a`.month_in_use) as month_in_use,
 							`a`.save,
-							`a`.aID,
-							`u_a`.done,
+							`a`.aID";
+			
+			//if want user related info, add it to query		
+			if($user_info == 1){
+				$query .= ",`u_a`.done,
 							DATE_FORMAT(`u_a`.reserve_date,'%m/%d/%Y') as reserve_date";
+			}
+			
 			//if looking for business info also ($business info > 0)
 			if($business_info != 0){
 				$query .= ",`b`.`name` as business_name,
@@ -559,25 +563,37 @@ class Activities extends User {
 							`b`.`yelp_address` as business_yelp_address,
 							`b`.`yelp_rating` as business_rating";
 			}
-			$query .= " FROM activities a
-						INNER JOIN u_activities u_a
+			
+			
+			$query .= " FROM activities a ";
+			
+			if($user_info == 1){
+				$query .= "INNER JOIN u_activities u_a
 						ON `u_a`.aID = `a`.aID ";
+			}
 			
 			//join businesses table if looking for business info		
 			if($business_info != 0){
 				$query .= "JOIN businesses b 
-							ON `u_a`.`aID` = `b`.`aID` ";
+							ON `a`.`aID` = `b`.`aID` ";
 			}
-			$query .= "WHERE `u_a`.`uID` = '".$_SESSION['user']['uID']."'
-						AND a.aID = '".$activity_aid."'";
+			
+			$query .= "WHERE ";
+			
+			if($user_info == 1)
+				$query .= "`u_a`.`uID` = '".$_SESSION['user']['uID']."' AND ";
+			
+			$query .= "a.aID = '".$activity_aid."'";
 			
 			
 			$this->result = $this->con->query($query);
 			
-			$array = array('name','aID','expire','g_maps','type','cost',
+			//default array of columns
+			$array = array('name','aID','expire','type','cost',
 							'tokens','reserve_needed','month_in_use',
-							'save','done','reserve_date');
-							
+							'save');
+			
+			//add business_info columns to requested rows			
 			if($business_info != 0){
 				$array_add = array('business_name','business_email','business_street_address',
 									'business_city_address','business_website',
@@ -585,6 +601,14 @@ class Activities extends User {
 									
 				$array = array_merge($array,$array_add);
 			}
+			
+			//add user info to requested rows
+			if($user_info == 1){
+				$array_add = array('done','reserve_date');
+				
+				$array = array_merge($array,$array_add);
+			}
+			
 										
 			return $this->loop_results($array);
 			

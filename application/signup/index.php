@@ -9,10 +9,28 @@ $header = new Header();
 
 $body = new Body();
 
-$form = new Form('signup/signup_set','POST');
-$form->input_diff('image','package','budget','select',$GLOBALS['file_adj'] . 'images/signup/select_button.png','budget');
-$form->input_diff('image','package','basic','select',$GLOBALS['file_adj'] . 'images/signup/select_button.png','basic');
-$form->input_diff('image','package','premium','select',$GLOBALS['file_adj'] . 'images/signup/select_button.png','premium');
+$form = new Form(array('action'=>'/signup/signup_set',
+						'method'=>'POST'));
+echo $form->input(array('type'=>'image',
+					'name'=>'package',
+					'id'=>'budget',
+					'class'=>'select',
+					'src'=>'/images/signup/select_button.png',
+					'value'=>'budget'));
+
+echo $form->input(array('type'=>'image',
+					'name'=>'package',
+					'id'=>'basic',
+					'class'=>'select',
+					'src'=>'/images/signup/select_button.png',
+					'value'=>'basic'));
+				
+echo $form->input(array('type'=>'image',
+					'name'=>'package',
+					'id'=>'premium',
+					'class'=>'select',
+					'src'=>'/images/signup/select_button.png',
+					'value'=>'premium'));
 $form->close();
 
 ?>
@@ -27,7 +45,7 @@ $form->close();
     </div>
 </div>
 
-<a href="preview/member.php" alt="Preview Cityvate"><img src="<?php echo $GLOBALS['file_adj'];?>images/signup/preview.png" id="preview"/></a>
+<a href="preview/member.php" alt="Preview Cityvate"><img src="/images/signup/preview.png" id="preview"/></a>
 
 <div class='fade_box' id='fade2'>
 	<div class='text title' id='text2'>

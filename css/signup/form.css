@@ -180,7 +180,7 @@ select#when {
 .review_box {
 	width:520px;
 	height:30px;
-	background: url(../images/signup/review_box.png) no-repeat;
+	background: url(/images/signup/review_box.png) no-repeat;
 	float:left;
 	margin:-2px 0px -2px 46px;
 }

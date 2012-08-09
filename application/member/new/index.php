@@ -15,14 +15,14 @@ $activities = new New_activities();
 $activities->get_activities();
 ?>
 
-<div id='top_right'>
+<div id='top_left'>
 	<p class='text right_centered yellow top_right_large' id='top_right_new'>
     	NEW ACTIVITIES
     </p>
     <p class='text right_centered yellow top_right_small' id='top_right_month'>
     	<?php echo strtoupper(date('F',strtotime("+1 month")));?>
     </p>
-    
+    <!--
    	<p class='text right_centered green' id='top_right_balance'>
     	Amount left to spend: <span id='token_balance'>
 			<?php 
@@ -33,14 +33,22 @@ $activities->get_activities();
     <p class='text right_centered green top_right_small' id='top_right_number'>
     	Number of activities: <span id='number_activities'>0</span>
     </p>
+    -->
 </div>
 
 <div id='body_left_back'>
 </div>
 
 <div id='body_left'>
-	<p class='text yellow top_right_small' id='body_left_directions'>
+	<p class='text top_right_small' id='body_left_directions'>
     	Pick and choose from your options below:
+    </p>
+    <p class='text green' id='top_left_balance'>
+    	Balance: <span id='token_balance'>
+			<?php 
+				//add amount of package tokens(constant defined in bootstrap) to remaining balance
+				echo $_SESSION['user']['tokens_balance'] + constant(strtoupper($_SESSION['user']['package']) . '_TOKENS');
+			?></span> tokens
     </p>
 	<div id='body_left_title_bar'>
     	<p class='text body_left_title' id='body_left_title_activity'>
@@ -58,21 +66,50 @@ $activities->get_activities();
     </div>
     
     <?php
-		$form = new Form('/member/new/process.php','POST','','activities');
+		$form = new Form(array('action'=>'/member/new/process.php',
+								'method'=>'POST',
+								'id'=>'activities'));
 		echo $activities->create_bars();
 	?>
     <img src='/images/new/cancel_button.png' id='cancel' class='button'/>
     
     <?php
-		$form->input('image','submitter','button','/images/new/accept_button.png','return validate()');
-		$form->input('hidden','leftover');
+		echo $form->input(array('type'=>'image',
+							'id'=>'submitter',
+							'class'=>'button',
+							'src'=>'/images/new/accept_button.png',
+							'onclick'=>'return validate()'));
+		echo $form->input(array('type'=>'hidden',
+							'id'=>'leftover'));
 		$form->close();
 	?>
 </div>
 
 
 <div id='bottom_right'>
-
+	<div id='bottom_right_default'>
+        <p class='right_centered text bottom_right_desc'>
+            Click any of the activities to read a brief description.
+        </p>
+    </div>
+    <div id='bottom_right_ajax'>
+        <p class='right_centered text yellow' id='bottom_right_name'>
+        </p>
+        <p class='right_centered text' id='bottom_right_type'>
+        </p>
+        
+        <span class='bottom_right_img_container'>
+            <img src='/images/blank.png' id='bottom_right_img' class='bottom_right_img'/>
+        </span>
+        
+        <p class='text right_centered' id='bottom_right_text'>
+        </p>
+        
+        <img src='http://www.maps.google.com/maps?q=' id='bottom_right_map' class='bottom_right_img_container' />
+        
+        <p class='text right_centered' id='bottom_right_reserve'>
+        </p>
+     </div>
 </div>
 
 

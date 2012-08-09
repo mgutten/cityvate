@@ -15,33 +15,47 @@ $(function() {
 		$(this).attr('checked',false)
 	})
 	
-	//change background bar's class on checkbox change
+	//trigger functions on checkbox change
 	$('.body_left_checkbox').change(function() {
 		
 		toggle_class($(this));
 		
 	})
 	
+	//prevent trigger of "click" function for parent div .body_left_bar
+	$('.body_left_checkbox').click(function(e) {
+		e.stopPropagation();
+	})
+	
 	//allows selection of activities by clicking on whole bar, not just checkbox
 	$('.body_left_bar').click(function() {
+		
 		//since it's the parent of the tag we need(checkbox), adjust tag variable
 		var tag = $(this).children('.body_left_checkbox');
-		
-		//change checkbox value
-		if(tag.is(':checked'))
-			tag.attr('checked',false)		
-		else
-			tag.attr('checked',true)
 			
+		//change checkbox value
+		if(tag.is(':checked')){
+			tag.prop('checked',false)
+		}
+		else{
+			tag.prop('checked',true)
+		}
 		
-		toggle_class($(this).children('.body_left_checkbox'));
+		toggle_class(tag);
 		
 	})
 	
+	
 	//run ajax for activity description and cancel the selection of this activity
-	$('.body_left_details').click(function() {
-		return false;
+	$('.body_left_details').click(function(e) {
+		
+		e.stopPropagation();
+		
+		var aid = $(this).parent().children('.body_left_checkbox').attr('value');
+		bottom_right_load(aid);
+			
 	})
+
 	
 	//confirmation buttons of alert
 	$('#no').click(function(){
@@ -74,6 +88,8 @@ function toggle_class(tag) {
 	
 	//change num of activities
 	count_activities();
+	
+	bottom_right_load(tag.attr('value'));
 		
 }
 
@@ -88,9 +104,9 @@ function change_balance(tag) {
 	
 	//if negative value of tokens, make balance red
 	if(balance - cost < 0)
-		$('#top_right_balance').addClass('red')
+		$('#top_left_balance').addClass('red')
 	else
-		$('#top_right_balance').removeClass('red')
+		$('#top_left_balance').removeClass('red')
 		
 	$('#token_balance').html(balance-cost)	
 	
@@ -103,6 +119,7 @@ function count_activities() {
 	
 }
 
+//validate balance of tokens and display appropriate alert
 function validate() {
 	
 	var tokens_left = $('#token_balance').html();
@@ -119,5 +136,46 @@ function validate() {
 		return false;
 	}
 		
+}
+
+//ajax call to retrieve description/info for activity
+function bottom_right_load(aid) {
+
+	$.ajax({
+		url: '/member/ajax_calls/new_ajax.php',
+		type: 'POST',
+		data: {aid: aid},
+		success: function(data) {
+			
+			var activity = $.parseJSON(data);
+			
+			body_right_populate(activity);
+			
+		}
+		
+	})
+	
+}
+
+//populate bottom_right div with activity description
+function body_right_populate(activity){
+		
+	//hide default and show ajax results
+	$('#bottom_right_default').hide();
+	$('#bottom_right_ajax').show();
+	
+	$('#bottom_right_name').text(activity.name);
+	
+	$('#bottom_right_type').text(activity.type);
+	
+	$('#bottom_right_img').attr('src','/images/activities/' 
+								+ activity.month_in_use + '/'
+								+ activity.name.replace(/ /g,'_') + '.jpg');
+								
+	$('#bottom_right_text').text(activity.desc);
+								
+								
+								
+	
 }
 

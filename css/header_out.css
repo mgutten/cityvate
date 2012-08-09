@@ -19,15 +19,20 @@ img.bg {
 	display:inline;
 }
 
-@media screen and (max-width: 1024px) { /* Specific to this particular image */
-	img.bg {
-		left: 50%;
-		margin-left: -512px;   /* 50% */
-	}
-}
+
+
 
 p {
 	cursor:default;
+}
+
+/*IE6 prevent underlining of links*/
+a {
+	text-decoration:none;
+}
+
+a img{
+	border:none;
 }
 
 .text {
@@ -157,14 +162,7 @@ p {
 	width:600px;
 	height:auto;
 	min-height:100px;
-	padding-bottom:50px;
-	border:#0C3 solid 1px;
-}
-
-#alert_confirmation {
-	background:#000;
-	width:600px;
-	height:200px;
+	padding-bottom:30px;
 	border:#0C3 solid 1px;
 }
 
@@ -213,7 +211,7 @@ p {
 .confirm_button {
 	float:left;
 	cursor:pointer;
-	margin:40px 0px 0px 50px;
+	margin:10px 0px 0px 50px;
 }
 
 .confirm_button#yes {

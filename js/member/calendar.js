@@ -347,14 +347,15 @@ function activity_desc(activity_aid){
 			body_right_populate(0);
 		}
 		else{
+
 			$.ajax({
 				url: '/member/ajax_calls/db_ajax.php',
 				type:'POST',
-				dataType:'json',
 				data: {activity : activity_aid},
 				success: function(data) {
 					
-					var activity_array = eval(data);
+					var activity_array = $.parseJSON(data);
+					
 					body_right_populate(activity_array);
 					
 				}
@@ -365,7 +366,7 @@ function activity_desc(activity_aid){
 }
 
 //populate lower half of body_right with returned json results
-//from activity_desc ajax
+//from activity_desc 
 function body_right_populate(array){
 		//if a day was clicked without an activity
 		if(array == 0) {

@@ -746,25 +746,6 @@ class New_activities {
 		
 		return $block;
 		
-		foreach($this->activities as $num=>$inner){
-				
-				//counter to be used for assigning proper classes within inner foreach
-				$i = 1;
-				
-				$block .= "<div class='body_left_bar'>";
-				
-				foreach($inner as $key=>$val){
-					$class = 'text body_left_val';
-					
-					if($i & 1)
-						$class .= ' green';
-						
-					$block .= "<p class='$class'>$val</p>";
-				}
-				$block .= "</div>";
-		}
-		
-		return $block;
 			
 	}
 }

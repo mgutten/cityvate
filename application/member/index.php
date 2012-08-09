@@ -59,7 +59,7 @@ $upcoming_event = $activities_call->upcoming();
 			echo "/images/activities/no_activities.png";?>' class='activity_picture shown' id='picture_shown'/>
                    </div>
                    <div id='picture_hidden_outer'>
-                      <img src='' id='picture_hidden' class='picture_toggle'/>
+                      <img src='/images/blank.png' id='picture_hidden' class='picture_toggle'/>
                    </div>
                    
       		<div id='picture_top'>

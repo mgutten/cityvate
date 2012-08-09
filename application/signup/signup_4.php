@@ -1,6 +1,8 @@
 <?php
 
-
+if(empty($_SESSION['signup']['package']))
+	header('location:/signup/step1');
+	
 //position in signup process
 $pos = 4;
 

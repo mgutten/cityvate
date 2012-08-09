@@ -12,7 +12,10 @@
 	$body->background('Login',$pos);
 	
 	//create form for login that will run js fn validate() for id _main
-	$form = new Form("login/login_authenticate.php","POST","return validate(\"login_main\")","login_main");
+	$form = new Form(array('action'=>"login/login_authenticate.php",
+							'method'=>"POST",
+							'onsubmit'=>"return validate(\"login_main\")",
+							'id'=>"login_main"));
 	
 	$class = 'drop text';
 	
@@ -26,7 +29,10 @@
 		
 		//if username was not found in db, change color of username/pw back
         (!empty($_SESSION['user']['username_fail']) ? $class .= ' red_back' : '');
-        $form->input('text','username_main',$class,'',$user);
+        echo $form->input(array('type'=>'text',
+								'id'=>'username_main',
+								'class'=>$class,
+								'value'=>$user));
     ?>
 
 <p class='text box_title_lower red' id='username_lower'>
@@ -41,7 +47,9 @@
     <?php
 	//if username was found but password incorrect, change color of pw input
         (!empty($_SESSION['user']['password_fail']) ? $class .= ' red_back' : '');
-        $form->input('password','password_main',$class);
+        echo $form->input(array('type'=>'password',
+								'id'=>'password_main',
+								'class'=>$class));
     ?>
 
 <p class='text box_title_lower red' id='password_lower'>
@@ -57,7 +65,10 @@
 <a href='/application/forgot' class='forgot_link text'>Forgot your password?</a>
 
 <?php
-$form->input('image','submit','next_button','/images/login_button_green.png');
+echo $form->input(array('type'=>'image',
+						'id'=>'submit',
+						'class'=>'next_button',
+						'src'=>'/images/login_button_green.png'));
 $form->close();
 
 

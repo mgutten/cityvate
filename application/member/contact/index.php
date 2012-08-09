@@ -3,7 +3,10 @@
 
 $body = new Information('Member Contact', 'Contact Us');
 
-$form = new Form('/mail/to_cv.php','POST','return validate("contact")','contact');
+$form = new Form(array('action'=>'/mail/to_cv.php',
+						'method'=>'POST',
+						'onsubmit'=>'return validate("contact")',
+						'id'=>'contact'));
 ?>
 
 <p class='text information_section_title center'>
@@ -36,7 +39,10 @@ $form = new Form('/mail/to_cv.php','POST','return validate("contact")','contact'
 	
 <?php
 
-$form->input('image','submitter','submitter','/images/information/submit_button.png');
+echo $form->input(array('type'=>'image',
+						'id'=>'submitter',
+						'class'=>'submitter',
+						'src'=>'/images/information/submit_button.png'));
 
 
 //if message has already been sent and redirected back here, set alert box
