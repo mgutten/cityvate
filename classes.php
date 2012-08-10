@@ -682,4 +682,17 @@ function txt_file($type, $month_in_use, $a_name) {
 	return $contents;
 }
 
+//convert date to str given format (mo/dd/yyyy)
+function date_to_str($date, $format = '') {
+	
+		$date_call = DateTime::createFromFormat('m/d/Y', $date);
+		
+		if($format == '') 
+			return $date_call->format('F j, Y');
+		else
+			return $date_call->format($format);
+			
+		
+}
+
 	

@@ -733,7 +733,7 @@ class New_activities {
 			
 			$block .= "<input type='checkbox' autocomplete='off' class='body_left_checkbox' value='" . $this->activities[$i]['aID'] . "' name='activities_list[]'/>";
 			
-			$block .= "<p class='text green body_left_val'>" . $this->activities[$i]['name'] . "</p>";
+			$block .= "<p class='text green body_left_val body_left_name'>" . $this->activities[$i]['name'] . "</p>";
 			$block .= "<p class='text body_left_val body_left_cost'>" . 
 						($this->activities[$i]['tokens'] == 0 ? 'Free' : $this->activities[$i]['tokens']) . "</p>";
 			$block .= "<p class='text green body_left_val body_left_save'>" . 

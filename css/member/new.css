@@ -10,6 +10,7 @@
 	
 }
 
+
 /*top_right section*/
 #top_left {
 	width:285px;
@@ -78,7 +79,6 @@
 
 #body_left_directions {
 	float:left;
-	color:#999;
 	margin:9px 0px 0px 40px;
 }
 
@@ -157,6 +157,7 @@
 	cursor:pointer;
 
 }
+
 /* end values of each activity within bar*/
 
 /*bottom buttons of body_left*/
@@ -186,20 +187,42 @@
 /*end body_left section*/
 
 /*bottom_right section*/
-#bottom_right{
+
+
+#bottom_right_container {
 	float:right;
-	clear:none;
+	width:292px;
+	height:500px;
+}
+
+#bottom_right{
+	float:left;
 	width:284px;
 	min-height:350px;
 	background:#000;
-	margin:0px 1px 0px 0px;
+	margin:0px 0px 0px 0px;
 	padding-bottom:20px;
+	opacity:.9;
+	filter:alpha(opacity=90);
+	-moz-opacity:0.9;
+	-khtml-opacity: 0.9;
+}
+
+#separator {
+	width:8px;
+	float:left;
+	background:#000;
+	opacity:.65;
+	filter:alpha(opacity=65);
+	-moz-opacity:0.65;
+	-khtml-opacity: 0.65;	
+	margin-top:0px;
+	height:100%;
 }
 
 .bottom_right_desc {
 	float:left;
 	margin:40px 0px 0px 40px;
-	color:#999;
 	font-size:14px;
 	width:205px;
 }
@@ -233,7 +256,7 @@
 	float:left;
 	height:160px;
 	width:auto;
-	margin-left:-15px;
+	margin-left:-5px;
 }
 
 #bottom_right_text {
@@ -245,6 +268,21 @@
 	
 }
 
+#bottom_right_reserve {
+	float:left;
+	clear:both;
+	margin:10px 0px 0px 12px;
+	text-align:center;
+	width:260px;
+	color:#FF3;
+}
+
+#bottom_right_map {
+	opacity:.85;
+	filter:alpha(opacity=85);
+	-moz-opacity:0.85;
+	-khtml-opacity: 0.85;
+}
 
 
 /*end bottom_right section*/
@@ -267,3 +305,10 @@
 	margin-left:125px;
 }
 /*end alert boxes*/
+
+/*general additions*/
+
+
+.dark_text {
+	color:#999;
+}

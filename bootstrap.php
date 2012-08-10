@@ -1,4 +1,9 @@
 <?php
+if(strpos($_SERVER['REQUEST_URI'],'member/new') !== false){
+	header("Cache-Control: no-cache, must-revalidate");
+	header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+}
+
 session_start();
 
 //if we are in the member directory, you must be logged in

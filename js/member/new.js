@@ -1,14 +1,13 @@
 // JavaScript Document
-var num_activities = 0;
 
 $(function() {
+	
 	
 	//adjust height of body_left background to match height of body_left
 	//also adjust margin-top of body_left to overlay body_left_background
 	var body_left_height = parseInt($('#body_left').css('height'),10);
 	$('#body_left_back').css('height',body_left_height + 'px');
-	$('#body_left').css('margin-top','-' + body_left_height + 'px');
-	$('#bottom_right').css('margin-top','-' + (body_left_height - 119) + 'px');
+	$('#bottom_right_container,#body_left').css('margin-top','-' + body_left_height + 'px');
 	
 	//set all checkboxes to unchecked on page load
 	$('input[type=checkbox]').each(function() {
@@ -74,20 +73,17 @@ $(function() {
 function toggle_class(tag) {
 	
 	//if checkbox is now checked, make background of bar green
-	if(tag.is(':checked')){
+	if(tag.is(':checked'))
 		tag.parent().addClass('body_left_bar_selected');
-		num_activities += 1;
-	}
-	else{
+	else
 		tag.parent().removeClass('body_left_bar_selected');
-		num_activities -= 1;
-	}
 	
 	//change balance of tokens
 	change_balance(tag);
 	
-	//change num of activities
-	count_activities();
+	//check bars to see if cost is greater than balance
+	//if so change to red
+	//check_bars();
 	
 	bottom_right_load(tag.attr('value'));
 		
@@ -108,16 +104,29 @@ function change_balance(tag) {
 	else
 		$('#top_left_balance').removeClass('red')
 		
-	$('#token_balance').html(balance-cost)	
+	$('#token_balance').html(balance-cost)
 	
 }
 
+/*
 //change the number of activities in top_right section
-function count_activities() {
+function check_bars() {
 	
-	$("#number_activities").html(num_activities);
-	
+	$(".body_left_bar").each(function() {
+		var cost = parseInt($(this).children('.body_left_cost').html());
+		var balance = parseInt($('#token_balance').html());
+		
+		if(cost > balance && !$(this).is('.body_left_bar_selected')){
+			$(this).children('.body_left_name,.body_left_cost').addClass('red')
+		}
+		else {
+			$(this).children('.body_left_name,.body_left_cost').removeClass('red')
+		}
+		
+	})
+			
 }
+*/
 
 //validate balance of tokens and display appropriate alert
 function validate() {
@@ -159,23 +168,45 @@ function bottom_right_load(aid) {
 
 //populate bottom_right div with activity description
 function body_right_populate(activity){
-		
+	
 	//hide default and show ajax results
 	$('#bottom_right_default').hide();
 	$('#bottom_right_ajax').show();
 	
+	//activity name
 	$('#bottom_right_name').text(activity.name);
 	
+	//activity type
 	$('#bottom_right_type').text(activity.type);
 	
+	//activity img
 	$('#bottom_right_img').attr('src','/images/activities/' 
 								+ activity.month_in_use + '/'
 								+ activity.name.replace(/ /g,'_') + '.jpg');
-								
+	//description						
 	$('#bottom_right_text').text(activity.desc);
-								
-								
-								
+	
+	//map
+	var business_address = activity.business_street_address + ' ' 
+							+ activity.business_city_address;
+							
+	$('#bottom_right_map').attr('src','http://maps.googleapis.com/maps/api/staticmap?center=' 
+										+ business_address + 
+										'&zoom=14&size=240x160&maptype=roadmap&markers=color:green%7C'
+										+ business_address + '&sensor=false')	
+	
+	$('#bottom_right_map_link').attr('href','http://www.google.com/maps?q=' + business_address);
+		
+	/*//reservation needed
+	var reserve = (activity.reserve_needed > 0 ? 'Reservation needed ' + activity.reserve_needed + ' day(s) in advance' : 'Reservation not needed');
+	
+	$('#bottom_right_reserve').text(reserve);	*/
+	
+	//what it's good for txt
+	$('#bottom_right_reserve').text(activity.what);
+	
+	$('#bottom_right_expire').text(activity.expire);
+									
 	
 }
 

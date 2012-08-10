@@ -22,25 +22,13 @@ $activities->get_activities();
     <p class='text right_centered yellow top_right_small' id='top_right_month'>
     	<?php echo strtoupper(date('F',strtotime("+1 month")));?>
     </p>
-    <!--
-   	<p class='text right_centered green' id='top_right_balance'>
-    	Amount left to spend: <span id='token_balance'>
-			<?php 
-				//add amount of package tokens(constant defined in bootstrap) to remaining balance
-				echo $_SESSION['user']['tokens_balance'] + constant(strtoupper($_SESSION['user']['package']) . '_TOKENS');
-			?></span> tokens
-    </p>
-    <p class='text right_centered green top_right_small' id='top_right_number'>
-    	Number of activities: <span id='number_activities'>0</span>
-    </p>
-    -->
 </div>
 
 <div id='body_left_back'>
 </div>
 
 <div id='body_left'>
-	<p class='text top_right_small' id='body_left_directions'>
+	<p class='text top_right_small dark_text' id='body_left_directions'>
     	Pick and choose from your options below:
     </p>
     <p class='text green' id='top_left_balance'>
@@ -85,31 +73,43 @@ $activities->get_activities();
 	?>
 </div>
 
+<div id='bottom_right_container'>
 
-<div id='bottom_right'>
-	<div id='bottom_right_default'>
-        <p class='right_centered text bottom_right_desc'>
-            Click any of the activities to read a brief description.
-        </p>
+	<div id='separator'>
     </div>
-    <div id='bottom_right_ajax'>
-        <p class='right_centered text yellow' id='bottom_right_name'>
-        </p>
-        <p class='right_centered text' id='bottom_right_type'>
-        </p>
-        
-        <span class='bottom_right_img_container'>
-            <img src='/images/blank.png' id='bottom_right_img' class='bottom_right_img'/>
-        </span>
-        
-        <p class='text right_centered' id='bottom_right_text'>
-        </p>
-        
-        <img src='http://www.maps.google.com/maps?q=' id='bottom_right_map' class='bottom_right_img_container' />
-        
-        <p class='text right_centered' id='bottom_right_reserve'>
-        </p>
-     </div>
+
+    <div id='bottom_right'>
+        <div id='bottom_right_default'>
+            <p class='right_centered text bottom_right_desc dark_text'>
+                Click any of the activities to read a brief description.
+            </p>
+        </div>
+        <div id='bottom_right_ajax'>
+            <p class='right_centered text yellow' id='bottom_right_name'>
+            </p>
+            <p class='right_centered text' id='bottom_right_type'>
+            </p>
+            
+            <span class='bottom_right_img_container'>
+                <img src='/images/blank.png' id='bottom_right_img' class='bottom_right_img'/>
+            </span>
+            
+            <p class='text right_centered' id='bottom_right_text'>
+            </p>
+            
+            
+            <a href='' id='bottom_right_map_link' target='_blank'>
+           		<img src='http://www.maps.google.com/maps?q=' id='bottom_right_map' class='bottom_right_img_container' />
+            </a>
+            
+            <p class='text right_centered' id='bottom_right_reserve'>
+            </p>
+            
+            <p class='text right_centered dark_text'>
+            Expires: <span id='bottom_right_expire'></span>
+            </p>
+         </div>
+    </div>
 </div>
 
 

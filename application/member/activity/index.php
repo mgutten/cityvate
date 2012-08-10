@@ -175,8 +175,7 @@ if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/txt/additional/" . $body->a['month_
 		
 		echo "<p class='text reservation_date'>";
 		
-		$date = DateTime::createFromFormat('m/d/Y', $a['reserve_date']);
-		echo $date->format('F j, Y @ g a' );
+		echo date_to_str($a['reserve_date'],'F j, Y @ g a');
         
 		echo "</p>";
 	}
