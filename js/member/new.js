@@ -1,12 +1,13 @@
 // JavaScript Document
 
+var old_qty;
+
 $(function() {
-	
-	
+
 	//adjust height of body_left background to match height of body_left
 	//also adjust margin-top of body_left to overlay body_left_background
-	var body_left_height = parseInt($('#body_left').css('height'),10);
-	$('#body_left_back').css('height',body_left_height + 'px');
+	var body_left_height = parseInt($('#body_left').css('height'),10) + 27;
+	$('#body_left_back,#separator').css('height',body_left_height + 'px' );
 	$('#bottom_right_container,#body_left').css('margin-top','-' + body_left_height + 'px');
 	
 	//set all checkboxes to unchecked on page load
@@ -44,6 +45,34 @@ $(function() {
 		
 	})
 	
+	//prevent changing of background bar color onclick when background is selected
+	$('.body_left_qty').click(function(e) {
+		if($(this).parent().is('.body_left_bar_selected'))
+			e.stopPropagation();
+	})
+	
+	//store old qty in var when focus on qty box
+	$('.body_left_qty').focus(function() {
+		if($(this).val() == '')
+			old_qty = 1;
+		else
+			old_qty = $(this).val();
+	})
+	
+	//change total amount when change qty
+	$('.body_left_qty').change(function() {
+		//limit max qty to 4
+		if($(this).val() > 4)
+			$(this).val(4)
+			
+		if(isNaN($(this).val()) || $(this).val() < 0)
+			$(this).val(1)
+		
+		if($(this).parent().is('.body_left_bar_selected') && $(this).val() != old_qty)
+			qty_change($(this));
+		
+	})
+	
 	
 	//run ajax for activity description and cancel the selection of this activity
 	$('.body_left_details').click(function(e) {
@@ -65,18 +94,24 @@ $(function() {
 		$('#input_leftover').attr('value',$(this).attr('id'));
 		$('#activities').submit();
 	})
-	
+		
 	
 })
 
-
+//tag is checkbox_tag
 function toggle_class(tag) {
 	
+	var aid = tag.attr('value');	
+	tag = tag.parent();
+	
 	//if checkbox is now checked, make background of bar green
-	if(tag.is(':checked'))
-		tag.parent().addClass('body_left_bar_selected');
+	if(tag.children('.body_left_checkbox').is(':checked')){
+		tag.addClass('body_left_bar_selected');
+		tag.children('.body_left_qty').val(1);
+	}
 	else
-		tag.parent().removeClass('body_left_bar_selected');
+		tag.removeClass('body_left_bar_selected');
+	
 	
 	//change balance of tokens
 	change_balance(tag);
@@ -85,18 +120,25 @@ function toggle_class(tag) {
 	//if so change to red
 	//check_bars();
 	
-	bottom_right_load(tag.attr('value'));
+	bottom_right_load(aid);
 		
 }
 
 //change the balance of tokens after an activity is chosen/unchosen
-function change_balance(tag) {
+function change_balance(parent_tag) {
 	
-	var cost = (tag.parent().children('.body_left_cost').html() == 'Free' ? 0 : tag.parent().children('.body_left_cost').html());
+	var tag = parent_tag;
+	var cost = (tag.children('.body_left_cost').html() == 'Free' ? 0 : parseInt(tag.children('.body_left_cost').html(),10));
 	var balance = $('#token_balance').html();
 	
-	if(!tag.is(':checked'))
-		cost = cost * -1;
+	if(cost > 0){
+		if(!tag.children('.body_left_checkbox').is(':checked')){
+			cost = cost * -1 * parseInt(tag.children('.body_left_qty').val());
+			tag.children('.body_left_qty').val('');
+		}
+		else
+			cost = cost * parseInt(tag.children('.body_left_qty').val(),10);
+	}
 	
 	//if negative value of tokens, make balance red
 	if(balance - cost < 0)
@@ -210,3 +252,28 @@ function body_right_populate(activity){
 	
 }
 
+//tag is qty box
+function qty_change(tag) {
+	
+	//if qty of 0 entered, deselect this activity
+	if(tag.val() == 0){
+		tag.parent().removeClass('body_left_bar_selected');
+		tag.parent().children('.body_left_checkbox').prop('checked',false);
+		tag.val('');
+	}
+	
+	var balance = parseInt($('#token_balance').html(),10);
+	var cost = tag.parent().children('.body_left_cost').html();
+
+	balance = balance + parseInt((old_qty * cost),10);
+	
+	balance = balance - parseInt((tag.val() * cost),10);
+
+	//if negative value of tokens, make balance red
+	if(balance < 0)
+		$('#top_left_balance').addClass('red')
+	else
+		$('#top_left_balance').removeClass('red')
+
+	$('#token_balance').html(balance);
+}

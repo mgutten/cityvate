@@ -39,7 +39,11 @@
 }
 
 #top_right_month {
-	margin-top:2px;
+	margin-top:0px;
+}
+
+#top_right_new {
+	margin-top:10px;
 }
 
 #top_left_balance {
@@ -87,8 +91,8 @@
 	width:638px;
 	height:20px;
 	padding:4px 0px 4px 0px;
-	background:#444;
-	margin:10px 0px 8px 0px;
+	background:#333;
+	margin:10px 0px 4px 0px;
 }
 
 .body_left_title {
@@ -96,18 +100,6 @@
 	margin:0px 0px 0px 50px;
 	width:100px;
 	font-size:18px;
-}
-
-#body_left_title_cost {
-	margin-left:120px;
-}
-
-#body_left_title_save {
-	margin-left: 0px;
-}
-
-#body_left_title_details {
-	margin-left:40px;
 }
 
 .body_left_bar {
@@ -138,24 +130,53 @@
 	font-size:15px;
 }
 
+.body_left_activity {
+	width:200px;
+	margin: 0px 0px 0px 50px;
+}
+
 .body_left_cost {
-	width:30px;
-	margin-left:25px;
+	width:50px;
+	margin-left:20px;
 	text-align:center;
 }
 
 .body_left_save {
-	margin-left: 90px;
-	width:50px;
+	margin-left: 30px;
+	width:80px;
+	text-align:center;
 }
 
 .body_left_details {
-	margin: 5px 0px 0px 65px;
+	margin: 0px 0px 0px 40px;
+	width:80px;
+	text-align:center;
+}
+
+.body_left_qty {
+	margin-left:20px;
+	width:50px;
+	text-align:center;
+}
+
+.body_left_qty.drop {
+	float:left;
+	clear:none;
+	width:18px;
+	padding-left:0px;
+	padding-right:1px;
+	padding-top:3px;
+	height:10px;
+	font-size:12px;
+	margin:2px 0px 0px 28px;
+	border:1px #999 solid;
+}
+
+.body_left_details.body_left_val {
+	margin:5px 0px 0px 43px;
 	text-decoration:underline;
 	font-size:11px;
-	width:80px;
 	cursor:pointer;
-
 }
 
 /* end values of each activity within bar*/
@@ -192,7 +213,7 @@
 #bottom_right_container {
 	float:right;
 	width:292px;
-	height:500px;
+	height:370px;
 }
 
 #bottom_right{

@@ -17,10 +17,10 @@ $activities->get_activities();
 
 <div id='top_left'>
 	<p class='text right_centered yellow top_right_large' id='top_right_new'>
-    	NEW ACTIVITIES
+    	New Activities
     </p>
     <p class='text right_centered yellow top_right_small' id='top_right_month'>
-    	<?php echo strtoupper(date('F',strtotime("+1 month")));?>
+    	<?php echo date('F',strtotime("+1 month"));?>
     </p>
 </div>
 
@@ -39,17 +39,20 @@ $activities->get_activities();
 			?></span> tokens
     </p>
 	<div id='body_left_title_bar'>
-    	<p class='text body_left_title' id='body_left_title_activity'>
+    	<p class='text body_left_title body_left_activity' id='body_left_title_activity'>
         	Activity
         </p>
-        <p class='text body_left_title' id='body_left_title_cost'>
+        <p class='text body_left_title body_left_cost' id='body_left_title_cost'>
         	Cost
         </p>
-        <p class='text body_left_title' id='body_left_title_save'>
+        <p class='text body_left_title body_left_save' id='body_left_title_save'>
         	You save
         </p>
-        <p class='text body_left_title' id='body_left_title_details'>
+        <p class='text body_left_title body_left_details' id='body_left_title_details'>
         	Details
+        </p>
+        <p class='text body_left_title body_left_qty' id='body_left_title_qty'>
+        	Qty
         </p>
     </div>
     
@@ -111,7 +114,6 @@ $activities->get_activities();
          </div>
     </div>
 </div>
-
 
 <?php
 	/*alert box when too many tokens are spent*/

@@ -725,13 +725,20 @@ class New_activities {
 	
 	function create_bars() {
 		
+		global $form;
+		
 		$block = '';
 		
 		for($i = 0; $i < count($this->activities); $i++){
 			
 			$block .= "<div class='body_left_bar' id='" . $this->activities[$i]['aID'] . "'>";
 			
-			$block .= "<input type='checkbox' autocomplete='off' class='body_left_checkbox' value='" . $this->activities[$i]['aID'] . "' name='activities_list[]'/>";
+			$block .= $form->input(array('type'=>'checkbox',
+											'id'=>'check' . $this->activities[$i]['aID'],
+											'autocomplete'=>'off',
+											'class'=>'body_left_checkbox',
+											'value'=>$this->activities[$i]['aID'],
+											'name'=>'activities_list[]'));
 			
 			$block .= "<p class='text green body_left_val body_left_name'>" . $this->activities[$i]['name'] . "</p>";
 			$block .= "<p class='text body_left_val body_left_cost'>" . 
@@ -739,6 +746,16 @@ class New_activities {
 			$block .= "<p class='text green body_left_val body_left_save'>" . 
 						($this->activities[$i]['save'] > 100 ? "N/A" : $this->activities[$i]['save'] . "%") . "</p>";
 			$block .= "<p class='text body_left_val body_left_details'>Read about it</p>";
+			
+			//if this is not a free activity, set quantity dropdown
+			if($this->activities[$i]['tokens'] > 0){
+				$block .= $form->input(array('type'=>'text',
+												'id'=>'qty' . $this->activities[$i]['aID'],
+												'name'=>'qty[' . $this->activities[$i]['aID'] . ']',
+												'class'=>'text body_left_qty drop',
+												'maxlength'=>'2',
+												'autocomplete'=>'off'));
+			}
 			
 			$block .= "</div>";
 			
