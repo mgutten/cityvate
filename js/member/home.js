@@ -341,7 +341,7 @@ function looping_act() {
 		}
 		//if no reserve_date, create plus
 		if(array[i]['reserve_date'] == null){
-			reserve = '<a href="calendar.php"><img src="../images/member/plus.png" title="Add to Calendar" class="activity_reserve plus"/></a>'
+			reserve = '<a href="/member/calendar"><img src="../images/member/plus.png" title="Add to Calendar" class="activity_reserve plus"/></a>'
 		}
 		//else parse through the reserve_date and pull out month
 		//and day, then compare vs month_array for month name
@@ -352,7 +352,7 @@ function looping_act() {
 			month_temp = month_array[month_temp].substring(0,3);
 			//pull day from reserve_date
 			var day_temp = array[i]['reserve_date'].substring(8,10);
-			reserve = "<a href='calendar.php'><p class='activity_reserve' title='Change Reservation'>"+month_temp+' '+day_temp+"</p></a>";
+			reserve = "<a href='/member/calendar'><p class='activity_reserve' title='Change Reservation'>"+month_temp+' '+day_temp+"</p></a>";
 		}
 
 		//if it's expired, show no calendar link

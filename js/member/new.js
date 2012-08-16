@@ -1,6 +1,7 @@
 // JavaScript Document
 
 var old_qty;
+var total_spent = 0;
 
 $(function() {
 
@@ -83,11 +84,18 @@ $(function() {
 		bottom_right_load(aid);
 			
 	})
-
 	
+
 	//confirmation buttons of alert
 	$('#no').click(function(){
 		$('.too_many').hide();
+	})
+	
+	//alert for when new activities have already been reserved
+	$('.already').show();
+	
+	$('.already').click(function() {
+		window.location = '/member'
 	})
 	
 	$('#refund,#carryover,#donate').click(function() {
@@ -133,11 +141,11 @@ function change_balance(parent_tag) {
 	
 	if(cost > 0){
 		if(!tag.children('.body_left_checkbox').is(':checked')){
-			cost = cost * -1 * parseInt(tag.children('.body_left_qty').val());
+			total_spent += cost = cost * -1 * parseInt(tag.children('.body_left_qty').val());
 			tag.children('.body_left_qty').val('');
 		}
 		else
-			cost = cost * parseInt(tag.children('.body_left_qty').val(),10);
+			total_spent += cost = cost * parseInt(tag.children('.body_left_qty').val(),10);
 	}
 	
 	//if negative value of tokens, make balance red
@@ -147,7 +155,7 @@ function change_balance(parent_tag) {
 		$('#top_left_balance').removeClass('red')
 		
 	$('#token_balance').html(balance-cost)
-	
+	$('#input_total_spent').val(total_spent);
 }
 
 /*
@@ -174,6 +182,8 @@ function check_bars() {
 function validate() {
 	
 	var tokens_left = $('#token_balance').html();
+	
+	$('#input_refund_amt').val(tokens_left)
 	
 	if(tokens_left < 0){
 		$('.too_many').show();
@@ -268,6 +278,10 @@ function qty_change(tag) {
 	balance = balance + parseInt((old_qty * cost),10);
 	
 	balance = balance - parseInt((tag.val() * cost),10);
+	
+	//change hidden input of total spent
+	total_spent += parseInt(tag.val() * cost,10) - parseInt((old_qty * cost),10);
+	$('#input_total_spent').val(total_spent);
 
 	//if negative value of tokens, make balance red
 	if(balance < 0)
@@ -276,4 +290,6 @@ function qty_change(tag) {
 		$('#top_left_balance').removeClass('red')
 
 	$('#token_balance').html(balance);
+	
+	
 }

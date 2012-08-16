@@ -8,6 +8,7 @@ class User {
 	var $con;
 	var $user = array();
 	var $salt = 'nHVxL3lgwRNMZ9p6';
+	var $query = '';
 	
 	function __construct() {
 		
@@ -59,32 +60,7 @@ class User {
 			}
 			
 			$query .= " FROM users WHERE username='".$username."' ";
-			
-			/*			
-			//make first query to see if username exists in db
-			$result = $this->con->query($query);
-			
-			//if doesn't exist, set fail session and redirect to login.php
-			if($result->num_rows < 1 && $checking == 0) {
-				$_SESSION['user']['username_fail'] = $username;
-				$_SESSION['user']['password_fail'] = true;
-				header('location:/login');
-				exit;
-			}
-			elseif($result->num_rows > 0 && $checking != 0){
-				//if found results and not checking for pw ($checking==1),
-				//then username is taken, send back to signup page
-					$_SESSION['exists']=TRUE;
-					header('location:step2');
-					exit;
-			}
-			else{
-				//case when username exists but password entered later is incorrect
-				//notify user that it is wrong password
-				$_SESSION['user']['password_fail'] = true;
-
-			}
-			*/
+	
 
 			//if we arent simply checking if username exists, test password also
 			if($checking==0)
@@ -245,6 +221,139 @@ class User {
 		
 	}
 	
+	//insert info into table with table_name and column_array
+	function insert($table_name,$column_array){
+		
+		$query = 'INSERT INTO ' . $table_name . ' (';
+
+		//if we have a multi dimensional array, then we are inserting
+		//several values to same table
+		if(!empty($column_array[0]) && is_array($column_array[0])){
+			$last = end(array_keys($column_array[0]));
+			
+			//create column name paren
+			foreach($column_array[0] as $key=>$val){
+				$query .= $key;
+				
+				if($key != $last)
+					$query .= ',';
+			}
+			
+			$query .= ') VALUES ';
+			
+			//create values statement
+			for($i = 0; $i < count($column_array); $i++){
+				
+				//open current value set
+				$query .= '(';
+				foreach($column_array[$i] as $key=>$val){
+					
+					//if $val contains CURDATE or NULL no quotes around
+					if(strpos($val,'CURDATE') !== false || 
+						strpos($val,'NULL') !== false ||
+						strpos($val, '()') !== false ||
+						strpos($val, '@tid') !== false)
+						$query .= $val;
+					else
+						$query .= "'" . $val . "'";
+					
+					if($key != $last)
+						$query .= ',';
+				}
+				//close current value set and append comma
+				$query .= ')';
+				if($i != (count($column_array)-1))
+					$query .= ',';
+			}
+		}				
+		else{					
+		
+		$val_addition = '';
+		$last = end(array_keys($column_array));
+		
+		//loop through column array and create proper insert
+		//statement for single row
+		foreach($column_array as $key=>$val){
+			$query .= $key;
+			
+			//if $val contains CURDATE or NULL no quotes around
+			if(strpos($val,'CURDATE') !== false || 
+				strpos($val,'NULL') !== false ||
+				strpos($val, '()') !== false ||
+				strpos($val, '@tid') !== false)
+				$val_addition .= $val;
+			else
+				$val_addition .= "'" . $val . "'";
+			
+			if($key !== $last){
+				$query .= ',';
+				$val_addition .= ',';
+			}
+
+		}
+		
+		$query .= ') VALUES (' . $val_addition . ')';
+		
+		}
+		
+		$query .= ';';
+		
+		
+		$this->query .= $query;
+	}
+	
+	//update rows of $table_name with associative array
+	function update($table_name, $column_array, $and_statement = '') {
+		
+		$query = 'UPDATE ' . $table_name . ' SET ';
+		
+		
+		$last = end(array_keys($column_array));
+		
+		foreach($column_array as $key=>$val){
+			
+			$query .= $key . ' = "' . $val . '"';
+			
+			if($key != $last) 
+				$query .= ',';
+			
+		}
+		
+		$query .= ' WHERE uID = "' . $_SESSION['user']['uID'] . '"';
+		
+		if($and_statement != '')
+			$query .= ' ' . $and_statement;
+		
+		$query .= ';';
+		
+		$this->query .= $query;
+	}
+	
+	function delete($table_name, $and_statement = '') {
+		
+		$query = 'DELETE FROM ' . $table_name . ' WHERE 
+					uID = "' . $_SESSION['user']['uID'] . '"';
+		
+		if($and_statement != '')
+			$query .= ' AND ' . $and_statement;
+			
+		$query .= ';';
+			
+		$this->query .= $query;
+		
+	}
+	
+	function execute() {
+		
+		if(substr_count($this->query,';') > 1)
+			$result = $this->con->multi_query($this->query);
+		else
+			$result = $this->con->query($this->query);
+		
+		$this->query = '';
+		
+	}	
+	
 	//check if subscription is still good next month
 	function check_subscription() {
 		
@@ -267,7 +376,22 @@ class User {
 			return false;
 			
 	}
+	
+	function check_new_activities() {
 		
+		$query = 'SELECT atID FROM a_transactions WHERE
+					uID  = "' . $_SESSION['user']['uID'] . '" AND
+					MONTH(date_processed) = "' . date("n") . '"';
+		
+		$result = $this->con->query($query);
+		
+		if($result->num_rows > 0)
+			return true;
+		else
+			return false;
+	}
+			
+	
 	
 	function loop_results($array,$counter = 0) {
 			
@@ -375,45 +499,10 @@ class Activities extends User {
 								
 				return $this->loop_results($array,1);
 			
-			
-			/*
-			//loop through array and set results to activities array
-			$i=0;
-			while($row = $result->fetch_array()){
-						
-						$this->activities[$i]['name'] = $row['name'];
-						$this->activities[$i]['reserve_date'] = $row['reserve_date'];
-						$this->activities[$i]['type'] = $row['type'];
-						$this->activities[$i]['aID'] = $row['aID'];
-						$this->activities[$i]['done'] = $row['done'];
-						$this->activities[$i]['reserve_needed'] = $row['reserve_needed'];
-						$this->activities[$i]['expire'] = $row['expire'];
-						$i++;
-						
-				}
-			return $this->activities;
-			*/
 	}
 	
 	function upcoming($num_days = 7) {
-	
-	//figure out what reserved events are coming in the next week
-	/*
-	for($i=0;$i<count($this->activities);$i++) {
-	
-		if(!empty($this->activities[$i]['reserve_date'])){
-			$date_now = time();
-			$date_event = strtotime($this->activities[$i]['reserve_date']);
-			$diff = abs($date_event-$date_now);
-			if($diff < 60*60*24*$num_days)
-				$upcoming_event[] = $i;
-		}
-	}
-	
-	if(!empty($upcoming_event))
-		return $upcoming_event;
-		*/
-		
+			
 	$query = "SELECT u_activities.aID, 
 					u_activities.reserve_date,
 					activities.name as name
@@ -425,24 +514,11 @@ class Activities extends User {
 				AND u_activities.uID = '" . $_SESSION['user']['uID'] . "'";
 				
 	$this->result = $this->con->query($query);
-	
-	//$i=0;
-	
+		
 		
 		$array = array('aID','reserve_date','name');
 							
 		return $this->loop_results($array,1);
-		/*
-		while($row = $result->fetch_array()) {
-				
-				$upcoming_event[$i]['aID'] = $row['aID'];
-				$upcoming_event[$i]['reserve_date'] = $row['reserve_date'];
-				$upcoming_event[$i]['name'] = $row['name'];
-				$i++;
-		}
-		
-		return $upcoming_event;
-		*/
 	
 	}
 	
@@ -612,27 +688,6 @@ class Activities extends User {
 										
 			return $this->loop_results($array);
 			
-			/*
-			while($row = $result->fetch_array()){
-					
-					$activities['name'] = $row['name'];
-					$activities['aID'] = $row['aID'];
-					$activities['expire'] = $row['expire'];
-					$activities['g_maps'] = $row['g_maps'];
-					$activities['type'] = $row['type'];
-					$activities['cost'] = $row['cost'];
-					$activities['tokens'] = $row['tokens'];
-					$activities['reserve_needed'] = $row['reserve_needed'];
-					$activities['month_in_use'] = $row['month_in_use'];
-					$activities['save'] = $row['save'];
-					$activities['desc'] = $row['desc'];
-					$activities['done'] = $row['done'];
-					$activities['reserve_date'] = $row['reserve_date'];
-					
-			}
-			
-			return $activities;
-			*/
 	}
 	
 	function past_activities() {
@@ -657,8 +712,5 @@ class Activities extends User {
 			
 			
 	}
-			
-			
 				
-	
 }

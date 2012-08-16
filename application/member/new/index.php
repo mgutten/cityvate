@@ -1,6 +1,17 @@
 <?php
 /*location of file: member/new/index.php*/
+
 require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/db_functions.php');
+
+$user = new User();
+
+/*
+if(!empty($_COOKIE['new_activities']) ||
+	$user->check_new_activities() === true){
+	$already = new Alert_w_txt('already');
+	$already->generic('Nice try!', 'You have already redeemed your activities for ' . date('F',strtotime("+1 month")) . '.  Please contact support@cityvate.com if you have any questions.');
+	}
+	*/
 
 $head = new Head('New Activities',1);
 $head->style('member/new');
@@ -70,8 +81,15 @@ $activities->get_activities();
 							'class'=>'button',
 							'src'=>'/images/new/accept_button.png',
 							'onclick'=>'return validate()'));
+							
 		echo $form->input(array('type'=>'hidden',
 							'id'=>'leftover'));
+		echo $form->input(array('type'=>'hidden',
+							'id'=>'total_spent'));
+		echo $form->input(array('type'=>'hidden',
+							'id'=>'refund_amt')); 					
+		
+							
 		$form->close();
 	?>
 </div>
