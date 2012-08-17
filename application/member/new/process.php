@@ -1,14 +1,16 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/db_functions.php');
 
+//protect from direct traffic
+if(empty($_POST['total_spent']) &&
+	empty($_POST['refund_amt'])){
+		
+	echo "<button onclick='window.location=\"/member/new\"'>Back</button>";
+	die( "You have not filled out the proper fields.  Please try again.");
+}
+
 //declare User class
 $user = new User();
-
-//if new activities have already been reserved/chosen and recorded
-//do not allow for processing to happen again
-/*if(!empty($_COOKIE['new_activities']) ||
-	$user->check_new_activities() === true)
-	die('You have already redeemed your new activities.');*/
 
 $user_balance = $_SESSION['user']['tokens_balance'] + constant(strtoupper($_SESSION['user']['package']) . '_TOKENS');
 $total_spent = $_POST['total_spent'];
@@ -39,8 +41,11 @@ if($total_spent > $user_balance || $refund_amt > $user_balance
 //calculate cash refund to be used later 
 $cash_refund = $refund_amt * EXCHANGE;
 
+$tid = $user->check_new_activities();
+$val_array = array();
+
 //determine if inserting new rows or updating old ones
-if($user->check_new_activities() === true) {
+if(!empty($tid)) {
 	//update old rows
 	$user->update('transactions',
 					array('date_processed'=>'CURDATE()',
@@ -48,7 +53,24 @@ if($user->check_new_activities() === true) {
 						  'type'=>$leftover),
 					'AND MONTH(date_processed) = "' . date('n') . '"'
 					);
+					
+	$user->delete('a_transactions','tid = "' . $tid . '"');
 	
+	foreach($_POST['activities_list'] as $key=>$val){		
+	
+		array_push($val_array, array('atid'=>'',
+						  'tid'=>$tid,
+						  'uid'=>$_SESSION['user']['uID'],
+						  'aid'=>$val,
+						  'date_processed'=>'CURDATE()',
+						  'qty'=>(!empty($_POST['qty'][$val]) ? $_POST['qty'][$val] : '1')));
+						  
+											  
+	}
+
+	$user->insert('a_transactions',$val_array);
+	
+
 }
 else{
 //record monetary transaction
@@ -64,7 +86,6 @@ $user->insert('transactions',array('tid'=>'',
 //solve issues w/ standardizing tid
 $user->query .= 'SET @tid = last_insert_id();';
 
-$val_array = array();
 foreach($_POST['activities_list'] as $key=>$val){		
 
 	array_push($val_array, array('atid'=>'',
@@ -130,8 +151,5 @@ $user->con->multi_query($query);
 */
 }
 
+//execute generated query
 $user->execute();
-
-setcookie('new_activities',true,time()+(3600*72));
-
-

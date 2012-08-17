@@ -312,7 +312,11 @@ class User {
 		
 		foreach($column_array as $key=>$val){
 			
-			$query .= $key . ' = "' . $val . '"';
+			//no quotes for mysql functions like CURDATE()
+			if(strpos($val,'()') !== false)
+				$query .= $key . ' = ' . $val;
+			else
+				$query .= $key . ' = "' . $val . '"';
 			
 			if($key != $last) 
 				$query .= ',';
@@ -379,14 +383,18 @@ class User {
 	
 	function check_new_activities() {
 		
-		$query = 'SELECT atID FROM a_transactions WHERE
+		$query = 'SELECT tID FROM a_transactions WHERE
 					uID  = "' . $_SESSION['user']['uID'] . '" AND
-					MONTH(date_processed) = "' . date("n") . '"';
+					MONTH(date_processed) = "' . date("n") . '" LIMIT 1';
 		
 		$result = $this->con->query($query);
 		
-		if($result->num_rows > 0)
-			return true;
+		if($result->num_rows > 0){
+			while($row = $result->fetch_array()){
+				
+				return $row['tID'];
+			}
+		}
 		else
 			return false;
 	}
