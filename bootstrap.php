@@ -25,4 +25,5 @@ define('EXCHANGE',2.5);
 define('BUDGET_TOKENS',10);
 define('BASIC_TOKENS',20);
 define('PREMIUM_TOKENS',40);
+define('CHARITIES', 'The Red Cross, Salvation Army, and Toys for Tots');
 

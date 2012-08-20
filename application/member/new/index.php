@@ -3,16 +3,6 @@
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/db_functions.php');
 
-$user = new User();
-
-/*
-if(!empty($_COOKIE['new_activities']) ||
-	$user->check_new_activities() === true){
-	$already = new Alert_w_txt('already');
-	$already->generic('Nice try!', 'You have already redeemed your activities for ' . date('F',strtotime("+1 month")) . '.  Please contact support@cityvate.com if you have any questions.');
-	}
-	*/
-
 $head = new Head('New Activities',1);
 $head->style('member/new');
 $head->script('member/new');
@@ -24,11 +14,13 @@ $body = new Body();
 
 $activities = new New_activities();
 $activities->get_activities();
+
 ?>
 
 <div id='top_left'>
 	<p class='text right_centered yellow top_right_large' id='top_right_new'>
     	New Activities
+
     </p>
     <p class='text right_centered yellow top_right_small' id='top_right_month'>
     	<?php echo date('F',strtotime("+1 month"));?>
@@ -154,7 +146,27 @@ $activities->get_activities();
     
     <img src='/images/new/refund_button.png' class='leftover_button button' id="refund" title=''/>
     <img src='/images/new/carryover_button.png' class='leftover_button button' id="carryover" title='Tokens will be carried over to next month'/>
-    <img src='/images/new/donate_button.png' class='leftover_button button' id="donate" title='100% of cash refund will be donated to charity'/>
+    <img src='/images/new/donate_button.png' class='leftover_button button' id="donate" title='100% of cash refund will be donated to <?php echo CHARITIES;?>'/>
 <?php
 	$leftover->close();
+	
+	//if activities have been processed, show alert
+	if(!empty($_SESSION['new']['success'])){
+		
+		if($_SESSION['new']['success'] == 'refund')
+			$alert_val = 'A refund will be issued to your credit/debit card several days after the 1st.';
+		elseif($_SESSION['new']['success'] == 'carryover')
+			$alert_val = 'Your leftover tokens will be carried over to the next month.';
+		else
+			$alert_val = '100% of your refund will be split equally between ' . CHARITIES;
+				
+		
+		$success = new Alert_w_txt('success');
+		$success->generic('Thank you!','You can change your selections anytime before <span class="yellow">' . date('F',strtotime("+1 month")) . '
+										 1, ' . date('Y',strtotime("+1 month")) . '</span> by coming back to this page. After that, 
+										 you will be unable to cancel or trade your activities.</br></br>'
+										 . $alert_val);
+										 
+		unset($_SESSION['new']['success']);
+	}
 ?>

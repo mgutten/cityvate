@@ -725,20 +725,41 @@ class New_activities {
 	
 	function create_bars() {
 		
+		$reserved_activities = $this->activities_call->check_new_activities();
+		
 		global $form;
 		
 		$block = '';
 		
 		for($i = 0; $i < count($this->activities); $i++){
 			
-			$block .= "<div class='body_left_bar' id='" . $this->activities[$i]['aID'] . "'>";
+			//check if current activity is already reserved
+			if(!empty($reserved_activities[$this->activities[$i]['aID']]))
+				$reserved = true;
+			else
+				$reserved = false;
 			
-			$block .= $form->input(array('type'=>'checkbox',
-											'id'=>'check' . $this->activities[$i]['aID'],
-											'autocomplete'=>'off',
-											'class'=>'body_left_checkbox',
-											'value'=>$this->activities[$i]['aID'],
-											'name'=>'activities_list[]'));
+			$block .= "<div class='body_left_bar";
+			
+			//if reserved, change background color of bar
+			if($reserved === true)
+				$block .= " body_left_bar_selected";
+			
+			$block .= "' id='" . $this->activities[$i]['aID'] . "'>";
+			
+			$checkbox_array = array('type'=>'checkbox',
+									'id'=>'check' . $this->activities[$i]['aID'],
+									'autocomplete'=>'off',
+									'class'=>'body_left_checkbox',
+									'value'=>$this->activities[$i]['aID'],
+									'name'=>'activities_list[]'
+									);
+			//if reserved, check the checkbox
+			if($reserved === true)
+				$checkbox_array['checked'] = 'checked';
+				
+			$block .= $form->input($checkbox_array);
+			
 			
 			$block .= "<p class='text green body_left_val body_left_name'>" . $this->activities[$i]['name'] . "</p>";
 			$block .= "<p class='text body_left_val body_left_cost'>" . 
@@ -749,12 +770,18 @@ class New_activities {
 			
 			//if this is not a free activity, set quantity dropdown
 			if($this->activities[$i]['tokens'] > 0){
-				$block .= $form->input(array('type'=>'text',
-												'id'=>'qty' . $this->activities[$i]['aID'],
-												'name'=>'qty[' . $this->activities[$i]['aID'] . ']',
-												'class'=>'text body_left_qty drop',
-												'maxlength'=>'2',
-												'autocomplete'=>'off'));
+				
+				$qty_array = array('type'=>'text',
+									'id'=>'qty' . $this->activities[$i]['aID'],
+									'name'=>'qty[' . $this->activities[$i]['aID'] . ']',
+									'class'=>'text body_left_qty drop',
+									'maxlength'=>'2',
+									'autocomplete'=>'off');
+				//if reserved, set qty to previous qty					
+				if($reserved === true)
+					$qty_array['value'] = $reserved_activities[$this->activities[$i]['aID']]['qty'];
+				
+				$block .= $form->input($qty_array);
 			}
 			
 			$block .= "</div>";

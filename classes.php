@@ -98,6 +98,7 @@ class Head {
 		//create stylesheet links
 		function style($style_array) {
 				
+				
 				if (is_array($style_array)) {
 					
 						//loop through array and create stylesheet links
@@ -106,6 +107,7 @@ class Head {
 								$value = str_replace(' ','_',$value);
 								//test if this is an external link
 								$pos = strpos($value,'http');
+								
 								
 								if($pos===false)
 									echo "<link rel='stylesheet' href='/css/" . $value . ".css' media='screen' />\n";

@@ -3,6 +3,7 @@
 var old_qty;
 var total_spent = 0;
 
+
 $(function() {
 
 	//adjust height of body_left background to match height of body_left
@@ -11,10 +12,13 @@ $(function() {
 	$('#body_left_back,#separator').css('height',body_left_height + 'px' );
 	$('#bottom_right_container,#body_left').css('margin-top','-' + body_left_height + 'px');
 	
-	//set all checkboxes to unchecked on page load
-	$('input[type=checkbox]').each(function() {
-		$(this).attr('checked',false)
-	})
+	//onload if there are reserved checkboxes change the token balance to reflect selections
+	$('.body_left_checkbox').each(function() {
+		
+		if($(this).prop('checked') == true)
+			change_balance($(this).parent());
+		
+	});
 	
 	//trigger functions on checkbox change
 	$('.body_left_checkbox').change(function() {
@@ -92,15 +96,11 @@ $(function() {
 	})
 	
 	//alert for when new activities have already been reserved
-	$('.already').show();
-	
-	$('.already').click(function() {
-		window.location = '/member'
-	})
+	$('.success').show();
 	
 	$('#refund,#carryover,#donate').click(function() {
 		$('#input_leftover').attr('value',$(this).attr('id'));
-		$('#activities').submit();
+		submit_form();
 	})
 		
 	
@@ -155,7 +155,7 @@ function change_balance(parent_tag) {
 		$('#top_left_balance').removeClass('red')
 		
 	$('#token_balance').html(balance-cost)
-	$('#input_total_spent').val(total_spent);
+	//$('#input_total_spent').val(total_spent);
 }
 
 /*
@@ -281,7 +281,7 @@ function qty_change(tag) {
 	
 	//change hidden input of total spent
 	total_spent += parseInt(tag.val() * cost,10) - parseInt((old_qty * cost),10);
-	$('#input_total_spent').val(total_spent);
+	//$('#input_total_spent').val(total_spent);
 
 	//if negative value of tokens, make balance red
 	if(balance < 0)
@@ -289,7 +289,49 @@ function qty_change(tag) {
 	else
 		$('#top_left_balance').removeClass('red')
 
-	$('#token_balance').html(balance);
-	
+	$('#token_balance').html(balance);	
 	
 }
+
+//submit activities form to process.php with ajax
+function submit_form(){
+	
+	var activities_list = new Array();
+	var qty = new Array();
+	var qty_temp
+	
+	//store checked checkboxes in array
+	$('.body_left_checkbox').each(function() {
+		
+		if($(this).is(':checked')){
+			
+			//add id to activities list array
+			activities_list.push($(this).val());
+			//save qty to qty array
+			qty_temp = ($(this).parent().children('.body_left_qty').length > 0 ? $(this).parent().children('.body_left_qty').val() : 'NULL');
+			qty[parseInt($(this).parent().attr('id'),10)] = qty_temp;
+		
+			
+		}
+	})
+
+	var leftover = $('#input_leftover').val();
+	var refund_amt = $('#token_balance').html();
+	
+	//note conversion of activities_list and qty params to array
+	$.ajax({
+		type: 'POST',
+		url: '/member/new/process',
+		data: {'activities_list[]': activities_list,
+				'qty[]': qty,
+				leftover: leftover,
+				refund_amt: refund_amt,
+				total_spent: total_spent
+				},
+		
+		success: function(data){
+			
+		}
+	})
+}
+		

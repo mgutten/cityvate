@@ -382,18 +382,25 @@ class User {
 	}
 	
 	function check_new_activities() {
-		
-		$query = 'SELECT tID FROM a_transactions WHERE
+
+		$query = 'SELECT tID,aID,qty FROM a_transactions WHERE
 					uID  = "' . $_SESSION['user']['uID'] . '" AND
-					MONTH(date_processed) = "' . date("n") . '" LIMIT 1';
+					MONTH(date_processed) = "' . date("n") . '"';
 		
 		$result = $this->con->query($query);
 		
+		
 		if($result->num_rows > 0){
-			while($row = $result->fetch_array()){
 				
-				return $row['tID'];
+			$reserved_activities = array();	
+				
+			while($row = $result->fetch_array()) {
+				$reserved_activities[$row['aID']] = array('tID'=>$row['tID'],
+															'qty'=>$row['qty']);
 			}
+			
+			return $reserved_activities;
+			
 		}
 		else
 			return false;
@@ -402,7 +409,7 @@ class User {
 	
 	
 	function loop_results($array,$counter = 0) {
-			
+			$res_array = array();
 			if($this->result->num_rows > 0){
 				
 				//if counter is set to true, initiate counter
@@ -413,7 +420,7 @@ class User {
 					
 					//if counter is set, create multi-dimensional array
 					if($counter == 1){
-						
+					
 						foreach($array as $value) {
 							$res_array[$i][$value] = $row[$value];
 						}
