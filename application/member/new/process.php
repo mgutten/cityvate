@@ -92,7 +92,3 @@ else{
 
 //execute generated query
 $user->execute();
-
-$_SESSION['new']['success'] = $_POST['leftover'];
-
-header('location:/member/new');

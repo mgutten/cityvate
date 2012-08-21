@@ -2,7 +2,7 @@
 
 var old_qty;
 var total_spent = 0;
-
+var charities;
 
 $(function() {
 
@@ -89,16 +89,13 @@ $(function() {
 			
 	})
 	
-
 	//confirmation buttons of alert
 	$('#no').click(function(){
 		$('.too_many').hide();
 	})
 	
-	//alert for when new activities have already been reserved
-	$('.success').show();
-	
 	$('#refund,#carryover,#donate').click(function() {
+		
 		$('#input_leftover').attr('value',$(this).attr('id'));
 		submit_form();
 	})
@@ -123,11 +120,7 @@ function toggle_class(tag) {
 	
 	//change balance of tokens
 	change_balance(tag);
-	
-	//check bars to see if cost is greater than balance
-	//if so change to red
-	//check_bars();
-	
+		
 	bottom_right_load(aid);
 		
 }
@@ -157,26 +150,6 @@ function change_balance(parent_tag) {
 	$('#token_balance').html(balance-cost)
 	//$('#input_total_spent').val(total_spent);
 }
-
-/*
-//change the number of activities in top_right section
-function check_bars() {
-	
-	$(".body_left_bar").each(function() {
-		var cost = parseInt($(this).children('.body_left_cost').html());
-		var balance = parseInt($('#token_balance').html());
-		
-		if(cost > balance && !$(this).is('.body_left_bar_selected')){
-			$(this).children('.body_left_name,.body_left_cost').addClass('red')
-		}
-		else {
-			$(this).children('.body_left_name,.body_left_cost').removeClass('red')
-		}
-		
-	})
-			
-}
-*/
 
 //validate balance of tokens and display appropriate alert
 function validate() {
@@ -244,7 +217,7 @@ function body_right_populate(activity){
 							
 	$('#bottom_right_map').attr('src','http://maps.googleapis.com/maps/api/staticmap?center=' 
 										+ business_address + 
-										'&zoom=14&size=240x160&maptype=roadmap&markers=color:green%7C'
+										'&zoom=13&size=240x160&maptype=roadmap&markers=color:green%7C'
 										+ business_address + '&sensor=false')	
 	
 	$('#bottom_right_map_link').attr('href','http://www.google.com/maps?q=' + business_address);
@@ -318,6 +291,18 @@ function submit_form(){
 	var leftover = $('#input_leftover').val();
 	var refund_amt = $('#token_balance').html();
 	
+	//determine response alert statement
+	var success_text;
+	if(leftover == 'refund')
+		success_text = 'A refund will be issued to your credit/debit card several days after the 1st.';
+	else if(leftover == 'carryover')
+		success_text = 'Your leftover tokens will be carried over to the next month.';
+	else 		
+		success_text = '100% of your refund will be split equally between ' + charities;
+
+	
+	
+	
 	//note conversion of activities_list and qty params to array
 	$.ajax({
 		type: 'POST',
@@ -330,7 +315,9 @@ function submit_form(){
 				},
 		
 		success: function(data){
-			
+				$('.leftover').hide();
+				$('#success_alert_refund').html(success_text);
+				$('.success').show();
 		}
 	})
 }

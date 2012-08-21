@@ -17,6 +17,12 @@ $activities->get_activities();
 
 ?>
 
+<script type='text/javascript'>
+//set charities var for use in javascript alert
+charities = '<?php echo CHARITIES;?>';
+
+</script>
+
 <div id='top_left'>
 	<p class='text right_centered yellow top_right_large' id='top_right_new'>
     	New Activities
@@ -150,23 +156,14 @@ $activities->get_activities();
 <?php
 	$leftover->close();
 	
-	//if activities have been processed, show alert
-	if(!empty($_SESSION['new']['success'])){
-		
-		if($_SESSION['new']['success'] == 'refund')
-			$alert_val = 'A refund will be issued to your credit/debit card several days after the 1st.';
-		elseif($_SESSION['new']['success'] == 'carryover')
-			$alert_val = 'Your leftover tokens will be carried over to the next month.';
-		else
-			$alert_val = '100% of your refund will be split equally between ' . CHARITIES;
-				
-		
+	//alert for when activities have been processed				
 		$success = new Alert_w_txt('success');
 		$success->generic('Thank you!','You can change your selections anytime before <span class="yellow">' . date('F',strtotime("+1 month")) . '
 										 1, ' . date('Y',strtotime("+1 month")) . '</span> by coming back to this page. After that, 
-										 you will be unable to cancel or trade your activities.</br></br>'
-										 . $alert_val);
+										 you will be unable to cancel or trade your activities.</br></br> 
+										 <span id="success_alert_refund"></span></br>
+										 <a href="/member" class="text green" id="back_home">Back to Home</a>'
+										 );
 										 
-		unset($_SESSION['new']['success']);
-	}
+	
 ?>

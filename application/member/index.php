@@ -19,7 +19,8 @@ $body = new Body_member(1);
 $activities_call = new Activities();
 //if nearing end of current month, change to next month
 //and display new activities
-if($body->check_new_activities() === true && $activities_call->check_subscription() === true){
+$subscription_check = $activities_call->check_subscription();
+if($body->check_new_activities() === true && $subscription_check === true){
 	$time = strtotime('+1 month');
 	$selected_month = date('m',strtotime('+1 month'));
 }
@@ -32,7 +33,30 @@ $activities = $activities_call->activities($selected_month);
 //store upcoming events for coming week
 $upcoming_event = $activities_call->upcoming();
 
-
+//if loading page and there are new activities
+//and user has valid subscription
+if(empty($activities) && $time > time() && $subscription_check === true){
+	
+	//store filenames of images from next month's activities in array
+	$image_filenames = array_slice(array_filter(scandir('X:/Program Files (x86)/wamp/www/Local_site/cityvate/images/activities/' . date('m',strtotime('+1 month')) . '/')), 0, 10);
+	
+	//create inline script to define new_activities js array
+	echo "<script type='text/javascript'>";
+	
+	//set a_array[2] (i.e. whether subscription is valid or not) to true
+	echo "a_array[2] = true;";
+	
+	//loop through image filename's array and remove .jpg
+	//then store in new_activities js array
+	$c = 0;
+	for($i = 2; $i < count($image_filenames); $i++){
+		echo "new_activities[$c] = \"" . str_replace('.jpg','',$image_filenames[$i]) . "\";";
+		$c++;
+	}
+	
+	echo "</script>";
+	
+}
 
 ?>
 
@@ -44,19 +68,19 @@ $upcoming_event = $activities_call->upcoming();
 	?>' id='picture_link'>
           <div id='picture'>
                   <div id='picture_shown_outer'>
-                      <img src='<?php
+                      <img src="<?php
 		//standard case when activities were purchased, display first activities picture
         if(!empty($activities))
 		 	echo "/images/activities/" . date('m') . "/" . str_replace(' ','_',strtolower($activities[0]['name'])) . ".jpg";
-			
 		//case when we are in last 5 days of month and their subscription is still valid
-		elseif(empty($activities) && $time > time() && $activities_call->check_subscription() === true)
-			echo "/images/activities/new_activities.png";
-			
+		elseif($time > time() && $subscription_check === true){
+			$image_filenames = array_slice(array_filter(scandir('X:/Program Files (x86)/wamp/www/Local_site/cityvate/images/activities/' . date('m',strtotime('+1 month')) . '/')), 0, 10);
+			echo "/images/activities/" . date('m', strtotime("+1 month")) . "/" . $image_filenames[2];
+		}
 		//case when no activities exist and either subscription no longer valid
 		//or no activities were purchased
 		else
-			echo "/images/activities/no_activities.png";?>' class='activity_picture shown' id='picture_shown'/>
+			echo "/images/activities/no_activities.png";?>" class='activity_picture shown' id='picture_shown'/>
                    </div>
                    <div id='picture_hidden_outer'>
                       <img src='/images/blank.png' id='picture_hidden' class='picture_toggle'/>
@@ -66,22 +90,32 @@ $upcoming_event = $activities_call->upcoming();
          <?php
 		 //if no activities, toggle the picture bars
     	if(!empty($activities)) 
+			$display = $display_lower =  '';
+		//else if new activities are available and valid subscrip
+		//display top bar only 
+		elseif($time > time() && $subscription_check === true){
 			$display = '';
+			$display_lower = 'style="display:none"';
+		}
 		else
 			$display = 'style="display:none;"';
 			
 		?>
-			        
-                  
+			                          
                       <div class='picture_banner picture_toggle' id='picture_top_banner' <?php echo $display;?>>
                       </div>
                       <p class='text banner picture_toggle' id='picture_banner_text' <?php echo $display;?>>
-                              <?php if(!empty($activities))
-							  			echo $activities[0]['name'];?>
+                            <?php 
+									if(!empty($activities))
+							  			echo $activities[0]['name'];
+									elseif($time > time() && $subscription_check === true)
+										echo 'New Activities Available';
+										
+							?>
                       </p>
-                      <div class='picture_banner picture_toggle' id='picture_bottom_banner' <?php echo $display;?>>
+                      <div class='picture_banner picture_toggle' id='picture_bottom_banner' <?php echo $display_lower;?>>
                       </div>
-                      <p class='text banner picture_toggle' id='click_banner' <?php echo $display;?>>
+                      <p class='text banner picture_toggle' id='click_banner' <?php echo $display_lower;?>>
                               Click for details
                       </p>
                    

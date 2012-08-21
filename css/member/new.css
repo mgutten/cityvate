@@ -325,6 +325,13 @@
 #refund {
 	margin-left:125px;
 }
+
+#back_home {
+	float:right;
+	clear:both;
+	margin:20px 0px 0px 0px;
+	text-decoration:underline;
+}
 /*end alert boxes*/
 
 /*general additions*/
