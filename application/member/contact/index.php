@@ -13,14 +13,16 @@ $form = new Form(array('action'=>'/mail/to_cv.php',
 	What is your question regarding?
 </p>
 
-<select class='text drop center' name='subject'>
-	<option>My Account</option>
-    <option>My Activities</option>
-    <option>Subscription</option>
-    <option>Expired/Done Activities</option>
-    <option>How to Redeem</option>
-    <option>Other</option>
-</select>
+
+    <select class='text drop center' name='subject'>
+        <option>My Account</option>
+        <option>My Activities</option>
+        <option>Subscription</option>
+        <option>Expired/Done Activities</option>
+        <option>How to Redeem</option>
+        <option>Other</option>
+    </select>
+
 
 <p class='text information_section_title center'>
 	Please type your message below

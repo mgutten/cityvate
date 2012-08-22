@@ -18,7 +18,8 @@ $header = new Header();
 $body = new Body_account(2);
 
 //if not set, retrieve package info from db
-if(empty($_SESSION['user']['package']))
+if(empty($_SESSION['user']['package'])
+	|| empty($_SESSION['user']['end_date']))
 		$body->get_user_info();
 
 ?>
