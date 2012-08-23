@@ -54,17 +54,13 @@
 	margin-left:50px;
 }
 
-.text {
+.how_what_text {
 	float:left;
 	text-align:justify;
-	margin: 0px;
-	font-family:'Neon 80s';
-	font-size:13px;
-	color:#DADADA;
 	opacity:0;
 	filter:alpha(opacity=0);
 	width:370px;
-	
+	font-size:13px;
 }
 
 .title {
@@ -75,8 +71,8 @@
 
 #pricing {
 	float:left;
-	clear:both;
-	margin:42px 0px 0px 444px;
+	clear:none;
+	margin:30px 0px 0px 30px;
 }
 
 #pricing:hover {
@@ -93,14 +89,14 @@
 .quote_box {
 	clear:both;
 	float:left;
-	margin:40px 0px 0px 80px;
+	margin:5px 0px 0px 80px;
 	width:340px;
 	height:60px;
 }
 
 #second {
 	clear:none;
-	margin-left:160px;
+	margin-left:30px;
 }
 
 .quote_name {
@@ -134,4 +130,58 @@
 #preview:hover {
 	opacity:.85;
 	filter:alpha(opacity=85);
+}
+
+#next_month {
+	float:left;
+	clear:both;
+	margin:25px 0px 0px 23px;
+	width:955px;
+	text-align:center;
+}
+
+#activities_container {
+	float:left;
+	clear:both;
+	width:370px;
+	height:65px;
+	overflow:hidden;
+	margin:3px 0px 0px 315px;
+}
+
+#activities_inner_container {
+	float:left;
+	width:1000px;
+	margin-left:-200px;
+}
+
+.activities_slide {
+	width:200px;
+	float:left;
+	position:relative;
+	margin:0px 0px 0px 285px;
+
+}
+
+#activities_slide2{
+	margin-left:85px;
+}
+
+.activity_name {
+	width:100%;
+	text-align:center;
+	font-size:1.2em;
+}
+
+.activity_img {
+	float:left;
+	margin-left:65px;
+}
+	
+.savings {
+	float:left;
+	width:20px;
+	text-align:center;
+	margin:12px 0px 0px 5px;
+	line-height:12px;
 }

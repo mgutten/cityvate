@@ -62,7 +62,7 @@ function how_what($howorwhat) {
 							
 				foreach($text[$howorwhat] as $key=>$value){
 					
-					$block .= "<p class='title text $text_num %s'>$key</p>\n <p class='text $text_num %s'>$value</p>\n";
+					$block .= "<p class='title text how_what_text $text_num %s'>$key</p>\n <p class='text how_what_text $text_num %s'>$value</p>\n";
 					
 					$text_num++;	
 				}

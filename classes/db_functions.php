@@ -465,11 +465,8 @@ class Activities extends User {
 			else
 				$date_period = '"'.$selected_month.'"';
 			
-			//test to see if we need the activities by month it was used
-			//or by when it expires
-			if($calendar==0)
-				$month_test = "MONTH(`activities`.`month_in_use`) =";
 			
+			$month_test = "MONTH(`activities`.`month_in_use`) =";
 			
 			//test to see if we need the activities that are done or that are
 			//currently active
@@ -514,6 +511,18 @@ class Activities extends User {
 								
 				return $this->loop_results($array,1);
 			
+	}
+	
+	function next_month_activities() {
+		
+		$query = 'SELECT type,save FROM activities
+					WHERE MONTH(month_in_use) = "' . date('n',strtotime('+1 month')) . '"
+					ORDER BY RAND() LIMIT 10';
+				
+					
+		$this->result = $this->con->query($query);
+		
+		return $this->loop_results(array('type','save'),1);
 	}
 	
 	function upcoming($num_days = 7) {

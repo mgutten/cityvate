@@ -20,10 +20,9 @@ img.bg {
 }
 
 
-
-
 p {
 	cursor:default;
+	margin:0px 0px 0px 0px;
 }
 
 /*IE6 prevent underlining of links*/
@@ -37,6 +36,7 @@ a img{
 
 .text {
 	font-family:'Neon 80s';
+	/*font-family:"Museo Sans Cyrl 500";*/
 	font-size:14px;
 	color:#DFDFDF;
 }
@@ -242,6 +242,15 @@ a img{
 
 .red {
 	color:#CA0000;
+}
+
+.green {
+	/*color:#44b20f;*/
+	color:#04B30D;
+}
+
+.yellow {
+	color:#ff3;
 }
 
 	
