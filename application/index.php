@@ -49,9 +49,7 @@ $activities = $activities_call->next_month_activities();
 	//javascript array for use in slide animation
 	for($i = 0; $i < count($activities); $i++){
 		
-		echo 'activities['.$i.'] = new Object;';
-		echo 'activities['.$i.'].type = "' . $activities[$i]['type'] . '";';
-		echo 'activities['.$i.'].save = "' . $activities[$i]['save'] . '";';
+		echo 'activities['.$i.'] = "' . $activities[$i]['type'] . '";';
 		
 	}
 ?>
@@ -79,14 +77,14 @@ $activities = $activities_call->next_month_activities();
                 <?php echo $activities[0]['type'];?>
             </p>
             <img src='/images/activities/mini/<?php echo str_replace(' ','_',$activities[0]['type']);?>.png' class='activity_img' id='activity_img1'/>
-            <p class='text green savings' id='activity_save1'><?php echo $activities[0]['save'];?>% off</p>
+
         </div>
         <div id='activities_slide2' class='text activities_slide'>
             <p class='text green activity_name' id='activity_name2'>
                 <?php echo $activities[1]['type'];?>
             </p>
             <img src='/images/activities/mini/<?php echo str_replace(' ','_',$activities[1]['type']);?>.png' class='activity_img' id='activity_img2'/>
-            <p class='text green savings' id='activity_save2'><?php echo $activities[1]['save'];?>% off</p>
+          
         </div>
      </div>
 </div>

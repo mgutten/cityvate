@@ -54,7 +54,7 @@ $(function() {
 function preload(arrayOfImages) {
     $(arrayOfImages).each(function(){
 		
-        $('<img/>')[0].src = '/images/activities/mini/' + this.type.replace(/ /g,'_') + '.png';
+        $('<img/>')[0].src = '/images/activities/mini/' + this.replace(/ /g,'_') + '.png';
         
     });
 	
@@ -114,8 +114,7 @@ function fade(div) {
 //sliding effect for next month's activities
 function sliding() {
 	var margin_first,margin_second,animation;
-	var activity_name = activities[activities_next].type;
-	var activity_save = activities[activities_next].save;
+	var activity_name = activities[activities_next];
 	
 	if(cur_slide == 1){
 		animation = '0px';
