@@ -105,8 +105,8 @@ a img{
 
 #dropdown_container {
 	float:left;
-	margin:0px 0px 0px 557px;
-	height:100px;
+	margin:0px 0px -50px 557px;
+	height:150px;
 	width:115px;
 	overflow:hidden;
 }
@@ -114,10 +114,10 @@ a img{
 #dropdown {
 	float:left;
 	position:relative;
-	top:-115px;
+	top:-128px;
 	margin:0px 0px 0px 0px;
 	width:115px;
-	height:100px;
+	height:128px;
 	background-color:#000;
 	z-index:-1;
 	overflow:hidden;

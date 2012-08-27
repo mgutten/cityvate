@@ -3,9 +3,8 @@ $(function() {
 	
 	//resize body onload
 	body_resize();
-	
-	//code to deal with header dropdown
-	//header dropdown animation	
+		
+	//deal with header dropdown animation
 	$("#drop,#dropdown").hover(
 	
 		function() {
@@ -18,7 +17,7 @@ $(function() {
 				//don't animate div to closed
 				if(!$('.username').is(':focus')){
 						$("#dropdown").css('z-index','1');
-						$("#dropdown").stop().animate({top:'-70px'},300);
+						$("#dropdown").stop().animate({top:parseInt($('#dropdown').css('height'),10) * -1 + 'px'},300);
 				}
 		}
 	)

@@ -129,8 +129,8 @@ if(empty($activities) && $time > time() && $subscription_check === true){
         </a>
 						
          <div id='top_right_month'>
-                  <div id='left_arrow' class='arrow' onclick='arrow_click(-1)'></div>
-                  <div id='right_arrow' class='arrow' onclick='arrow_click(1)' style='display:none'></div>
+                  <div id='left_arrow' class='arrow'></div>
+                  <div id='right_arrow' class='arrow grey_arrow'></div>
           		  <p id='<?php echo date('m',$time).date('F',$time);?>' class='text activity_month'><?php echo date('F',$time);?>'s Activities</p>
       
           </div>

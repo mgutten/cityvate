@@ -68,7 +68,7 @@ $activities = $activities_call->next_month_activities();
 <p id='next_month' class='text'>
     Next Month's Activities Include:
 </p>
-
+<!---->
 <img src='/images/home/arrow_left_green.png' class='arrow' id='prev_arrow' />
 <div id='activities_container'>
 	<div id='activities_inner_container'>
@@ -85,6 +85,13 @@ $activities = $activities_call->next_month_activities();
             </p>
             <img src='/images/activities/mini/<?php echo str_replace(' ','_',$activities[1]['type']);?>.png' class='activity_img' id='activity_img2'/>
           
+        </div>
+        <div id='activities_slide3' class='text activities_slide'>
+        	<p class='text green activity_name' id='activity_name3'>
+            	<?php
+				 echo $activities[2]['type'];?>
+            </p>
+            <img src='/images/activities/mini/<?php echo str_replace(' ','_',$activities[2]['type']);?>.png' class='activity_img' id='activity_img3'/>
         </div>
      </div>
 </div>

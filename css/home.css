@@ -25,10 +25,17 @@
 	float:left;
 	margin-left:85px;
 	margin-top:10px;
+	
 }
 
 #what {
 	clear:both;
+}
+
+#what,#how {
+	width:380px;
+	height:270px;
+	overflow:hidden;
 }
 
 #what_img {
@@ -135,7 +142,7 @@
 #next_month {
 	float:left;
 	clear:both;
-	margin:25px 0px 0px 23px;
+	margin:15px 0px 0px 23px;
 	width:955px;
 	text-align:center;
 }
@@ -150,21 +157,18 @@
 
 #activities_inner_container {
 	float:left;
-	width:1000px;
-	margin-left:-200px;
+	width:1400px;
+	margin-left:-285px;
 }
 
 .activities_slide {
 	width:200px;
 	float:left;
 	position:relative;
-	margin:0px 0px 0px 285px;
+	margin:0px 0px 0px 85px;
 
 }
 
-#activities_slide2{
-	margin-left:85px;
-}
 
 .activity_name {
 	width:100%;
@@ -189,6 +193,7 @@
 .arrow {
 	float:left;
 	margin: 30px 0px 0px 270px;
+	cursor:pointer;
 }
 
 #next_arrow {

@@ -59,10 +59,10 @@ a img{
 
 .header_link {
 	float:left;
-	width:60px;
+	width:100px;
 	height:22px;
 	text-align: center;
-	margin-left:50px;
+	margin-left:10px;
 	color:#CCC;
 	font-size:13px;
 	font-family:"Neon 80s";
@@ -70,7 +70,7 @@ a img{
 }
 
 .header_first {
-	margin-left:570px;
+	margin-left:550px;
 }
 
 .header_link:hover {
@@ -87,19 +87,19 @@ a img{
 
 #arrow {
 	float:right;
-	margin-top:3px;
+	margin: 3px 0px 0px 0px;
 }
 
 #dropdown_container {
-	float:left;
-	margin:0px 0px 0px 500px;
-	height:70px;
+	float:right;
+	margin:0px 14px -70px 0px;
+	height:150px;
 	width:140px;
 	overflow:hidden;
 }
 
 #dropdown {
-	float:left;
+	float:right;
 	position:relative;
 	top:-70px;
 	margin:0px 0px 0px 0px;
@@ -108,6 +108,12 @@ a img{
 	background-color:#000;
 	z-index:-1;
 	overflow:hidden;
+}
+
+#dropdown.dropdown_account {
+	top:-128px;
+	height:128px;
+	width:115px;
 }
 
 #input_login {
@@ -234,6 +240,33 @@ a img{
 	font-size:12px;
 	color:#fff;
 	background:#222;
+}
+
+.my_account {
+	float:left;
+	clear:both;
+	width:115px;
+	height:18px;
+	background-color:#000;
+	text-align:left;
+	margin:0px 0px 0px 0px;
+	padding:5px 0px 2px 5px;
+	cursor:pointer;
+	color:#D9D900;
+	font-size:12px;
+	border-top:#222solid 1px;
+}
+
+.my_account:hover {
+	color:#FFFF71
+}
+
+.logout {
+	color:#DFDFDF;
+}
+
+.logout:hover {
+	color:#fff;
 }
 
 .red_back {

@@ -98,11 +98,11 @@
 }
 
 #left_arrow {
-	background:url(../../images/member/left_arrow.png) no-repeat;
+	background:url(/images/member/left_arrow.png) no-repeat;
 }
 
 #right_arrow {
-	background:url(../../images/member/right_arrow.png) no-repeat;
+	background:url(/images/member/right_arrow_grey.png) no-repeat;
 	float:right;
 }
 

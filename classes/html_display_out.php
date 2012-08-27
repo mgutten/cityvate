@@ -58,7 +58,7 @@ function how_what($howorwhat) {
 				global $text_num;
 				global $text;
 				
-				$block = "<div class='how_what' id='%s'>\n<img src='" . $GLOBALS['file_adj'] . "images/home/%s.png' id='%s_img'/>\n";
+				$block = "<div class='how_what' id='%s'>\n<img src='/images/home/%s.png' id='%s_img'/>\n";
 							
 				foreach($text[$howorwhat] as $key=>$value){
 					
@@ -68,7 +68,7 @@ function how_what($howorwhat) {
 				}
 				//insert preview img
 				if($howorwhat=='how')
-					$block .= "<a href='preview/member.php' alt='Preview Cityvate' title='Check out Cityvate'><img src='" . $GLOBALS['file_adj'] . "images/home/preview.png' id='preview'/></a>";
+					$block .= "<a href='preview/member.php' alt='Preview Cityvate' title='Check out Cityvate'><img src='/images/home/preview.png' id='preview'/></a>";
 
 				$block .= "</div>\n";
 							

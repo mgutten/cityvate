@@ -34,7 +34,7 @@ $(function() {
 				//don't animate div to closed
 				if(!$('.username').is(':focus')){
 						$("#dropdown").css('z-index','1');
-						$("#dropdown").stop().animate({top:'-100px'},300);
+						$("#dropdown").stop().animate({top:'-128px'},300);
 				}
 	})
 	

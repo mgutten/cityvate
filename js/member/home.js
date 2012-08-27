@@ -46,6 +46,24 @@ $(function(){
 	//set starting_month
 	start_month = cur_month;
 	
+	//arrow click to change month
+	$('#left_arrow').click(function() {
+		
+		if($(this).is('.grey_arrow'))
+			return;
+		
+		arrow_click(-1);
+		
+	})
+	
+	$('#right_arrow').click(function() {
+		
+		if($(this).is('.grey_arrow'))
+			return;
+		
+		arrow_click(1);
+	})
+	
 	ready_functions();	
 
 	//start image scrolling onload
@@ -249,17 +267,21 @@ function change_month(new_month, start_range) {
 					a_array = eval(data)
 					
 					//check if we are at the end of our month_limit
-					if(new_month == month_limit)
-						$('#left_arrow').hide();
-					else
-						$('#left_arrow').show();
+					if(new_month == month_limit){
+						$('#left_arrow').addClass('grey_arrow');
+						$('#left_arrow').css('background-image','url(/images/member/left_arrow_grey.png)');
+					}
+					else{
+						$('#left_arrow').removeClass('grey_arrow');
+						$('#left_arrow').css('background-image','url(/images/member/left_arrow.png)');
+					}
 					
 					//cancel loading cursor
 					$("*").css('cursor','auto');
 					$("#left_arrow").css('cursor','pointer');
 					$("#right_arrow").css('cursor','pointer');
 					
-							}
+			}
 		})
 		
 }
@@ -281,8 +303,14 @@ function populate_html(array) {
 		change_picture();
 		
 		//show arrow if before current month
-		(start_month != month ? $('#right_arrow').css('display','block') : $('#right_arrow').css('display','none'))
-		
+		if(start_month != month){
+			$('#right_arrow').css('background-image','url(/images/member/right_arrow.png)')
+			$('#right_arrow').removeClass('grey_arrow');
+		}
+		else{
+			$('#right_arrow').css('background-image','url(/images/member/right_arrow_grey.png)');	
+			$('#right_arrow').addClass('grey_arrow');
+		}
 }
 
 function change_picture() {

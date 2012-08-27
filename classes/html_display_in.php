@@ -2,7 +2,7 @@
 
 class Body_member extends Body {
 	
-	var $links = array("Home"=> '/member',
+	var $links = array("Activities"=> '/member',
 						"Calendar"=>'/member/calendar',
 						"Past Activities"=>'/member/past');
 	var $done = array();

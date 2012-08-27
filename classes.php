@@ -193,18 +193,19 @@ class Header {
 			$this->links['Home'] = '';
 			
 			//if logged out, add to array of header links
-			if($login == 'out') {
+			if($login == 'out' && empty($_SESSION['user']['uID'])) {
 					$this->links['Signup'] = 'signup';
 					$this->links['About'] = 'about';
 					$this->drop['Login']='login';
+
 			}
 			
 			//if logged in, change dropdown variable
 			else {
-					$this->drop['My Account'] = 'member/account';
+					$this->drop['My Account'] = 'member/';
 					$this->links['Calendar'] = 'member/calendar';
 					$this->links['Contact'] = 'member/contact';
-					$this->links['Home'] = 'member';
+					$this->links['Home'] = '';
 			}
 					
 			//display components of header as well as background img
@@ -217,9 +218,13 @@ class Header {
 			echo "<a href='/".$this->links['Home']."' alt='Home'><div id='logo'></div></a>";
 			
 			//display dropdown
-			echo "<div id='dropdown_container'><div id='dropdown'>\n";
+			
 			//if not logged in, display form
 			if(!empty($this->drop['Login'])) {
+				
+					
+				echo "<div id='dropdown_container'><div id='dropdown'>\n";
+				
 				$form = new Form(array('action'=>'/login/login_authenticate.php',
 										'method'=>'POST',
 										'onsubmit'=>'return validate("login_top")',
@@ -239,11 +244,14 @@ class Header {
 				$form->close();
 			}
 			else {
-				$my_activities = "<a href='/member/account' alt='My Account'><p class='my_account text'>Account Info</p></a>";
+				echo "<div id='dropdown_container'><div id='dropdown' class='dropdown_account'>\n";
+				
+				$account_info = "<a href='/member/account' alt='My Account'><p class='my_account text'>Account Info</p></a>";
+				$my_activities = "<a href='/member' alt='My activities'><p class='my_account text'>Activities</p></a>";
 				$preferences = "<a href='/member/preferences' alt='Prefences'><p class='my_account text'>Preferences</p></a>";
 				$subscription = "<a href='/member/subscription' alt='Subscription'><p class='my_account text'>Subscription</p></a>";
 				$logout = "<a href='/member/logout' alt='Logout'><p class='my_account text logout'>Logout</p></a>";
-				echo $my_activities.$subscription.$preferences.$logout;
+				echo $my_activities.$account_info.$subscription.$preferences.$logout;
 			}
 			echo "</div></div>\n";
 			
