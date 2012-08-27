@@ -69,7 +69,7 @@ $activities = $activities_call->next_month_activities();
     Next Month's Activities Include:
 </p>
 
-
+<img src='/images/home/arrow_left_green.png' class='arrow' id='prev_arrow' />
 <div id='activities_container'>
 	<div id='activities_inner_container'>
         <div id='activities_slide1' class='text activities_slide'>
@@ -88,6 +88,7 @@ $activities = $activities_call->next_month_activities();
         </div>
      </div>
 </div>
+<img src='/images/home/arrow_right_green.png' class='arrow' id='next_arrow' />
 
 <?php
 		quote_box('first',"I found myself caught in a rut, sitting around bored out of my mind.  But then I signed up for Cityvate, and now have something to look forward to every week!","John B");

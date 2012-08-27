@@ -26,14 +26,14 @@ $(function() {
 		//start sliding effect	
 		var slide = setInterval(function(){
 									sliding()
-								}, 5000)
+								}, 7000)
 								
 		$(window).focus(function() {
 			
 			if(!slide){
 				slide = setInterval(function() {
 									sliding()
-								}, 5000);
+								}, 7000);
 			}
 		});
 		

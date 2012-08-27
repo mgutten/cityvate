@@ -2,14 +2,15 @@
 /* CSS Document */
 
 #body_main {
-	width:700px;
+	width:auto;
 	height:auto;
 	min-height:270px;
 	background:url(../images/blank_back.png);
 	float:left;
 	clear:both;
-	margin:0px 0px 0px 150px;
-	padding-bottom:30px;
+	margin:0px 0px 0px 0px;
+	padding:0px 50px 30px 50px;
+
 }
 
 #body_bottom {

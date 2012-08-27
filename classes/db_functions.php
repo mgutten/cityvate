@@ -34,13 +34,6 @@ class User {
 				header('location:/login');
 				exit;
 			}
-			elseif($user_exists === true && $checking != 0){
-				//if found results and not checking for pw ($checking==1),
-				//then username is taken, send back to signup page
-					$_SESSION['exists']=TRUE;
-					header('location:step2');
-					exit;
-			}
 			else{
 				//case when username exists but password entered later is incorrect
 				//notify user that it is wrong password
@@ -111,15 +104,19 @@ class User {
 		$query = "SELECT uID FROM users WHERE username = '" . $username . "'";
 		$result = $this->con->query($query);
 		
+		
 		if($result->num_rows > 0){
 			while($row = $result->fetch_array()){
 				
 				return $row['uID'];
+				
 			}
 		}
 		else{
+			
 			$_SESSION['user']['username_fail'] = $username;
 			return false;
+			
 		}
 	}
 	
@@ -365,7 +362,7 @@ class User {
 					WHERE uID = "' . $_SESSION['user']['uID'] . '" AND
 					(MONTH(end_date) > MONTH(CURDATE()) AND
 					MONTH(start_date) <= MONTH(CURDATE()) OR
-					auto_renew = "1")';
+					auto_renew = "1") LIMIT 1';
 		
 		$result = $this->con->query($query);
 		
@@ -513,6 +510,7 @@ class Activities extends User {
 			
 	}
 	
+	//find next month's activities for any user
 	function next_month_activities() {
 		
 		$query = 'SELECT type,save FROM activities
@@ -546,6 +544,7 @@ class Activities extends User {
 	
 	}
 	
+	//find new activities for this user
 	function new_activities($month) {
 		
 		//if package type is not stored and subscription 
@@ -569,7 +568,8 @@ class Activities extends User {
 							GROUP_CONCAT(a_p.preference) as preference,
 							a.name as name,
 							a.tokens as tokens,
-							a.save as save
+							a.save as save,
+							a.type as type
 					FROM 
 						u_preferences as u_p,a_preferences as a_p  
 					JOIN 
@@ -589,7 +589,7 @@ class Activities extends User {
 					
 		$this->result = $this->con->query($query);
 		
-		$array = array('aID','name','tokens','save');
+		$array = array('aID','name','tokens','save','type');
 		
 		return $this->loop_results($array,1);
 				

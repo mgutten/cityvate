@@ -13,7 +13,7 @@ class Head {
 //class to create the head section of a page (including 
 //stylesheets and scripts)
 	
-	var $script = array("jquery-1.6.min");
+	var $script = array("jquery-1.8.min");
 	var $style= array();
 	var $title;
 	var $title_css;

@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/db_functions.php');
 	//set default next to step 1
 	$next = 1;
@@ -24,15 +24,23 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/db_functions.php');
 	//if username/password has been submitted
 	//send to check against database
 	if(!empty($_POST['usernameemail'])){
-
+		
+		$user = new User();
+		
+		//check if username is valid email format
 		if(!preg_match('/^[a-zA-Z0-9_\-\.]+@[a-z]+\.[com|net|edu|org|biz]+$/i',$_POST['usernameemail'])){
 			$_SESSION['user']['email_fail'] = true;
-			header('location:signup_2.php');
+			header('location:/signup/step2');
+			exit;
+		}
+		//check if username is already taken
+		elseif($user->check_username($_POST['usernameemail']) !== false){
+			$_SESSION['user']['username_fail'] = true;
+			header('location:/signup/step2');
 			exit;
 		}
 		
-		$conn = new User();
-		$conn->login($_POST['usernameemail'],'',1);
+		$user->login($_POST['usernameemail'],'',1);
 
 	}
 	

@@ -51,6 +51,20 @@ $(function(){
 	//start image scrolling onload
 	set_fade_effect();
 	
+	//pause image scrolling while browser is elsewhere
+	$(window).focus(function() {
+		if(!timeout[1]){
+				set_fade_effect()
+			}
+	});
+		
+	$(window).blur(function() {
+			clearInterval(timeout[1]);
+			timeout[1] = 0;
+	});
+	
+
+	
 });
 
 //all of the functions that need to be run on ready
@@ -59,36 +73,23 @@ function ready_functions() {
 	
 
 	//perform custom image fade onclick
-	$('.activity').click(function() {
+	$('#top_right_activities').on('click','.activity',function() {
+		alert();
 		reset_list = 0;
 		bar_select($(this));
 		
 	})
-		
-	//pause image scrolling onhover
-	$('.activity,#picture').hover(
-	function() {
-			clearTimeout(timeout[1]);
-			clearTimeout(timeout[6]);
-	},
-	function() {
-				
-				timeout[6] = setTimeout(function() {
-								set_fade_effect();
-					}, 520);
-			
-	})
-		
 	
+
 	//remove finished activity from "done" list
 	//on click of x button
-	$(".activity_done_x").click(function() {
+	$(".activity_done").on('click','.activity_done_x',function() {
 		remove_done($(this).attr("id"));
 	})
 	
 	
 	//pagination page clicks
-	$('.pag_nums').click(function() {
+	$('#pag_nums').on('click','.pag_nums',function() {
 		
 		var start = (parseInt($(this).text()) - 1) * 5 + 1;
 		//run pagination function to determine which page was selected
@@ -98,7 +99,6 @@ function ready_functions() {
 		
 		timeout[3] = setTimeout(function() {
 							looping_act();
-							ready_functions();
 							
 					},100);
 					
@@ -111,7 +111,7 @@ function ready_functions() {
 	})
 	
 	//pagination for finished activities
-	$('.pag_nums_done').click(function() {
+	$('.pag_nums').on('click','.pag_nums_done',function() {
 		$('.pag_nums_selected_done').removeClass('pag_nums_selected_done');
 		$(this).addClass('pag_nums_selected_done');
 		
@@ -128,6 +128,21 @@ function ready_functions() {
 					},50);
 		
 	})
+	
+	//pause image scrolling onhover
+	$('#body_top').on('mouseenter mouseleave','.activity,#picture',function(e){
+			
+		if(e.type == 'mouseenter'){
+				clearTimeout(timeout[1]);
+				clearTimeout(timeout[6]);
+			}
+		else{
+				timeout[6] = setTimeout(function() {
+								set_fade_effect();
+					}, 520);
+			
+		}
+	});
 	
 	//preload new images for smoother fade effect
 	preload_images();
@@ -189,9 +204,9 @@ function arrow_click(val) {
 			  		populate_html(a_array);
 					looping_act();
 					looping_done();
-				
+					preload_images();
+					
 					//reeval ready functions for newly generated html
-					ready_functions();
 					clearTimeout(timeout[1]);
 					
 					set_fade_effect();

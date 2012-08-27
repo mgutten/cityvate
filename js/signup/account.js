@@ -1,4 +1,4 @@
-// Signup account js
+// Signup account js for signup_2.php
 
 $(document).ready(function() {
 	
@@ -11,8 +11,60 @@ $(document).ready(function() {
 		$('#input_fullname').css('color','#555');
 	}
 	
+	//toggle checkmark as person types for fullname
+	$('#input_fullname,#input_usernameemail,#input_password2').keyup(function() {
+		
+		check_input($(this));
+		
+	})
+	
+	$('#input_fullname,#input_usernameemail,#input_password2').blur(function() {
+		
+		check_input($(this));
+		
+	})
+
+	check_input('#input_fullname');
+	check_input('#input_usernameemail');
+	check_input('#input_password2');
 	
 })
+
+function check_input(tag) {
+		
+		var pattern;
+		var value = tag.val();
+		var id = tag.attr('id');
+		
+		//if statement to set pattern for use later
+		if(id == 'input_fullname')
+		 	pattern = /^[a-z]+\s+[a-z]+(-)*[a-z]*$/i;
+		else if(id == 'input_usernameemail')
+			pattern = /^[a-zA-Z0-9_\-\.]+@[a-z]+\.[com|net|edu|org|biz]+$/i;
+		//else it's password and needs no match but length requirement
+		else{
+			if(value.length > 5 && value.length < 13){
+				tag.next('.checkmark').show();
+				tag.nextAll('.x_img:first').hide();
+			}
+			else{
+				tag.next('.checkmark').hide();
+				tag.nextAll('.x_img:first').show();
+			}
+			
+			return;
+		}
+			
+		//if statement for match of fullname and username boxes to pattern
+		if(value.match(pattern)){
+			tag.next('.checkmark').show();
+			tag.nextAll('.x_img:first').hide();
+		}
+		else{
+			tag.next('.checkmark').hide();
+			tag.nextAll('.x_img:first').show();
+		}
+}
 
 //code for signup form "fullname" category
 function fullname_check() {

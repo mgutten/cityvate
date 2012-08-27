@@ -10,8 +10,16 @@ $(function() {
 	*/
 	
 	//populate #body_bottom with "Questions" text
-	$('#body_bottom').addClass('text');
-	$('#body_bottom').html('Questions?  Contact us at support@cityvate.com');
+	$('#body_bottom').addClass('text').html('Questions?  Contact us at support@cityvate.com');
+	
+	//dynamically change values of element's properties
+	var total_width = parseInt($('#body').width(),10);
+	var inner_width = parseInt($('#body_main').innerWidth(),10);
+	var margins = Math.round((total_width-inner_width)/2);
+	
+	$('#body_main,#body_bottom').css('margin-left',margins);
+	$('#body_bottom').css('width',inner_width);
+	
 	
 	
 })

@@ -53,14 +53,20 @@ class Body_member extends Body {
 			
 			if(empty($this->activities)){
 				//check if there are new activities available
-				if($this->check_new_activities() === true)
+				//check_new_activities is not a db call, but a 
+				//test against a fixed date set as the lower bound
+				//to alert of new activities
+				if($this->check_new_activities() === true){
 					echo "<a href='/member/new'><img src='/images/member/new_activities_button.png' class='new_activity' /></a></div>
 						<div id='pag_nums'></div>";
+				}
 				//else there are no activities and no new activities
-				else
+				else{
 					echo "<div class='text no_activity'>There are no activities for this month.</div></div>
 						<div id='pag_nums'></div>";
+				}
 				return;
+				
 			}
 				
 			
@@ -152,7 +158,8 @@ class Body_member extends Body {
 								<p class='activity_name'>".$value['name']."</p>
 								<p class='activity_type'>".$value['type']."</p>
 							</a>
-							<p class='activity_reserve activity_done_x' id='".$value['aID']."' title='Never Did This'>X</p></div>";
+							<p class='activity_reserve activity_done_x' id='".$value['aID']."' title='Never Did This'>X</p>
+							</div>";
 					$b++;
 				}
 				
@@ -164,7 +171,7 @@ class Body_member extends Body {
 		echo "</div>";
 		
 		if(count($this->done) > 3)
-					$this->pagination_fn($this->done,3,'_done');
+				$this->pagination_fn($this->done,3,'_done');
 	}
 	
 	//populate "Coming Up" section of member.php

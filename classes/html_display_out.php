@@ -122,12 +122,20 @@ function signup_boxes($title_array) {
 													'id'=>'password2',
 													'class'=>$class));
 						else{
-							//case when username is not in email format
-							if($key=='Username/email' && 
-								(!empty($_SESSION['user']['email_fail']) || !empty($_SESSION['exists']))){
+
+							//case when username has failed
+							if($key=='Username/email' && (!empty($_SESSION['user']['username_fail']) || !empty($_SESSION['user']['email_fail']))){
+									
 								$class .= ' red_back';
 								$lower = ' red';
-								$value = 'Please enter a valid email address.';
+								
+								//case when username is taken
+								if(!empty($_SESSION['user']['username_fail']))
+									$value = 'That username is already taken.';
+								//case when username not in email format
+								elseif(!empty($_SESSION['user']['email_fail']))
+									$value = $value = 'Please enter a valid email address.';
+									
 							}
 							//case when username is taken
 							if($lower == ' red' && !empty($_SESSION['exists']))
@@ -138,6 +146,9 @@ function signup_boxes($title_array) {
 													'class'=>$class,
 													'value'=>$val));
 						}
+						
+						echo "<img src='/images/signup/checkmark.png' class='checkmark'/>";
+						echo "<img src='/images/signup/x.png' class='x_img'/>";
 						
 						//lower title caption for textbox	
 						echo "<p class='text box_title_lower $lower'>$value</p>";

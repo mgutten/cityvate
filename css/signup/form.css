@@ -322,3 +322,10 @@ select#when {
 	height:14px;
 	font-size:14px;
 }
+
+.checkmark,.x_img {
+	float:left;
+	margin:6px 0px 0px 10px;
+	display:none;
+}
+
