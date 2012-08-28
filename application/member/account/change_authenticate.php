@@ -35,7 +35,7 @@ if($user->check_password($password) === true){
 	//test to see if new username is in email format
 	if($type == 'username' && !preg_match('/^[a-zA-Z0-9_\-\.]+@[a-z]+\.[com|net|edu|org|biz]+$/i',$change)){
 		$_SESSION['user']['username_fail'] = true;
-		header('location:change/' . $type);
+		header('location:' . $url['account'] . '/change/' . $type);
 		exit;
 	}
 	
@@ -44,10 +44,10 @@ if($user->check_password($password) === true){
 
 	$_SESSION['user']['change_success'] = $type;
 
-	header('location:/member/account');
+	header('location:' . $url['account']);
 	exit;
 }
 else{
 	$_SESSION['user']['password_fail'] = true;
-	header('location:change/' . $type);
+	header('location:' . $url['account'] . '/change/' . $type);
 }

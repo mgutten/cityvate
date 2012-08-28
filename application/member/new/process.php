@@ -5,7 +5,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/db_functions.php');
 if(empty($_POST['total_spent']) &&
 	empty($_POST['refund_amt'])){
 		
-	echo "<button onclick='window.location=\"/member/new\"'>Back</button>";
+	echo "<button onclick='window.location=\"" . $url['new'] . "\"'>Back</button>";
 	die( "You have not filled out the proper fields.  Please try again.");
 }
 
@@ -20,7 +20,7 @@ $refund_amt = $_POST['refund_amt'];
 //protect from hackers either spending too much or asking for too much refund
 if($total_spent > $user_balance || $refund_amt > $user_balance 
 	|| $refund_amt != ($user_balance - $total_spent)){
-		echo "<button onclick='window.location=\"/member/new\"'>Back</button>";
+		echo "<button onclick='window.location=\"" . $url['new'] . "\"'>Back</button>";
 		die(' Incorrect balance of tokens detected, please try again.');
 	}
 	

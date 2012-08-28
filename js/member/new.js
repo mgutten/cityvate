@@ -35,18 +35,12 @@ $(function() {
 	//allows selection of activities by clicking on whole bar, not just checkbox
 	$('.body_left_bar').click(function() {
 		
-		//since it's the parent of the tag we need(checkbox), adjust tag variable
-		var tag = $(this).children('.body_left_checkbox');
-			
-		//change checkbox value
-		if(tag.is(':checked')){
-			tag.prop('checked',false)
-		}
-		else{
-			tag.prop('checked',true)
-		}
+		$('.body_left_bar_solo').removeClass('body_left_bar_solo');
+		$(this).addClass('body_left_bar_solo');
 		
-		toggle_class(tag);
+		//since it's the parent of the tag we need(checkbox), adjust tag variable
+		var aid = $(this).children('.body_left_checkbox').val();
+		bottom_right_load(aid)
 		
 	})
 	

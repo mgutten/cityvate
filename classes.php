@@ -18,17 +18,21 @@ class Head {
 	var $title;
 	var $title_css;
 	var $file_adj = '/';
+	var $url;
 	
 		function __construct($title, $default_js = 0) {
 				date_default_timezone_set('America/Los_Angeles');
 				
 				global $login;
+				global $url;
 				
+				//set url paths from boostrap.php
+				$this->url = $url;
 				
 				//if login status "in" then check to see if sessione
 				//vars are set.  If no, send to login page
 				if($login=='in' && empty($_SESSION['user']))
-						header('location:/login');
+						header('location:' . $this->url['login']);
 
 				
 				//make paths relative to current file location
@@ -182,10 +186,14 @@ class Header {
 	
 	var $links=array();
 	var $drop=array();
+	var $url;
 	
 	function __construct() {
 			
 			global $login;
+			global $url;
+			
+			$this->url = $url;
 			
 			//set file_adj var from Head class
 			$file_adj = $GLOBALS['file_adj'];
@@ -194,18 +202,18 @@ class Header {
 			
 			//if logged out, add to array of header links
 			if($login == 'out' && empty($_SESSION['user']['uID'])) {
-					$this->links['Signup'] = 'signup';
-					$this->links['About'] = 'about';
-					$this->drop['Login']='login';
+					$this->links['Signup'] = $this->url['signup'];
+					$this->links['About'] = $this->url['about'];
+					$this->drop['Login']= $this->url['login'];
 
 			}
 			
 			//if logged in, change dropdown variable
 			else {
-					$this->drop['My Account'] = 'member/';
-					$this->links['Calendar'] = 'member/calendar';
-					$this->links['Contact'] = 'member/contact';
-					$this->links['Home'] = '';
+					$this->drop['My Account'] = $this->url['account'];
+					$this->links['My Activities'] = $this->url['member'];
+					$this->links['Contact'] = $this->url['contact'];
+					$this->links['Home'] = $this->url['home'];
 			}
 					
 			//display components of header as well as background img
@@ -237,7 +245,7 @@ class Header {
 										'id'=>'password',
 										'class'=>'username',
 										'value'=>'password'));
-				echo "<a href='/forgot' id='forgot'>Forgot?</p></a>";
+				echo "<a href='" . $this->url['forgot'] . "' id='forgot'>Forgot?</p></a>";
 				echo $form->input(array('type'=>'image',
 										'id'=>'login',
 										'src'=>'/images/login_button.png'));
@@ -246,12 +254,12 @@ class Header {
 			else {
 				echo "<div id='dropdown_container'><div id='dropdown' class='dropdown_account'>\n";
 				
-				$account_info = "<a href='/member/account' alt='My Account'><p class='my_account text'>Account Info</p></a>";
-				$my_activities = "<a href='/member' alt='My activities'><p class='my_account text'>Activities</p></a>";
-				$preferences = "<a href='/member/preferences' alt='Prefences'><p class='my_account text'>Preferences</p></a>";
-				$subscription = "<a href='/member/subscription' alt='Subscription'><p class='my_account text'>Subscription</p></a>";
-				$logout = "<a href='/member/logout' alt='Logout'><p class='my_account text logout'>Logout</p></a>";
-				echo $my_activities.$account_info.$subscription.$preferences.$logout;
+				$account_info = "<a href='" . $this->url['account'] . "' alt='My Account'><p class='my_account text'>Account Info</p></a>";
+				$calendar = "<a href='" . $this->url['calendar'] . "' alt='My calendar'><p class='my_account text'>Calendar</p></a>";
+				$preferences = "<a href='" . $this->url['preferences'] . "' alt='Prefences'><p class='my_account text'>Preferences</p></a>";
+				$subscription = "<a href='" . $this->url['subscription'] . "' alt='Subscription'><p class='my_account text'>Subscription</p></a>";
+				$logout = "<a href='" . $this->url['logout'] . "' alt='Logout'><p class='my_account text logout'>Logout</p></a>";
+				echo $calendar.$account_info.$subscription.$preferences.$logout;
 			}
 			echo "</div></div>\n";
 			
@@ -275,7 +283,7 @@ class Header {
 					if($key == 'Home') 
 							$class .= ' header_first';
 												
-					echo "<a href='/" . $value . "' alt='$key'><div class='$class'>" . $key . "</div></a>\n";
+					echo "<a href='" . $value . "' alt='$key'><div class='$class'>" . $key . "</div></a>\n";
 					
 					
 			}
@@ -284,8 +292,10 @@ class Header {
 			foreach($this->drop as $key=>$value) {
 				//if dropdown is myaccount, do not adjust out of member folder
 				$class = 'header_link';
+				if($key == 'Login')
+					$class .= ' login_right';
 				
-					echo "<a href='/". $value . "'><div class='$class' id='drop'>" . $key . "<img src='/images/home/arrow.png' id='arrow'/></div></a>\n</div>\n";
+					echo "<a href='". $value . "'><div class='$class' id='drop'>" . $key . "<img src='/images/home/arrow.png' id='arrow'/></div></a>\n</div>\n";
 					
 					
 			}
@@ -298,12 +308,13 @@ class Header {
 
 class Body {
 	
-	//set cost of each package for all pages
-	var $package_cost = array('budget'=>25,
-							'basic'=>50,
-							'premium'=>100);
+	var $url;
 	
 	function __construct() {
+		
+		global $url;
+		
+		$this->url = $url;
 		
 		echo "<div id='body_main'>";
 	
@@ -324,6 +335,8 @@ class Body {
 }
 
 class Information {
+	
+	var $head;
 	
 	function __construct($title, $page_title, $own_js = 1) {
 		

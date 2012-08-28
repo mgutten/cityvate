@@ -64,9 +64,9 @@ if(empty($activities) && $time > time() && $subscription_check === true){
 	<a href='
 	<?php
     	if(!empty($activities))
-			echo "/member/activity/" . $activities[0]['aID'];
+			echo $url['activity'] . "/" . $activities[0]['aID'];
 		elseif($time > time() && $subscription_check === true)
-			echo "/member/new";
+			echo $url['new'];
 			
 	?>' id='picture_link'>
           <div id='picture'>

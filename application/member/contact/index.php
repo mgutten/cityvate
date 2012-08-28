@@ -3,7 +3,7 @@
 
 $body = new Information('Member Contact', 'Contact Us');
 
-$form = new Form(array('action'=>'/mail/to_cv.php',
+$form = new Form(array('action'=>$url['mail_from'],
 						'method'=>'POST',
 						'onsubmit'=>'return validate("contact")',
 						'id'=>'contact'));

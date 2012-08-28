@@ -8,15 +8,20 @@ class User {
 	var $con;
 	var $user = array();
 	var $salt = 'nHVxL3lgwRNMZ9p6';
-	var $query = '';
+	var $query;
+	var $url;
 	
 	function __construct() {
-		
+			//set paths from bootstrap.php
+			global $url;
+			$this->url = $url;
+			
 			$this->con = new MySQLi('localhost',$this->username,$this->password,$this->db);
 			
 	}
 	
 	function login($username,$password,$checking=0) {
+			
 			
 			$_SESSION['user']['username'] = $username;
 			
@@ -31,7 +36,7 @@ class User {
 			
 			//if doesn't exist, set fail session and redirect to login.php
 			if($user_exists === false && $checking == 0) {
-				header('location:/login');
+				header('location:' . $this->url['login']);
 				exit;
 			}
 			else{
@@ -70,7 +75,7 @@ class User {
 				//if checking for password also ($checking=0)
 				//send back to login page
 				if($checking==0){
-					header('location:/login');
+					header('location:' . $this->url['login']);
 					exit;
 				}
 				
@@ -92,7 +97,7 @@ class User {
 				
 				
 				//login to member page
-				header('location:/member');
+				header('location:' . $this->url['member']);
 			}
 			
 			$result->free();
@@ -550,7 +555,7 @@ class Activities extends User {
 		//if package type is not stored and subscription 
 		//check fails (ie no valid subscription) redirect to homepage
 		if(empty($_SESSION['user']['package']) && $this->check_subscription() === false)
-			header('location:/member');
+			header('location:' . $this->url['member']);
 		
 		$package = $_SESSION['user']['package'];
 		

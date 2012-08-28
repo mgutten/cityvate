@@ -1,5 +1,4 @@
 <?php
-
 /* file location member/account/change.php */
 
 $pos=0;
@@ -9,10 +8,10 @@ $type_uc = ucwords($type);
 
 //if someone types in url to change city, redirect back to account
 if($type == 'city')
-	header('location:/member/account');
+	header('location:' . $url['account']);
 //if type is subscription, redirect to subscription page
 elseif($type == 'subscription')
-	header('location:/member/subscription');
+	header('location:'. $url['subscription']);
 
 $head = new Head_signup('Change Info',1);
 $head->close();

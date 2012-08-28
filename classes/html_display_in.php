@@ -4,13 +4,13 @@ class Body_member extends Body {
 	
 	var $links = array("Activities"=> '/member',
 						"Calendar"=>'/member/calendar',
-						"Past Activities"=>'/member/past');
+						"History"=>'/member/past');
 	var $done = array();
 	var $activities=array();
 	
 	
 	function __construct($selected_tab) {
-							
+			
 			echo "<div id='header2_back'>";
 			
 			$tabs = '';
@@ -57,7 +57,7 @@ class Body_member extends Body {
 				//test against a fixed date set as the lower bound
 				//to alert of new activities
 				if($this->check_new_activities() === true){
-					echo "<a href='/member/new'><img src='/images/member/new_activities_button.png' class='new_activity' /></a></div>
+					echo "<a href='" . $this->url['new'] . "'><img src='/images/member/new_activities_button.png' class='new_activity' /></a></div>
 						<div id='pag_nums'></div>";
 				}
 				//else there are no activities and no new activities
@@ -85,12 +85,12 @@ class Body_member extends Body {
                               $class = 'activity text';
                               //if no reserve date set, echo link to calendar
                               if(empty($activities[$i]['reserve_date'])){
-                                  $reserve_date = '<a href="/member/calendar"><img src="../images/member/plus.png" title="Add to Calendar" class="activity_reserve plus"/></a>';
+                                  $reserve_date = '<a href="' . $this->url['calendar'] . '"><img src="../images/member/plus.png" title="Add to Calendar" class="activity_reserve plus"/></a>';
 							  }
 							  else{
 								  //change date to format Mon dd
                                   $date = DateTime::createFromFormat('Y-m-d', substr($activities[$i]['reserve_date'],0,10));
-                                  $reserve_date = "<a href='/member/calendar'><p class='activity_reserve' title='Change Reservation'>".$date->format('M j')."</p></a>";
+                                  $reserve_date = "<a href='" . $this->url['calendar'] . "'><p class='activity_reserve' title='Change Reservation'>".$date->format('M j')."</p></a>";
 							  }
 							  
 							  //if coupon is expired, show no link to calendar
@@ -154,7 +154,7 @@ class Body_member extends Body {
 					if($b >= 3) 
 						break;
 					echo "<div class='activity_done text' >
-							<a href='/member/activity/".$value['aID']."' class='activity_link'>
+							<a href='" . $this->url['activity'] . "/" .$value['aID']. "' class='activity_link'>
 								<p class='activity_name'>".$value['name']."</p>
 								<p class='activity_type'>".$value['type']."</p>
 							</a>
@@ -200,7 +200,7 @@ class Body_member extends Body {
 				//format the date,time,day appropriately
 				$block .= $day.' '.$date_reserved.' @ '.$time."</p>";
 				
-				$block .= "<a href='/member/activity/".$upcoming_event[$i]['aID']."'><p class='text upcoming_name'>"
+				$block .= "<a href='" . $this->url['activity'] . "/" . $upcoming_event[$i]['aID'] . "'><p class='text upcoming_name'>"
 							.$upcoming_event[$i]['name']."</p></a>";
 				if($i>=3) {
 					break;
@@ -312,7 +312,7 @@ class Body_member_past extends Body_member {
 									}
 									
 									
-									$block .= "<a href='/member/activity/" . $value['aID'] . "'>
+									$block .= "<a href='" . $this->url['activity'] . "/" . $value['aID'] . "'>
 													<p class='" . $class . "' title = '" . $title . "'>
 														" . $value['name'] . "
 													</p>
@@ -418,7 +418,7 @@ class Body_account extends Body_member {
 							//do not display change option for city
 							if($key == 'city' || $key == 'tokens_balance')
 								continue;
-							$block .= "<a href='account/change/" . $key . "' class='text sub_link'>change</a>";
+							$block .= "<a href='" . $this->url['account'] . "/change/" . $key . "' class='text sub_link'>change</a>";
 						
 					}
 			}
@@ -768,12 +768,13 @@ class New_activities {
 			$block .= $form->input($checkbox_array);
 			
 			
-			$block .= "<p class='text green body_left_val body_left_name'>" . $this->activities[$i]['name'] . "</p>";
+			$block .= "<p class='text green body_left_val body_left_name'>" . $this->activities[$i]['type'] . "</p>";
 			$block .= "<p class='text body_left_val body_left_cost'>" . 
 						($this->activities[$i]['tokens'] == 0 ? 'Free' : $this->activities[$i]['tokens']) . "</p>";
 			$block .= "<p class='text green body_left_val body_left_save'>" . 
 						($this->activities[$i]['save'] > 100 ? "N/A" : $this->activities[$i]['save'] . "%") . "</p>";
-			$block .= "<p class='text body_left_val body_left_details'>Read about it</p>";
+			//$block .= "<p class='text body_left_val body_left_details'>Read about it</p>";
+			$block .= "<p class='text body_left_val body_left_details'></p>";
 			
 			//if this is not a free activity, set quantity dropdown
 			if($this->activities[$i]['tokens'] > 0){

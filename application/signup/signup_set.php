@@ -44,4 +44,4 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/db_functions.php');
 
 	}
 	
-header('location:../signup/step'.$next.'');
+header('location:' . $url['signup'] . '/step'.$next.'');

@@ -5,8 +5,13 @@
 class Form_signup extends Form {
 	
 	var $last;
+	var $url;
 	
 	function __construct($pos) {
+		
+			global $url;
+			$this->url = $url;
+			
 			$this->last = $pos-1;
 			$next = $pos+1;
 			
@@ -18,7 +23,7 @@ class Form_signup extends Form {
 	function back() {
 			//if on first page of signup, go back to index
 			if($this->last==0) 
-				$loc = '../signup';
+				$loc = $this->url['signup'];
 			//else back button should go to last step
 			else
 				$loc = 'step'.$this->last;
@@ -57,6 +62,7 @@ function how_what($howorwhat) {
 	
 				global $text_num;
 				global $text;
+				global $url;
 				
 				$block = "<div class='how_what' id='%s'>\n<img src='/images/home/%s.png' id='%s_img'/>\n";
 							
@@ -68,7 +74,7 @@ function how_what($howorwhat) {
 				}
 				//insert preview img
 				if($howorwhat=='how')
-					$block .= "<a href='preview/member.php' alt='Preview Cityvate' title='Check out Cityvate'><img src='/images/home/preview.png' id='preview'/></a>";
+					$block .= "<a href='" . $url['preview'] . "' alt='Preview Cityvate' title='Check out Cityvate'><img src='/images/home/preview.png' id='preview'/></a>";
 
 				$block .= "</div>\n";
 							
@@ -180,7 +186,7 @@ function signup_review($textarray) {
 			}
 			
 			//display "edit" button for each page
-			echo "<a href='step$edit_cnt' alt='Edit $title information' class='text edit'>edit</a>";
+			echo "<a href='step{$edit_cnt}' alt='Edit $title information' class='text edit'>edit</a>";
 			
 		}
 		

@@ -34,7 +34,7 @@ if(!empty($_POST['aid'])){
 	
 	$activities_call->change_reserve($aid,$new_date);
 	
-	header('location:/member/calendar');
+	header('location:' . $url['calendar']);
 	exit;	
 }
 

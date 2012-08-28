@@ -46,5 +46,5 @@ $input_array = array($type => $first_input_array[$type],
 											'lower'=>'Enter your current password')
 				);
 
-$body->create_input($input_array,'../subscription_change_authenticate.php?type=' . $_GET["type"],'update','return validate("change_subscription")','change_subscription');
+$body->create_input($input_array,'subscription_change_authenticate.php?type=' . $_GET["type"],'update','return validate("change_subscription")','change_subscription');
 

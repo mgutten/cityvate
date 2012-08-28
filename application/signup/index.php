@@ -9,7 +9,7 @@ $header = new Header();
 
 $body = new Body();
 
-$form = new Form(array('action'=>'/signup/signup_set',
+$form = new Form(array('action'=>$url['signup'] . '/signup_set',
 						'method'=>'POST'));
 echo $form->input(array('type'=>'image',
 					'name'=>'package',
@@ -45,7 +45,7 @@ $form->close();
     </div>
 </div>
 
-<a href="preview/member.php" alt="Preview Cityvate"><img src="/images/signup/preview.png" id="preview"/></a>
+<a href="<?php echo $url['preview'];?>" alt="Preview Cityvate"><img src="/images/signup/preview.png" id="preview"/></a>
 
 <div class='fade_box' id='fade2'>
 	<div class='text title' id='text2'>

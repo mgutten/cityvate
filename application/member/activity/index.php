@@ -181,7 +181,7 @@ if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/txt/additional/" . $body->a['month_
 	}
 	//elseif not expired/done, link to calendar for reservation
 	elseif(strtotime($a['expire']) > (time()-60*60*24) || $a['done'] == 1){
-		echo "<a href='/member/calendar'><img src='/images/activity/reserve_button.png' class='button' /></a>
+		echo "<a href='" . $url['calendar'] . "'><img src='/images/activity/reserve_button.png' class='button' /></a>
 				<p class='text reservation_date'></p>";
 	}
 	//else it is already done/expired
@@ -190,7 +190,7 @@ if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/txt/additional/" . $body->a['month_
 	}
 ?>
 
-<img src="/images/activities/<?php echo $body->a['month_in_use'];?>/<?php echo strtolower($body->a_name);?>.jpg" id='activity_image' />
+<img src="/images/activities/<?php echo $body->a['month_in_use'] . "/" . strtolower($body->a_name);?>.jpg" id='activity_image' />
 
 <a href='http://www.maps.google.com/maps?q=<?php echo $business_address;?>' target='_blank'
                           ><img src='http://maps.googleapis.com/maps/api/staticmap?center=<?php echo $business_address;?>&zoom=13&size=280x180&maptype=roadmap

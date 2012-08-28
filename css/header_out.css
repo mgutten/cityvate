@@ -116,6 +116,11 @@ a img{
 	width:115px;
 }
 
+.login_right {
+	width:80px;
+	margin-left:20px;
+}
+
 #input_login {
 	width:41px;
 	height:16px;

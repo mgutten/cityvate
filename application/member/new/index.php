@@ -71,8 +71,7 @@ charities = '<?php echo CHARITIES;?>';
 								'id'=>'activities'));
 		echo $activities->create_bars();
 	?>
-    <img src='/images/new/cancel_button.png' id='cancel' class='button'/>
-    
+    <a href='/member' alt='Back to member home' class='text green' id='back_button'>Back</a>
     <?php
 		echo $form->input(array('type'=>'image',
 							'id'=>'submitter',
@@ -137,7 +136,7 @@ charities = '<?php echo CHARITIES;?>';
 ?>
 	<p class='alert_title'>You've spent too many tokens!</p>
     <p class='alert_main'>Would you like to purchase more tokens?</p>
-    <a href='/payment'><img src="/images/change/yes_button.png" id='yes' class='confirm_button'/></a>
+    <a href='<?php echo $url['payment'];?>'><img src="/images/change/yes_button.png" id='yes' class='confirm_button'/></a>
     <img src="/images/change/no_button.png" id='no' class='confirm_button'/>
 <?php
 	$too_many->close();
@@ -162,8 +161,6 @@ charities = '<?php echo CHARITIES;?>';
 										 1, ' . date('Y',strtotime("+1 month")) . '</span> by coming back to this page. After that, 
 										 you will be unable to cancel or trade your activities.</br></br> 
 										 <span id="success_alert_refund"></span></br>
-										 <a href="/member" class="text green" id="back_home">Back to Home</a>'
+										 <a href="' . $url['member'] . '" class="text green" id="back_home">Back to Home</a>'
 										 );
-										 
-	
-?>
+
