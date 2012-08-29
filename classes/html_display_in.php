@@ -2,14 +2,18 @@
 
 class Body_member extends Body {
 	
-	var $links = array("Activities"=> '/member',
+	var $links = array("My Activities"=> '/member',
 						"Calendar"=>'/member/calendar',
 						"History"=>'/member/past');
 	var $done = array();
 	var $activities=array();
-	
+	var $user;
+	var $url;
 	
 	function __construct($selected_tab) {
+			
+			global $url;
+			$this->url = $url;
 			
 			echo "<div id='header2_back'>";
 			
@@ -17,9 +21,9 @@ class Body_member extends Body {
 			$cur_tab=1;
 			
 			foreach($this->links as $key=>$value) {
+				
 					//make selected tab darker and longer
 					($selected_tab==$cur_tab ? $class = 'header_dark' : $class = 'header_light');
-									
 					
 					$tabs.= "<a href='" . $value . "' alt='Navigate to ".$key."'><div class='".$class." text header2'>$key</div></a>";
 				
@@ -30,6 +34,14 @@ class Body_member extends Body {
 			
 			echo "</div>";
 			
+			//check if valid subscription
+			$this->user = new User();
+			//if valid, display link to new activities for next month
+			if($this->user->check_subscription() === true 
+					&& (!empty($this->links['My Activities']) && $selected_tab == 1)
+					&& $this->check_new_activities() === false)
+				echo "<a href='" . $this->url['new'] . "'><div class='text' id='new_activities_small'>New Activities Available</div></a>";
+			
 			parent::__construct();
 	}
 	
@@ -37,8 +49,7 @@ class Body_member extends Body {
 	function check_new_activities() {
 		
 		//if today is within the last 7 days of month
-		/*TESTING, CHANGE 27 TO 7*/
-		if(date('j') >= (date('t')-27))
+		if(date('j') >= (date('t')-7))
 			return true;
 		else
 			return false;
@@ -46,19 +57,52 @@ class Body_member extends Body {
 	}
 	
 	//populate member/index.php with current activity bars
-	function member_activity($activities){
+	function member_activity($activities, $valid_subscription){
 		
 			echo "<div id='top_right_activities' class='top_right_activities'>";
 			$this->activities = $activities;
 			
 			if(empty($this->activities)){
-				//check if there are new activities available
-				//check_new_activities is not a db call, but a 
-				//test against a fixed date set as the lower bound
-				//to alert of new activities
-				if($this->check_new_activities() === true){
-					echo "<a href='" . $this->url['new'] . "'><img src='/images/member/new_activities_button.png' class='new_activity' /></a></div>
-						<div id='pag_nums'></div>";
+				/*
+				check if there are new activities available
+				check_new_activities is not a db call, but a 
+				test against a fixed date set as the lower bound
+				to alert of new activities
+				*/
+				if($this->check_new_activities() === true && 
+					($valid_subscription === true || $_SESSION['user']['tokens_balance'] > 0))
+					{
+						
+						$this->activities_call = new Activities();
+						$chosen_activities = $this->activities_call->check_new_activities();
+						
+						//inner check to test if user already has activities chosen for next month
+						if($chosen_activities !== false){
+							
+							$this->activities = $this->activities_call->reserved_new_activities(array_keys($chosen_activities));
+							
+							//loop through reserved activities and display bars
+							for($i = 0; $i < count($this->activities); $i++){
+								
+								$class = 'activity text';
+								
+								if($i == 0)
+									$class .= ' selected';
+								
+								 echo "<div class='$class' id='".$this->activities[$i]['aID']."'>
+						  			<p class='activity_name'>".$this->activities[$i]['name']."</p>
+									<p class='activity_type'>".$this->activities[$i]['type']."</p>
+									</div>
+									";
+							}
+							
+							echo "</div>";
+							echo "<div id='pag_nums'></div>";
+						}
+						else{
+							echo "<a href='" . $this->url['new'] . "'><img src='/images/member/new_activities_button.png' class='new_activity' /></a></div>
+								<div id='pag_nums'></div>";
+						}
 				}
 				//else there are no activities and no new activities
 				else{
@@ -142,7 +186,6 @@ class Body_member extends Body {
 	
 	//populate member.php with finished activities
 	function member_finished() {
-		echo "<div id='activity_done_lower'>";
 		
 			if(!empty($this->done)){
 				
@@ -168,7 +211,7 @@ class Body_member extends Body {
 			}
 			else
 				echo "<p class='text no_activity' id='no_activity_done'>You haven't done any activities this month.</p>";
-		echo "</div>";
+
 		
 		if(count($this->done) > 3)
 				$this->pagination_fn($this->done,3,'_done');
@@ -181,7 +224,7 @@ class Body_member extends Body {
 		
 		if(empty($upcoming_event)){
 			$block .= '<p class="upcoming text">No activities this week!</p>';
-			$block .= '<p class="upcoming text">Either add one from your calendar.</p>';
+			$block .= '<p class="upcoming text">Either add one from your calendar,</p>';
 			$block .= '<p class="upcoming text">Or check out the free activity of the day!</p>';
 			
 			echo $block;

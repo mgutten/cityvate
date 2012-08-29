@@ -8,8 +8,15 @@ else
 	include($_SERVER['DOCUMENT_ROOT'] . '/classes/html_display_out.php');
 	
 
+//general class to hold info that must be available to all classes
+class General {
+	var $package_cost = array('budget'=>25,
+								'basic'=>50,
+								'premium'=>100);
+}
+
 //declare common classes between logged in vs. logged out
-class Head {
+class Head extends General {
 //class to create the head section of a page (including 
 //stylesheets and scripts)
 	
@@ -17,7 +24,6 @@ class Head {
 	var $style= array();
 	var $title;
 	var $title_css;
-	var $file_adj = '/';
 	var $url;
 	
 		function __construct($title, $default_js = 0) {
@@ -44,7 +50,6 @@ class Head {
 					$this->file_adj .= '../';
 				}
 				*/
-				$GLOBALS['file_adj']=$this->file_adj;
 				
 				//set title for page
 				$this->title = $title;
@@ -182,7 +187,7 @@ class Head {
 }
 
 
-class Header {
+class Header extends General{
 	
 	var $links=array();
 	var $drop=array();
@@ -195,10 +200,7 @@ class Header {
 			
 			$this->url = $url;
 			
-			//set file_adj var from Head class
-			$file_adj = $GLOBALS['file_adj'];
-			
-			$this->links['Home'] = '';
+			$this->links['Home'] = $this->url['home'];
 			
 			//if logged out, add to array of header links
 			if($login == 'out' && empty($_SESSION['user']['uID'])) {
@@ -210,8 +212,8 @@ class Header {
 			
 			//if logged in, change dropdown variable
 			else {
-					$this->drop['My Account'] = $this->url['account'];
 					$this->links['My Activities'] = $this->url['member'];
+					$this->drop['My Account'] = $this->url['account'];
 					$this->links['Contact'] = $this->url['contact'];
 					$this->links['Home'] = $this->url['home'];
 			}
@@ -223,7 +225,7 @@ class Header {
 			$this->link();
 			
 			//display logo
-			echo "<a href='/".$this->links['Home']."' alt='Home'><div id='logo'></div></a>";
+			echo "<a href='".$this->links['Home']."' alt='Home'><div id='logo'></div></a>";
 			
 			//display dropdown
 			
@@ -252,14 +254,22 @@ class Header {
 				$form->close();
 			}
 			else {
-				echo "<div id='dropdown_container'><div id='dropdown' class='dropdown_account'>\n";
+				echo "<div id='dropdown_container_activities'><div id='dropdown_activities' class='dropdown'>";
+						$my_activities = "<a href='" . $this->url['member'] . "' alt='My Activities'><p class='my_account text'>Current Activities</p></a>";
+						$calendar = "<a href='" . $this->url['calendar'] . "' alt='Calendar'><p class='my_account text'>Calendar</p></a>";
+						$new_activities = "<a href='" . $this->url['new'] . "' alt='New Activities'><p class='my_account text logout'>New Activities</p></a>";
+				echo $my_activities.$calendar.$new_activities;
+				
+				echo "</div></div>";
+				
+				echo "<div id='dropdown_container'><div id='dropdown' class='dropdown_account dropdown'>\n";
 				
 				$account_info = "<a href='" . $this->url['account'] . "' alt='My Account'><p class='my_account text'>Account Info</p></a>";
-				$calendar = "<a href='" . $this->url['calendar'] . "' alt='My calendar'><p class='my_account text'>Calendar</p></a>";
+				//$calendar = "<a href='" . $this->url['calendar'] . "' alt='My calendar'><p class='my_account text'>Calendar</p></a>";
 				$preferences = "<a href='" . $this->url['preferences'] . "' alt='Prefences'><p class='my_account text'>Preferences</p></a>";
 				$subscription = "<a href='" . $this->url['subscription'] . "' alt='Subscription'><p class='my_account text'>Subscription</p></a>";
 				$logout = "<a href='" . $this->url['logout'] . "' alt='Logout'><p class='my_account text logout'>Logout</p></a>";
-				echo $calendar.$account_info.$subscription.$preferences.$logout;
+				echo $account_info.$subscription.$preferences.$logout;
 			}
 			echo "</div></div>\n";
 			
@@ -270,8 +280,12 @@ class Header {
 	
 	function link() {
 			
-			$file_adj = $GLOBALS['file_adj'];
-			$file_adj2 = $file_adj;
+			//display username if logged in
+			
+			if(!empty($_SESSION['user']['uID']))
+				echo "<p class='text green header_username'>" . $_SESSION['user']['username'] . "</p>";
+			else
+				echo "<p class='text green header_username'></p>";
 			
 			//create header links
 			foreach($this->links as $key=>$value) {
@@ -282,6 +296,11 @@ class Header {
 					//if home button, apply header_first class
 					if($key == 'Home') 
 							$class .= ' header_first';
+					if($key == 'My Activities'){
+						echo "<a href='". $value . "'><div class='$class' id='drop_activities'>" . $key . "<img src='/images/home/arrow.png' id='arrow'/></div></a>\n";
+						continue;
+					}
+					
 												
 					echo "<a href='" . $value . "' alt='$key'><div class='$class'>" . $key . "</div></a>\n";
 					
@@ -295,10 +314,11 @@ class Header {
 				if($key == 'Login')
 					$class .= ' login_right';
 				
-					echo "<a href='". $value . "'><div class='$class' id='drop'>" . $key . "<img src='/images/home/arrow.png' id='arrow'/></div></a>\n</div>\n";
-					
+					echo "<a href='". $value . "'><div class='$class' id='drop'>" . $key . "<img src='/images/home/arrow.png' id='arrow'/></div></a>\n";
 					
 			}
+			
+			echo "</div>\n";
 	
 	//end link()
 	}
@@ -306,7 +326,7 @@ class Header {
 }
 
 
-class Body {
+class Body extends General{
 	
 	var $url;
 	
@@ -432,12 +452,9 @@ class Form {
 class Alert {
 	
 	function __construct($name,$src) {
-			$file_adj ='';
-			if(!empty($GLOBALS['file_adj']))
-				$file_adj = $GLOBALS['file_adj'];
 			
 			$darken="<div class='darken $name' onclick='$(\".$name\").toggle()'></div>";
-			$img = "<img class='centered $name' src='".$file_adj."images/alert/$src.png' />";
+			$img = "<img class='centered $name' src='/images/alert/$src.png' />";
 			$x = "<div class='x $name' onclick='$(\".$name\").toggle()'></div>";
 			echo $darken.$img.$x;
 			

@@ -8,7 +8,7 @@ $(function() {
 
 	//adjust height of body_left background to match height of body_left
 	//also adjust margin-top of body_left to overlay body_left_background
-	var body_left_height = parseInt($('#body_left').css('height'),10) + 27;
+	var body_left_height = parseInt($('#body_left').css('height'),10)+20;
 	$('#body_left_back,#separator').css('height',body_left_height + 'px' );
 	$('#bottom_right_container,#body_left').css('margin-top','-' + body_left_height + 'px');
 	
@@ -20,16 +20,41 @@ $(function() {
 		
 	});
 	
+	$('.leftover_button').hover(
+	
+		function(){
+
+			var title;
+			
+			if($(this).attr("id") == 'refund')
+				title = 'A cash refund of $' + (parseInt($('#token_balance').html(),10)*2.5).toFixed(2) + ' will be credited to your credit/debit card.'
+			else
+				title = $(this).attr('aTitle');
+				
+			var top = parseInt($(this).offset().top,10);
+			var left = parseInt($(this).offset().left,10);
+			
+			$("#tooltip")
+				.html(title)
+				.css("top",(top + 40) + 'px')
+				.css('left',(left - 20) + 'px')
+				.stop()
+				.show()
+				.animate({'opacity':'1'},300);
+		},
+		function() {
+			$('#tooltip')
+				.stop()
+				.animate({'opacity':'0'},300)
+	});
+		
+		
+	
 	//trigger functions on checkbox change
 	$('.body_left_checkbox').change(function() {
 		
 		toggle_class($(this));
 		
-	})
-	
-	//prevent trigger of "click" function for parent div .body_left_bar
-	$('.body_left_checkbox').click(function(e) {
-		e.stopPropagation();
 	})
 	
 	//allows selection of activities by clicking on whole bar, not just checkbox
@@ -53,7 +78,7 @@ $(function() {
 	//store old qty in var when focus on qty box
 	$('.body_left_qty').focus(function() {
 		if($(this).val() == '')
-			old_qty = 1;
+			old_qty = null;
 		else
 			old_qty = $(this).val();
 	})
@@ -64,12 +89,25 @@ $(function() {
 		if($(this).val() > 4)
 			$(this).val(4)
 			
+		//limit input to positive integers
 		if(isNaN($(this).val()) || $(this).val() < 0)
 			$(this).val(1)
 		
-		if($(this).parent().is('.body_left_bar_selected') && $(this).val() != old_qty)
+		//if this activity is selected and we changed the qty, run qty change fn	
+		if($(this).parent().is('.body_left_bar_selected') && $(this).val() != old_qty){
 			qty_change($(this));
+		}
 		
+	})
+	
+	$('.body_left_qty').keyup(function() {
+		
+		//if parent is not selected and input is a positive integer
+		//toggle activity to selected
+		if(!$(this).parent().is('.body_left_bar_selected') && !isNaN($(this).val()) && $(this).val() != '') {
+			$(this).parent().addClass('body_left_bar_selected');
+			$(this).siblings('.body_left_checkbox').prop('checked',true);
+		}
 	})
 	
 	
@@ -88,9 +126,10 @@ $(function() {
 		$('.too_many').hide();
 	})
 	
-	$('#refund,#carryover,#donate').click(function() {
+	$('.leftover_button').click(function() {
 		
 		$('#input_leftover').attr('value',$(this).attr('id'));
+		$('#tooltip').hide();
 		submit_form();
 	})
 		
@@ -99,7 +138,7 @@ $(function() {
 
 //tag is checkbox_tag
 function toggle_class(tag) {
-	
+
 	var aid = tag.attr('value');	
 	tag = tag.parent();
 	
@@ -159,7 +198,7 @@ function validate() {
 	
 	if(tokens_left > 0){
 		$('#leftover_tokens').html(tokens_left);
-		$('#refund').attr('title','A cash refund of $' + (tokens_left*2.5).toFixed(2) + ' will be credited to your account')
+		//$('#refund').attr('title','A cash refund of $' + (tokens_left*2.5).toFixed(2) + ' will be credited to your account')
 		$('.leftover').show();
 		return false;
 	}
@@ -241,8 +280,11 @@ function qty_change(tag) {
 	
 	var balance = parseInt($('#token_balance').html(),10);
 	var cost = tag.parent().children('.body_left_cost').html();
+	
+	(old_qty == null ? old_qty = 0 : old_qty = old_qty);
 
 	balance = balance + parseInt((old_qty * cost),10);
+	
 	
 	balance = balance - parseInt((tag.val() * cost),10);
 	

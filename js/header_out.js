@@ -16,11 +16,27 @@ $(function() {
 				//if focused on username textbox,
 				//don't animate div to closed
 				if(!$('.username').is(':focus')){
+						var height = parseInt($('#dropdown').css('height'),10) * -1;
 						$("#dropdown").css('z-index','1');
-						$("#dropdown").stop().animate({top:parseInt($('#dropdown').css('height'),10) * -1 + 'px'},300);
+						$("#dropdown").stop().animate({top: height + 'px'},300);
 				}
 		}
 	)
+	
+	//dropdown for my_activities
+	$("#drop_activities,#dropdown_activities").hover(
+	
+		function() {
+				$("#dropdown_activities").css('z-index','2');
+				$("#dropdown_activities").stop().animate({top:'0px'},300);
+		},
+		function() {
+				var height = parseInt($('#dropdown_activities').css('height'),10) * -1;
+				$("#dropdown_activities").css('z-index','1');
+				$("#dropdown_activities").stop().animate({top: height + 'px'},300);
+					
+	})
+
 	
 	//expand div when focus on username
 	//textbox

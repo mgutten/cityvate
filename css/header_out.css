@@ -37,6 +37,7 @@ a img{
 .text {
 	font-family:'Neon 80s';
 	/*font-family:"Museo Sans Cyrl 500";*/
+	font-family:'Calluna Sans';
 	font-size:14px;
 	color:#DFDFDF;
 }
@@ -70,7 +71,17 @@ a img{
 }
 
 .header_first {
-	margin-left:550px;
+	margin-left:215px;
+}
+
+.header_username {
+	float:left;
+	height:22px;
+	text-align: center;
+	color:#CCC;
+	margin: 0px 0px 0px 45px;
+	width:250px;
+	font-size:13px;
 }
 
 .header_link:hover {
@@ -92,10 +103,34 @@ a img{
 
 #dropdown_container {
 	float:right;
-	margin:0px 14px -70px 0px;
+	margin:0px 49px -70px 0px;
 	height:150px;
 	width:140px;
 	overflow:hidden;
+}
+
+#dropdown_container_activities {
+	float:left;
+	margin:0px 14px -70px 300px;
+	height:100px;
+	width:140px;
+	overflow:hidden;
+}
+
+.dropdown {
+	float:right;
+	position:relative;
+	margin:0px 0px 0px 0px;
+	background-color:#000;
+	z-index:-1;
+	overflow:hidden;
+}
+
+#dropdown_activities {
+	float:left;
+	width:115px;
+	height:78px;
+	top:-78px;
 }
 
 #dropdown {
@@ -111,8 +146,8 @@ a img{
 }
 
 #dropdown.dropdown_account {
-	top:-128px;
-	height:128px;
+	top:-100px;
+	height:100px;
 	width:115px;
 }
 

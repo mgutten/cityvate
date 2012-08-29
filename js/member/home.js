@@ -92,7 +92,6 @@ function ready_functions() {
 
 	//perform custom image fade onclick
 	$('#top_right_activities').on('click','.activity',function() {
-		alert();
 		reset_list = 0;
 		bar_select($(this));
 		
@@ -319,6 +318,10 @@ function change_picture() {
 		var month_num=cur_month;
 		var src;
 		
+		//show "Finished Activities" section
+		$('.activity_done_hide').show();
+		
+		
 		//if no activities purchased for cur_month
 		if(empty == 1) {
 			
@@ -330,7 +333,7 @@ function change_picture() {
 			//no activities have been purchased yet, display new activities info
 			if(a_array[2] === true){
 				
-				
+				$('.activity_done_hide').hide();
 				
 				//change link to new activities page
 				$('#picture_link').attr('href','/member/new');

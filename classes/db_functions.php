@@ -195,7 +195,7 @@ class User {
 	}
 	
 	//fn to change value of column for individual user from change_authenticate.php and from_cv.php
-	function change($column_array){
+	function change($column_array, $user = ''){
 		
 		$query = "UPDATE users 
 					SET ";
@@ -217,7 +217,9 @@ class User {
 			$_SESSION['user'][$column] = $new;
 			
 		}
-		$query .= " WHERE uID = '" . $_SESSION['user']['uID'] . "'";
+		$query .= " WHERE uID = '";
+		$query .=  (!empty($user) ? $user : $_SESSION['user']['uID']);
+		$query .=  "'";
 		
 		$result = $this->con->query($query);
 		
@@ -411,6 +413,7 @@ class User {
 	
 	
 	function loop_results($array,$counter = 0) {
+		
 			$res_array = array();
 			if($this->result->num_rows > 0){
 				
@@ -591,7 +594,7 @@ class Activities extends User {
 						a_p.aID
 					ORDER BY
 						a.tokens DESC";
-					
+							
 		$this->result = $this->con->query($query);
 		
 		$array = array('aID','name','tokens','save','type');
@@ -599,6 +602,31 @@ class Activities extends User {
 		return $this->loop_results($array,1);
 				
 			
+	}
+	
+	function reserved_new_activities($aid_array){
+		
+		$query = "SELECT aID, name, type 
+					FROM activities
+					WHERE aID IN (";
+					
+		$last = end($aid_array);
+		
+		foreach($aid_array as $val){
+			
+			$query .= $val;
+			
+			if($val != $last)
+				$query .= ',';
+		}
+		
+		$query .= ")";
+		
+		$this->result = $this->con->query($query);
+		
+		$array = array('aID','name','type');
+		
+		return $this->loop_results($array,1);
 	}
 	
 	function remove_activity($aid,$to_current = '1'){

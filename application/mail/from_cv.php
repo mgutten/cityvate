@@ -10,9 +10,7 @@ $user = new User();
 $user_exists = $user->check_username($_REQUEST['username']);
 if($user_exists === false)
 	header('location:' . $_SERVER['HTTP_REFERER']);
-else
-	$_SESSION['user']['uID'] = $user_exists;
-	
+		
 //generate random password
 function genPassword($length=8)
 {
@@ -49,7 +47,7 @@ if(mail($to, $subject, $message, implode("\r\n", $headers)) == true){
 	$_SESSION['mail']['success'] = $_REQUEST['username'];
 	
 	//change password in db
-	$user->change(array('password'=>$password));
+	$user->change(array('password'=>$password), $user_exists);
 	header('location:' . $_SERVER['HTTP_REFERER']);
 }
 else{

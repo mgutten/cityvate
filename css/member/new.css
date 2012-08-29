@@ -193,11 +193,23 @@
 	margin:60px 0px 20px 50px;
 }
 
-#back_button {
+#back_links {
 	float:left;
 	clear:both;
-	margin:62px 0px 0px 30px;
+	margin:8px 0px 0px 30px;
+	width:100px;
 	font-size:12px;
+	height:auto;
+}
+
+.back_link {
+	float:left;
+	clear:both;
+	margin: 0px;
+}
+
+#back_button {
+	margin-top:3px;
 }
 
 .button {
@@ -213,7 +225,13 @@
 
 #input_submitter {
 	float:left;
-	margin:37px 0px 20px 430px;
+	margin:5px 0px 0px 350px;
+}
+
+#accept_note {
+	width:100px;
+	float:left;
+	margin:10px 0px 0px 488px;
 }
 
 /*end buttons*/
@@ -334,6 +352,15 @@
 	margin:40px 0px 0px 40px;
 }
 
+.leftover_question {
+	float:left;
+	margin:5px 0px 0px 115px;
+}
+
+#leftover_question1 {
+	margin-left: 194px;
+}
+
 #refund {
 	margin-left:125px;
 }
@@ -348,7 +375,16 @@
 
 /*general additions*/
 
-
 .dark_text {
 	color:#999;
+}
+
+#tooltip {
+	position:absolute;
+	width:150px;
+	height:auto;
+	padding: 5px 5px 5px 5px;
+	background:#222;
+	z-index:10000;
+	display:none;
 }

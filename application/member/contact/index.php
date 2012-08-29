@@ -3,7 +3,7 @@
 
 $body = new Information('Member Contact', 'Contact Us');
 
-$form = new Form(array('action'=>$url['mail_from'],
+$form = new Form(array('action'=>$url['mail_to'],
 						'method'=>'POST',
 						'onsubmit'=>'return validate("contact")',
 						'id'=>'contact'));

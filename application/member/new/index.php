@@ -3,6 +3,15 @@
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/db_functions.php');
 
+//retrieve activities from db
+$activities = new New_activities();
+$activities->get_activities();
+
+//if user reaches this page with direct url and does not have
+//active subscription or leftover tokens, redirect away
+if($activities->activities_call->check_subscription() === false && empty($_SESSION['user']['tokens_balance']))
+	header('location:' . $url['member']);
+
 $head = new Head('New Activities',1);
 $head->style('member/new');
 $head->script('member/new');
@@ -11,9 +20,6 @@ $head->close();
 $header = new Header();
 
 $body = new Body();
-
-$activities = new New_activities();
-$activities->get_activities();
 
 ?>
 
@@ -44,7 +50,12 @@ charities = '<?php echo CHARITIES;?>';
     	Balance: <span id='token_balance'>
 			<?php 
 				//add amount of package tokens(constant defined in bootstrap) to remaining balance
-				echo $_SESSION['user']['tokens_balance'] + constant(strtoupper($_SESSION['user']['package']) . '_TOKENS');
+				$old_tokens = (empty($_SESSION['user']['tokens_balance']) ? 0 : $_SESSION['user']['tokens_balance']);
+				$new_tokens = constant(strtoupper($_SESSION['user']['package']) . '_TOKENS');
+				$total_tokens = $old_tokens + $new_tokens;
+
+				echo $total_tokens;
+				
 			?></span> tokens
     </p>
 	<div id='body_left_title_bar'>
@@ -69,9 +80,16 @@ charities = '<?php echo CHARITIES;?>';
 		$form = new Form(array('action'=>'/member/new/process.php',
 								'method'=>'POST',
 								'id'=>'activities'));
+		//populate bars for activities
 		echo $activities->create_bars();
 	?>
-    <a href='/member' alt='Back to member home' class='text green' id='back_button'>Back</a>
+    <p class='text' id='accept_note'>Note: No choice is final until after the first of next month.</p>
+    
+    <div id='back_links'>
+        <a href='<?php echo $url['purchase'];?>' alt='Purchase more tokens'; class='text green back_link' id='purchase_button'>Purchase tokens</a>
+        <a href='<?php echo $url['member'];?>' alt='Back to member home' class='text green back_link' id='back_button'>Back</a>
+    </div>
+
     <?php
 		echo $form->input(array('type'=>'image',
 							'id'=>'submitter',
@@ -89,6 +107,7 @@ charities = '<?php echo CHARITIES;?>';
 							
 		$form->close();
 	?>
+
 </div>
 
 <div id='bottom_right_container'>
@@ -129,7 +148,7 @@ charities = '<?php echo CHARITIES;?>';
          </div>
     </div>
 </div>
-
+<div id='tooltip' class='text'></div>
 <?php
 	/*alert box when too many tokens are spent*/
 	$too_many = new Alert_w_txt('too_many');
@@ -147,11 +166,15 @@ charities = '<?php echo CHARITIES;?>';
 	$leftover = new Alert_w_txt('leftover');
 ?>
 	<p class='alert_title'>You have tokens left over</p>
-    <p class='alert_main'>How would you like to use your <span id='leftover_tokens'></span> tokens?</p>
+    <p class='alert_main'>How would you like to use your <span id='leftover_tokens'></span> extra token(s)?</p>
     
-    <img src='/images/new/refund_button.png' class='leftover_button button' id="refund" title=''/>
-    <img src='/images/new/carryover_button.png' class='leftover_button button' id="carryover" title='Tokens will be carried over to next month'/>
-    <img src='/images/new/donate_button.png' class='leftover_button button' id="donate" title='100% of cash refund will be donated to <?php echo CHARITIES;?>'/>
+    <img src='/images/new/refund_button.png' class='leftover_button button' id="refund"/>
+    <img src='/images/new/carryover_button.png' class='leftover_button button' id="carryover" aTitle='Tokens will be carried over to next month.'/>
+    <img src='/images/new/donate_button.png' class='leftover_button button' id="donate" aTitle='100% of cash refund will be donated to <?php echo CHARITIES;?>.'/>
+   <!-- <img src='/images/question_mark_circle.png' class='leftover_question' id='leftover_question1'/>
+    <img src='/images/question_mark_circle.png' class='leftover_question' id='leftover_question2' aTitle='Tokens will be carried over to next month.'/>
+    <img src='/images/question_mark_circle.png' class='leftover_question' id='leftover_question3' aTitle='100% of cash refund will be donated to <?php echo CHARITIES;?>.'/>
+    -->
 <?php
 	$leftover->close();
 	

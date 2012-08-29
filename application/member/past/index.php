@@ -14,7 +14,6 @@ $header = new Header();
 //selected(i.e. my_activities)
 $body = new Body_member_past(3);
 
-
 ?>
 
 <div id='never_container'>

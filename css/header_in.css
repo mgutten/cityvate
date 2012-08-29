@@ -46,8 +46,9 @@ a img{
 	/*font-family:"Gill Sans MT";*/
 	/*font-family:"Museo Sans Cyrl 500";*/
 	/*font-family:"Calluna Sans";*/
+	/*font-family:'apogee Rounded Sans';*/
 	font-family:'Neon 80s';
-
+	font-family:"Calluna Sans";
 	font-size:13px;
 	color:#DFDFDF;
 }
@@ -82,11 +83,20 @@ a img{
 }
 
 .header_first {
-	margin-left:550px;
+	margin-left:215px;
 }
 
 .header_link:hover {
 	color:#FFF;
+}
+
+.header_username {
+	float:left;
+	height:22px;
+	text-align: center;
+	color:#CCC;
+	margin: 0px 0px 0px 45px;
+	width:250px;
 }
 
 #logo {
@@ -94,6 +104,7 @@ a img{
 	width:300px;
 	height:84px;
 	float:left;
+	clear:both;
 	margin-left:22px;
 	padding-bottom:20px;
 }
@@ -103,24 +114,40 @@ a img{
 	margin-top:3px;
 }
 
-#dropdown_container {
+#dropdown_container,#dropdown_container_activities {
 	float:left;
-	margin:0px 0px -50px 557px;
+	margin:0px 0px -50px 107px;
 	height:150px;
 	width:115px;
 	overflow:hidden;
 }
 
-#dropdown {
+#dropdown_container_activities {
+	float:left;
+	margin-left:300px;
+	height:100px;
+	width:115px;
+	overflow:hidden;
+}
+
+.dropdown {
 	float:left;
 	position:relative;
-	top:-128px;
 	margin:0px 0px 0px 0px;
 	width:115px;
-	height:128px;
 	background-color:#000;
 	z-index:-1;
 	overflow:hidden;
+}
+
+#dropdown_activities {
+	height:78px;
+	top:-78px;
+}
+
+#dropdown {
+	top:-105px;
+	height:105px;
 }
 
 .darken {
@@ -230,7 +257,7 @@ a img{
 }
 
 #header2_back {
-	width:954px;
+	width:600px;
 	height:50px;
 	float:left;
 	clear:both;
@@ -261,6 +288,42 @@ a img{
 	padding-top:10px;
 }
 
+/*small new activities notification box*/
+#new_activities_small {
+	float:left;
+	width:130px;
+	height:40px;
+	text-align:center;
+	font-size:15px;
+	color:#CECECE;
+	margin:19px 0px 0px 201px;
+	background:#000;
+	opacity:.88;
+	padding-top:10px;
+}
+
+#new_activities_small:hover {
+	color:#fff;
+}
+
+/*little red circle with numbers inside to indicate new activities in header
+#notification_outer {
+	width:16px;
+	height:16px;
+	float:left;
+	margin:8px 0px 0px 3px;
+	background:url(/images/notification_circle.png) no-repeat;
+}
+
+#notification_outer_text {
+	float:left;
+	width:9px;
+	text-align:center;
+	margin:1px 0px 0px 3px;
+	font-size:10px;
+}
+*/
+
 /*red input boxes*/
 .red_back {
 	background-color:#950000;
@@ -277,6 +340,11 @@ a img{
 .green {
 	/*color:#44b20f;*/
 	color:#04B30D;
+}
+
+.white {
+	color: #fff;
+	
 }
 
 /*overlapping classes for alert_w_txt classes (change.php and calendar.php)*/

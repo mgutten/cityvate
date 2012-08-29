@@ -19,8 +19,8 @@ $body = new Body_member(1);
 $activities_call = new Activities();
 //if nearing end of current month, change to next month
 //and display new activities
-$subscription_check = $activities_call->check_subscription();
-if($body->check_new_activities() === true && $subscription_check === true){
+$valid_subscription = $activities_call->check_subscription();
+if($body->check_new_activities() === true && ($valid_subscription === true || $_SESSION['user']['tokens_balance'] > 0)){
 	$time = strtotime('+1 month');
 	$selected_month = date('m',strtotime('+1 month'));
 }
@@ -33,9 +33,14 @@ $activities = $activities_call->activities($selected_month);
 //store upcoming events for coming week
 $upcoming_event = $activities_call->upcoming();
 
+if(empty($activities) && $time > time() && ($valid_subscription === true || $_SESSION['user']['tokens_balance'] > 0))
+	$new_activities = true;
+else
+	$new_activities = false;
+
 //if loading page and there are new activities
 //and user has valid subscription
-if(empty($activities) && $time > time() && $subscription_check === true){
+if($new_activities === true){
 	
 	//store filenames of images from next month's activities in array
 	$image_filenames = array_slice(array_filter(scandir('X:/Program Files (x86)/wamp/www/Local_site/cityvate/images/activities/' . date('m',strtotime('+1 month')) . '/')), 0, 10);
@@ -65,7 +70,7 @@ if(empty($activities) && $time > time() && $subscription_check === true){
 	<?php
     	if(!empty($activities))
 			echo $url['activity'] . "/" . $activities[0]['aID'];
-		elseif($time > time() && $subscription_check === true)
+		elseif($new_activities === true)
 			echo $url['new'];
 			
 	?>' id='picture_link'>
@@ -76,7 +81,7 @@ if(empty($activities) && $time > time() && $subscription_check === true){
         if(!empty($activities))
 		 	echo "/images/activities/" . date('m') . "/" . str_replace(' ','_',strtolower($activities[0]['name'])) . ".jpg";
 		//case when we are in last 5 days of month and their subscription is still valid
-		elseif($time > time() && $subscription_check === true){
+		elseif($new_activities === true){
 			$image_filenames = array_slice(array_filter(scandir('X:/Program Files (x86)/wamp/www/Local_site/cityvate/images/activities/' . date('m',strtotime('+1 month')) . '/')), 0, 10);
 			echo "/images/activities/" . date('m', strtotime("+1 month")) . "/" . $image_filenames[2];
 		}
@@ -96,12 +101,14 @@ if(empty($activities) && $time > time() && $subscription_check === true){
 			$display = $display_lower =  '';
 		//else if new activities are available and valid subscrip
 		//display top bar only 
-		elseif($time > time() && $subscription_check === true){
+		elseif($new_activities === true){
 			$display = '';
 			$display_lower = 'style="display:none"';
 		}
-		else
+		else{
 			$display = 'style="display:none;"';
+			$display_lower = 'style="display:none;"';
+		}
 			
 		?>
 			                          
@@ -111,7 +118,7 @@ if(empty($activities) && $time > time() && $subscription_check === true){
                             <?php 
 									if(!empty($activities))
 							  			echo $activities[0]['name'];
-									elseif($time > time() && $subscription_check === true)
+									elseif($new_activities === true)
 										echo 'New Activities Available';
 										
 							?>
@@ -136,19 +143,35 @@ if(empty($activities) && $time > time() && $subscription_check === true){
           </div>
           
               
-              <?php
+             <?php
               //populate with list of activities from array
-                      $body->member_activity($activities);
-              ?>
+                      $body->member_activity($activities,$valid_subscription);
+             ?>
 
       		
             <div id='activity_done' class='top_right_activities'>
-				<p class='text' id='activity_done_title'>Finished Activities</p>
+            
+            <?php
+				if($new_activities === true)
+					$display = 'style="display:none;"';
+				else
+					$display = '';
+			?>
+            <p class='text activity_done_hide' id='activity_done_title' <?php echo $display;?>>Finished Activities</p>
+            <div id='activity_done_lower' class='activity_done_hide' <?php echo $display;?>>
+            <?php
+			
+				$body->member_finished();
+				
+			?>
+            </div>
+            <?php 
+				if($new_activities === true && $activities_call->check_new_activities() !== false){
 					
-               
-					<?php
-						$body->member_finished();
-					?>			
+					echo "<a href='" . $url['new'] . "' class='text green'>Edit your activities</a>";
+				}
+					
+			?>			
 						
 					
             </div>
