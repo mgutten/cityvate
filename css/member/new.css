@@ -197,7 +197,7 @@
 	float:left;
 	clear:both;
 	margin:8px 0px 0px 30px;
-	width:100px;
+	width:120px;
 	font-size:12px;
 	height:auto;
 }
@@ -208,8 +208,13 @@
 	margin: 0px;
 }
 
+
 #back_button {
 	margin-top:3px;
+}
+
+#renew_button {
+	margin-bottom:3px;
 }
 
 .button {
@@ -225,7 +230,7 @@
 
 #input_submitter {
 	float:left;
-	margin:5px 0px 0px 350px;
+	margin:5px 0px 0px 333px;
 }
 
 #accept_note {

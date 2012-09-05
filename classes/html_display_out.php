@@ -43,14 +43,34 @@ class Form_signup extends Form {
 								'src'=>'/images/signup/next_button.png'));
 	}
 	
-	function radio($name,$value) {
-			if(!empty($_SESSION['signup']['package']) && $value==$_SESSION['signup']['package'])
-				$checked='checked';
-			else
-				$checked='';
+	function radio($name,$value,$checked) {
 			
 			echo "<input type='radio' name='$name' class='$name' value='$value' $checked />";
 	}
+	
+	//radio button display for packages in step3 of signup
+	function radio_package_display($package_array) {
+		
+			foreach($package_array as $val){
+				
+				echo "<div class='radios'>";
+				
+				$checked='';
+				$class = '';
+				
+				if(!empty($_SESSION['signup']['package']) && $val==$_SESSION['signup']['package']){
+					$checked='checked';
+					$class = 'green';
+				}
+				
+				$this->radio('package',$val,$checked);
+				
+				echo "<p class='package_title text $class'>" . ucwords($val) . "</p><p class='text package_cost $class'>($" . $this->package_cost[$val] . "/mo)</p>";
+				
+				echo "</div>";
+			}
+	}
+				
 				
 				
 			
@@ -130,16 +150,16 @@ function signup_boxes($title_array) {
 						else{
 
 							//case when username has failed
-							if($key=='Username/email' && (!empty($_SESSION['user']['username_fail']) || !empty($_SESSION['user']['email_fail']))){
+							if($key=='Username/email' && (!empty($_SESSION['signup']['username_fail']) || !empty($_SESSION['signup']['email_fail']))){
 									
 								$class .= ' red_back';
 								$lower = ' red';
 								
 								//case when username is taken
-								if(!empty($_SESSION['user']['username_fail']))
+								if(!empty($_SESSION['signup']['username_fail']))
 									$value = 'That username is already taken.';
 								//case when username not in email format
-								elseif(!empty($_SESSION['user']['email_fail']))
+								elseif(!empty($_SESSION['signup']['email_fail']))
 									$value = $value = 'Please enter a valid email address.';
 									
 							}
@@ -171,16 +191,36 @@ function signup_review($textarray) {
 		$edit_cnt = 0;
 		//loop through first dimension of array ("title" layer)
 		foreach($textarray as $title=>$second) {
-			if($title!='Personal Info')
+			if($title != 'Personal Info')
 				$edit_cnt += 1;
+				
 			//echo title portion of review
 			echo "<div class='review_box'><p class='text review_box_text'>$title</p></div>";
 			
 			//loop through second dimension of array ("key to val")
 			foreach($second as $key=>$value) {
 				
+				$class = 'value text';
+				
+				if($key == 'Total')
+					$class .= ' total yellow';
+				if($key == 'Package')
+					$value = ucwords($value);
+				
 				$block = "<p class='key text'>$key:</p>";
-				$block .= "<p id='$key' class='value text'>$value</p>";
+				$block .= "<p id='$key' class='$class'>$value</p>";
+				
+				//add question mark for popup tooltip
+				if($key == 'Start Date'){
+					$tooltip = 'You will be able to choose activities immediately, but this is the date that your first activities will become active.'; 
+					$block .= "<p class='text green tooltip_question' tooltip ='$tooltip'>?</p>";
+				}
+				elseif($key == 'End Date'){
+					$tooltip = 'After this date you will not receive new tokens, but you will still be able to access your account.  You can always renew your subscription.'; 
+					$block .= "<p class='text green tooltip_question' tooltip ='$tooltip'>?</p>";
+				}
+
+				
 				
 				echo $block;
 			}

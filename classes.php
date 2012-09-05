@@ -258,8 +258,16 @@ class Header extends General{
 						$my_activities = "<a href='" . $this->url['member'] . "' alt='My Activities'><p class='my_account text'>Current Activities</p></a>";
 						$calendar = "<a href='" . $this->url['calendar'] . "' alt='Calendar'><p class='my_account text'>Calendar</p></a>";
 						$new_activities = "<a href='" . $this->url['new'] . "' alt='New Activities'><p class='my_account text logout'>New Activities</p></a>";
-				echo $my_activities.$calendar.$new_activities;
+				echo $my_activities.$calendar;
 				
+				//check to see if new activities should be displayed
+				if($login == 'in'){
+					$user = new User();	
+					if($user->check_subscription() == true ||
+							$_SESSION['user']['tokens_balance'] > 0)
+								echo $new_activities;
+				}
+							
 				echo "</div></div>";
 				
 				echo "<div id='dropdown_container'><div id='dropdown' class='dropdown_account dropdown'>\n";
@@ -346,7 +354,9 @@ class Body extends General{
 		//close body_main and body divs along with document
 		//create body_bottom div which connects main body to
 		//bottom of window
-		echo "</div><div id='body_bottom'></div></div></body></html>";
+		echo "</div><div id='body_bottom'></div></div>
+				<div id='tooltip' class='text'></div>
+				</body></html>";
 	
 	//end __destruct	
 	}
@@ -394,7 +404,7 @@ class Information {
 }
 
 
-class Form {
+class Form extends General {
 	
 	//create form tag
 	function __construct($array) {

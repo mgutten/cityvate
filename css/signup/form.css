@@ -27,7 +27,7 @@
 .title {
 	width:380px;
 	float:left;
-	margin:20px 0px;
+	margin:20px 0px 0px 0px;
 	color:#fff601;
 	font-size:24px;
 }
@@ -143,12 +143,16 @@ select.drop {
 	clear:both;
 	font-size:12px;
 	width:200px;
-	margin:30px 0px 0px 90px;
+	margin:20px 0px 0px 90px;
 }
 
-select#when {
+select.when {
 	width:150px;
 	margin-left:115px;
+}
+
+#end_date {
+	margin-top:30px;
 }
 
 .auto {
@@ -212,7 +216,7 @@ select#when {
 }
 
 .value {
-	width:200px;
+	width:auto;
 	font-size:11px;
 	float:left;
 	margin:3px 0px 0px 0px;
@@ -220,9 +224,6 @@ select#when {
 
 }
 
-#Total {
-	color:#FF3;
-}
 	
 /*paypal and google checkout buttons*/
 .pay_button {
@@ -230,8 +231,7 @@ select#when {
 	clear:both;
 	width:150px;
 	height:18px;
-	margin:35px 0px 0px 110px;
-	background-color:#666;
+	margin:10px 0px 0px 110px;
 }
 
 #or {
@@ -239,7 +239,7 @@ select#when {
 	text-align:center;
 	width:35px;
 	font-size:11px;
-	margin:37px 0px 0px 0px;
+	margin:13px 0px 0px 0px;
 }
 
 #google_co {
@@ -247,6 +247,65 @@ select#when {
 	margin-left:0px;
 }
 	
+	
+/* preferences */
+.preference {
+	float:left;
+	margin: 30px 0px 0px 30px;
+	cursor:pointer;
+	height:40px;
+	widht:140px;
+	overflow:hidden;
+}
+
+.preference_title {
+	float:left;
+	clear:both;
+	font-size:17px;
+	height:16px;
+	margin:0px 0px 0px 9px;
+	position:relative;
+	z-index:3;
+	cursor:pointer;
+
+}
+
+.preference_back {
+	position:relative;
+	z-index: 2;
+	float:left;
+	clear:both;
+	background:#000;
+	width:130px;
+	height:16px;
+	margin: -14px 0px 0px 0px;
+	opacity:.80;
+	filter:alpha(opacity=80);
+	cursor:pointer;
+
+}
+
+.preference_img {
+	float:left;
+	clear:both;
+	margin-top:-16px;
+	cursor:pointer;
+
+}
+
+#picknchoose {
+	margin-bottom:-20px;
+}
+
+#describe_yourself {
+	margin-top:0px;
+}
+
+#last_preference {
+	margin-left:200px;
+}
+
+
 /*city unavailable*/
 .unavailable {
 	color:#0C3;
@@ -321,6 +380,11 @@ select#when {
 	margin:-20px 0px -14px 0px;
 	height:14px;
 	font-size:14px;
+}
+
+.total {
+	font-size: 15px;
+	margin-top:0px;
 }
 
 .checkmark,.x_img {

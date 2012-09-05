@@ -152,6 +152,8 @@ if($new_activities === true){
             <div id='activity_done' class='top_right_activities'>
             
             <?php
+				//hide finished activities if there are new activities,
+				//but need to show them for ajax calls
 				if($new_activities === true)
 					$display = 'style="display:none;"';
 				else

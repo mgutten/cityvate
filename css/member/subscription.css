@@ -3,7 +3,8 @@
 
 #body_main {
 	width:700px;
-	height:400px;
+	min-height:370px;
+	padding-bottom:20px;
 	background:url(../../images/blank_back.png);
 	float:left;
 	clear:both;
@@ -15,7 +16,8 @@
 	height:150px;
 	float:left;
 	clear:both;
-	margin:10px 0px 0px 200px;
+	margin:10px 0px 0px 220px;
+
 }
 
 .title_back {
@@ -49,6 +51,15 @@
 	font-size:15px;
 	margin:30px 0px 0px 0px;
 	color:#04B30D;
+}
+
+#subscription_expired {
+	float:left;
+	clear:both;
+	height:50px;
+	text-align:center;
+	width:100%;
+
 }
 
 .button{

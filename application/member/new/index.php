@@ -1,17 +1,16 @@
 <?php
 /*location of file: member/new/index.php*/
 
-require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/db_functions.php');
-
 //retrieve activities from db
 $activities = new New_activities();
 $activities->get_activities();
+$check_subscription = $activities->activities_call->check_subscription();
 
 //if user reaches this page with direct url and does not have
 //active subscription or leftover tokens, redirect away
-if($activities->activities_call->check_subscription() === false && empty($_SESSION['user']['tokens_balance']))
+if($check_subscription === false && empty($_SESSION['user']['tokens_balance']))
 	header('location:' . $url['member']);
-
+	
 $head = new Head('New Activities',1);
 $head->style('member/new');
 $head->script('member/new');
@@ -51,7 +50,12 @@ charities = '<?php echo CHARITIES;?>';
 			<?php 
 				//add amount of package tokens(constant defined in bootstrap) to remaining balance
 				$old_tokens = (empty($_SESSION['user']['tokens_balance']) ? 0 : $_SESSION['user']['tokens_balance']);
-				$new_tokens = constant(strtoupper($_SESSION['user']['package']) . '_TOKENS');
+				
+				//if subscription not valid and package not set, no new tokens
+				if($check_subscription == false)
+					$new_tokens = 0;
+				else
+					$new_tokens = constant(strtoupper($_SESSION['user']['package']) . '_TOKENS');
 				$total_tokens = $old_tokens + $new_tokens;
 
 				echo $total_tokens;
@@ -86,7 +90,11 @@ charities = '<?php echo CHARITIES;?>';
     <p class='text' id='accept_note'>Note: No choice is final until after the first of next month.</p>
     
     <div id='back_links'>
-        <a href='<?php echo $url['purchase'];?>' alt='Purchase more tokens'; class='text green back_link' id='purchase_button'>Purchase tokens</a>
+    	<?php
+			if($check_subscription == false)
+				echo "<a href='" . $url['subscription'] . "/change/renew' alt='Renew Subscription'; class='text green back_link' id='renew_button'>Renew Subscription</a>";
+		?>
+        <a href='<?php echo $url['purchase'];?>' alt='Purchase more tokens'; class='text green back_link' id='purchase_button'>Purchase Tokens</a>
         <a href='<?php echo $url['member'];?>' alt='Back to member home' class='text green back_link' id='back_button'>Back</a>
     </div>
 

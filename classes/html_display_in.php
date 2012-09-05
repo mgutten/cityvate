@@ -37,7 +37,7 @@ class Body_member extends Body {
 			//check if valid subscription
 			$this->user = new User();
 			//if valid, display link to new activities for next month
-			if($this->user->check_subscription() === true 
+			if(($this->user->check_subscription() === true || $_SESSION['user']['tokens_balance'] > 0)
 					&& (!empty($this->links['My Activities']) && $selected_tab == 1)
 					&& $this->check_new_activities() === false)
 				echo "<a href='" . $this->url['new'] . "'><div class='text' id='new_activities_small'>New Activities Available</div></a>";

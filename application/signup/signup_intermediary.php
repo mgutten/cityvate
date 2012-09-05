@@ -3,13 +3,13 @@
 //position in signup process
 $pos = 4;
 
-$head = new Head_signup('Signup Interests');
+$head = new Head_signup('Signup Preferences');
 $head->close();
 
 $header = new Header();
 
 $body = new Body_signup();
-$body->background('Interests',$pos);
+$body->background('Preferences',$pos);
 
 $form = new Form_signup($pos);
 
@@ -112,7 +112,7 @@ $form = new Form_signup($pos);
     <img src='/images/signup/preferences/shopper.png' class='preference_img'/>
 </div>
 
-<div class='preference'>
+<div class='preference' id='last_preference'>
 	<p class='text preference_title preference_toggle'>
     	Giver
     </p>

@@ -27,15 +27,18 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/db_functions.php');
 		
 		$user = new User();
 		
+		unset($_SESSION['signup']['email_fail']);
+		unset($_SESSION['signup']['username_fail']);
+		
 		//check if username is valid email format
 		if(!preg_match('/^[a-zA-Z0-9_\-\.]+@[a-z]+\.[com|net|edu|org|biz]+$/i',$_POST['usernameemail'])){
-			$_SESSION['user']['email_fail'] = true;
+			$_SESSION['signup']['email_fail'] = true;
 			header('location:/signup/step2');
 			exit;
 		}
 		//check if username is already taken
 		elseif($user->check_username($_POST['usernameemail']) !== false){
-			$_SESSION['user']['username_fail'] = true;
+			$_SESSION['signup']['username_fail'] = true;
 			header('location:/signup/step2');
 			exit;
 		}

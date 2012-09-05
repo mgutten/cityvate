@@ -35,6 +35,15 @@ if(empty($_SESSION['user']['package'])
     <p class='package_val text'><?php echo $_SESSION['user']['end_date'];?></p>
 </div>
 
+
+
+<div id='subscription_expired'>
+	<p class='text red_back'>
+    	Your subscription has expired.
+    </p>
+    <a href='
+</div>
+
 <a href='<?php echo $url['subscription'];?>/change/package'><img src="/images/subscription/upgrade_button.png" class='button first'/></a>
 <a href='<?php echo $url['subscription'];?>/change/end_date'><img src="/images/subscription/end_button.png" class='button'/></a>
 <a href='<?php echo $url['subscription'];?>/change/payment'><img src="/images/subscription/pay_button.png" class='button'/></a>

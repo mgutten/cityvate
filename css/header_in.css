@@ -141,7 +141,7 @@ a img{
 }
 
 #dropdown_activities {
-	height:78px;
+	height:auto;
 	top:-78px;
 }
 
@@ -404,4 +404,14 @@ a img{
 	/*background-color:#313131;*/
 	background-color:#222;
 	padding-left:5px;
+}
+
+#tooltip {
+	position:absolute;
+	width:150px;
+	height:auto;
+	padding: 5px 5px 5px 5px;
+	background:#222;
+	z-index:10000;
+	display:none;
 }

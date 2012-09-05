@@ -36,11 +36,14 @@ if(strpos($_SERVER['REQUEST_URI'],'member') != false)
 else
 	$login = 'out';
 
+//include general class file
 require_once($_SERVER['DOCUMENT_ROOT'] . '/classes.php');
 
 //if page is in the member/ajax_calls section, require db_functions
-if(strpos($_SERVER['REQUEST_URI'],'ajax_calls') !== false)
+if(strpos($_SERVER['REQUEST_URI'],'ajax_calls') !== false ||
+	$login == 'in')
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/db_functions.php');
+	
 
 //define constants for how many tokens each package is worth (exchange rate: $2.50/1 token)
 define('EXCHANGE',2.5);

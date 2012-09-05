@@ -129,7 +129,7 @@ a img{
 #dropdown_activities {
 	float:left;
 	width:115px;
-	height:78px;
+	height:auto;
 	top:-78px;
 }
 
@@ -326,4 +326,19 @@ a img{
 	color:#ff3;
 }
 
-	
+#tooltip {
+	position:absolute;
+	width:150px;
+	height:auto;
+	padding: 5px 5px 5px 5px;
+	background:#222;
+	z-index:10000;
+	display:none;
+}	
+
+.tooltip_question {
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	float:left;
+	margin:2px 0px 0px 4px;
+}

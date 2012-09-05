@@ -1,4 +1,9 @@
 // JavaScript Document
+var timeout = new Array();
+/*
+timeout[0] = timeout to hide tooltip
+*/
+
 $(function() {
 	
 	//resize body onload
@@ -70,6 +75,41 @@ $(function() {
 	$('#input_submitter').click(function() {
 		return validate($(this).parent('form').attr('id'),true);
 	})
+	
+	//change color of selected package for step3 signup
+	$('input.package').change(function() {
+		$('.green.package_title,.green.package_cost').removeClass('green');
+		$(this).siblings().addClass('green');
+	})
+	
+	//tooltip
+	$('.tooltip_question').hover(function() {
+		
+		var html = $(this).attr('tooltip');
+		var top = parseInt($(this).offset().top,10);
+		var left = parseInt($(this).offset().left,10);
+		
+		clearTimeout(timeout[0]);
+		
+		$("#tooltip")
+					.html(html)
+					.css("top",(top + 10) + 'px')
+					.css('left',(left + 10) + 'px')
+					.stop()
+					.show()
+					.animate({'opacity':'1'},300);
+	},
+	function() {
+		
+		$('#tooltip')
+					.stop()
+					.animate({'opacity':'0'},300)
+		
+		timeout[0] = setTimeout(function() {
+						$('#tooltip').hide();
+						},305);	
+		
+	});
 
 //end "ready" function
 });

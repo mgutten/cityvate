@@ -557,10 +557,17 @@ class Activities extends User {
 		
 		//if package type is not stored and subscription 
 		//check fails (ie no valid subscription) redirect to homepage
-		if(empty($_SESSION['user']['package']) && $this->check_subscription() === false)
-			header('location:' . $this->url['member']);
+		if(empty($_SESSION['user']['package']) && 
+			$this->check_subscription() === false &&
+			empty($_SESSION['user']['tokens_balance'])){
+				
+				header('location:' . $this->url['member']);
+			}
 		
-		$package = $_SESSION['user']['package'];
+		if($this->check_subscription() == false)
+			$package = false;
+		else
+			$package = $_SESSION['user']['package'];
 		
 		//set token limit for activities used in sql statemnt
 		//(ie activity that costs 30 can not be seen by budget)
@@ -569,6 +576,8 @@ class Activities extends User {
 		elseif($package == 'basic')
 			$token_limit = 45;
 		elseif($package == 'premium')
+			$token_limit = 400;
+		elseif($package == false)
 			$token_limit = 400;
 			
 		
