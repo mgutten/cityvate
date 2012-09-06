@@ -277,7 +277,7 @@ select.when {
 }
 
 .preference_title_up {
-	margin-top: -18px;
+	margin-top: -20px;
 }
 
 .preference_back {
@@ -288,7 +288,7 @@ select.when {
 	background:#000;
 	width:130px;
 	height:16px;
-	margin: -14px 0px 0px 0px;
+	margin: -13px 0px 0px 0px;
 	opacity:.80;
 	filter:alpha(opacity=80);
 	cursor:pointer;
@@ -304,6 +304,15 @@ select.when {
 
 .preference_img_down {
 	margin-top: 0px;
+}
+
+.checkmark_interest {
+	float:right;
+	clear:both;
+	margin-top:-20px;
+	position:relative;
+	z-index:5;
+	display:none;
 }
 
 #picknchoose {

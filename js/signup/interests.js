@@ -20,6 +20,8 @@ $(function() {
 				.removeClass('preference_img_down');
 			$(this).children('.preference_title')
 				.removeClass('preference_title_up');
+			$(this).children('.checkmark_interest')
+				.hide();
 		}
 		//else hide title bar and change to color pic
 		else{
@@ -28,7 +30,8 @@ $(function() {
 				.addClass('preference_img_down');
 			$(this).children('.preference_title')
 				.addClass('preference_title_up');
-
+			$(this).children('.checkmark_interest')
+				.show();
 		}
 	})
 	
@@ -39,9 +42,9 @@ $(function() {
 		
 		if(src.match('_color')){
 			$(this).children('.preference_img')
-				.css('margin-top','-16px');
+				.removeClass('preference_img_down');
 			$(this).children('.preference_title')
-				.css('margin-top','0px');
+				.removeClass('preference_title_up');
 		}
 	},
 	function() {
@@ -50,9 +53,9 @@ $(function() {
 		
 		if(src.match('_color')){
 			$(this).children('.preference_img')
-				.css('margin-top','0px');
+				.addClass('preference_img_down');
 			$(this).children('.preference_title')
-				.css('margin-top','-18px');
+				.addClass('preference_title_up');
 		}
 	})
 	

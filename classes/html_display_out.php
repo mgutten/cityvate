@@ -277,6 +277,7 @@ function signup_interests($interests_list) {
 							<img src='/images/signup/preferences/" 
 								. strtolower(str_replace(' ','_',$val)) . $img_src . 
 							".png' class='preference_img $class_img'/>
+							<img src='/images/signup/checkmark.png' class='checkmark_interest'/>
 						</div>";
 		}
 }
