@@ -116,7 +116,7 @@ div#calendar {
 	width:164px;
 	height:22px;
 	float:left;
-	margin:25px 0px 0px 255px;
+	margin:25px 0px 0px 246px;
 }
 
 .arrow {
@@ -152,7 +152,7 @@ div#calendar {
 	float:left;
 	clear:both;
 	width:80px;
-	margin:5px 0px -15px 318px;
+	margin:2px 0px -15px 311px;
 }
 
 /*days of the week header*/
@@ -241,13 +241,10 @@ div.drophover {
 
 /*deal with alerts*/
 
-.centered {
-	width:600px;
-	height:252px;
-	background:#000;
-	border:#0C3 solid 1px;
+.alert_back {
+	padding-bottom:10px;
 }
-
+	
 
 #alert_activity_name {
 	float:left;
@@ -351,7 +348,7 @@ p.activity_desc_ajax {
 	float:left;
 	clear:both;
 	text-align:left;
-	margin: 0px 0px 4px 0px;
+	margin: -1px 0px 4px 0px;
 	height:14px;
 }
 
@@ -362,7 +359,7 @@ p.activity_desc_ajax {
 #cancel_reserve {
 	float:left;
 	clear:both;
-	margin:10px 0px 0px 170px;
+	margin:5px 0px 0px 170px;
 	display:none;
 	cursor:pointer;
 }

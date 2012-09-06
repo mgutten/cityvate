@@ -82,6 +82,13 @@ $(function() {
 		$(this).siblings().addClass('green');
 	})
 	
+	//toggle length of subscription dropdown for step3 signup
+	$('#input_auto_renew').change(function() {
+		
+			$('.when_toggle').toggle();
+		
+	})
+	
 	//tooltip
 	$('.tooltip_question').hover(function() {
 		

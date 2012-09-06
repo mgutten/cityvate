@@ -387,7 +387,7 @@ class Body_member_past extends Body_member {
 class Body_account extends Body_member {
 	var $links = array("My Account"=>'/member/account',
 						"Subscription"=>'/member/subscription',
-						"Preferences"=>'/member/preferences'
+						"Interests"=>'/member/interests'
 						);
 						
 	var $title_array = array("Account Info"=>array(

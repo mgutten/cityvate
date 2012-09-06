@@ -1,5 +1,7 @@
 // JavaScript Document
 
+var interests = new Array();
+
 $(function() {
 	
 	//move next button
@@ -15,17 +17,18 @@ $(function() {
 		if(src.match('_color')){
 			$(this).children('.preference_img')
 				.attr('src',src.replace('_color',''))
-				.css('margin-top','-16px');
+				.removeClass('preference_img_down');
 			$(this).children('.preference_title')
-				.css('margin-top','0px');
+				.removeClass('preference_title_up');
 		}
 		//else hide title bar and change to color pic
 		else{
 			$(this).children('.preference_img')
 				.attr('src',src.replace('.png','_color.png'))
-				.css('margin-top','0px');
+				.addClass('preference_img_down');
 			$(this).children('.preference_title')
-				.css('margin-top','-18px');
+				.addClass('preference_title_up');
+
 		}
 	})
 	
@@ -52,6 +55,20 @@ $(function() {
 				.css('margin-top','-18px');
 		}
 	})
+	
+	//add chosen interests to array on submit
+	$('form[name="signup_form"]').submit(function() {
+		
+		$('.preference_img').each(function() {
+			//if it's color, it's chosen so push to array
+			if($(this).attr('src').match('_color'))
+				interests.push(jQuery.trim($(this).siblings('.preference_title').text()));
+			
+		})
+					
+		$('#input_interests_hidden').val(JSON.stringify(interests));
+		return true;
+	});
 
 	
 })

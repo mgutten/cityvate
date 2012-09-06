@@ -27,25 +27,27 @@ $form->radio_package_display($package_array);
 </select>
 -->
 
-<p class='when_title text' id='end_date'>How long would you like your subscription to last?</p>
-
-<select name='end' class='text drop when' id='when_end'>
-<option value='1'>1 month</option>
-<option value='2' selected='selected'>2 months</option>
-<option value='3'>3 months</option>
-<option value='4'>4 months</option>
-</select>
-
 <?php
 echo $form->input(array('type'=>'checkbox',
 					'id'=>'auto_renew',
 					'class'=>'auto',
-					'value'=>'Yes'));
+					'value'=>'1'));
 ?>
 
 <p class='text renew'>Automatically Renew</p>
 
+<p class='when_title text when_toggle' id='end_date'>How long would you like your subscription to last?</p>
 
+<select name='end' class='text drop when when_toggle' id='when_end'>
+    <option value='1'>1 month</option>
+    <option value='2' selected='selected'>2 months</option>
+    <option value='3'>3 months</option>
+    <option value='4'>4 months</option>
+</select>
+
+<p class='text drop when_toggle auto_renew_desc'>
+	Your subscription will be automatically renewed at the beginning of each month.
+</p>
 
 <?php
 

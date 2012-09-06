@@ -152,19 +152,25 @@ select.when {
 }
 
 #end_date {
-	margin-top:30px;
+	margin-top:20px;
 }
 
 .auto {
 	float:left;
 	clear:both;
-	margin:15px 0px 0px 115px;
+	margin:25px 0px 0px 120px;
 }
 
 .renew {
 	float:left;
 	font-size:12px;
-	margin:15px 0px 0px 10px;
+	margin:25px 0px 0px 10px;
+}
+
+.auto_renew_desc {
+	font-size:12px;
+	display:none;
+	margin-top:25px;
 }
 
 
@@ -186,7 +192,7 @@ select.when {
 	height:30px;
 	background: url(/images/signup/review_box.png) no-repeat;
 	float:left;
-	margin:-2px 0px -2px 46px;
+	margin:5px 0px -2px 46px;
 }
 
 .review_box_text {
@@ -203,7 +209,7 @@ select.when {
 	text-decoration:none;
 	float:right;
 	clear:both;
-	margin:-3px 50px 0px 0px;
+	margin:-15px 50px 0px 0px;
 }
 
 .key {
@@ -231,7 +237,7 @@ select.when {
 	clear:both;
 	width:150px;
 	height:18px;
-	margin:10px 0px 0px 110px;
+	margin:25px 0px 0px 350px;
 }
 
 #or {
@@ -270,6 +276,10 @@ select.when {
 
 }
 
+.preference_title_up {
+	margin-top: -18px;
+}
+
 .preference_back {
 	position:relative;
 	z-index: 2;
@@ -290,7 +300,10 @@ select.when {
 	clear:both;
 	margin-top:-16px;
 	cursor:pointer;
+}
 
+.preference_img_down {
+	margin-top: 0px;
 }
 
 #picknchoose {

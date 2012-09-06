@@ -17,12 +17,14 @@ $text=array('what'=>array(
 				"Cityvate is your \"activity agent.\""
 					=>'We find awesome local activities just for you. Spend your free time having fun, not researching where to go or what to do.  
 						That\'s our job: to help you balance work and play.',
-				"We save you money."
-					=>"Save up to 30% off the hottest local activities, venues, and restaurants your area has to offer. 
-						We find the local hot spots, reserve them for you, and give you fresh ideas for some cheap and easy fun.",
 				"Make memories worth having."
 					=>"This is your life.  Do you want to look back on it and regret never enjoying it? 
-						 You ever want to try bungee jumping? How about cooking classes? Acting? Kayaking?  At Cityvate, the sky's the limit."
+						 You ever want to try bungee jumping? How about cooking classes? Acting? Kayaking?  At Cityvate, the sky's the limit.",						
+				"We save you money."
+					=>"Save up to 30% off the hottest local activities, venues, and restaurants your area has to offer.
+						Other activities are given to you for free. 
+						We find the local hot spots, reserve them for you, and give you fresh ideas for some cheap and easy fun."
+
 				),
 			'how'=>array(
 				"It's your budget for fun."

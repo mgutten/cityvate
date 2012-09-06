@@ -1,6 +1,6 @@
 // Signup account js for signup_2.php
 
-$(document).ready(function() {
+$(function() {
 	
 //signup form page clearing box onclick
 	$('#input_fullname').click(function(){
@@ -23,19 +23,18 @@ $(document).ready(function() {
 		check_input($(this));
 		
 	})
+	check_input($('#input_fullname'));
+	check_input($('#input_usernameemail'));
+	check_input($('#input_password2'));
 
-	check_input('#input_fullname');
-	check_input('#input_usernameemail');
-	check_input('#input_password2');
-	
 })
 
 function check_input(tag) {
-		
+
 		var pattern;
 		var value = tag.val();
 		var id = tag.attr('id');
-		
+
 		//if statement to set pattern for use later
 		if(id == 'input_fullname')
 		 	pattern = /^[a-z]+\s+[a-z]+(-)*[a-z]*$/i;

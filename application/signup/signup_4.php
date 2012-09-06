@@ -13,125 +13,35 @@ $body->background('Interests',$pos);
 
 $form = new Form_signup($pos);
 
+$interests_list = array('Gamer','Outdoorsman','Romantic',
+							'Party Animal','Athlete','Artist',
+							'Food Critic','Introvert','Socialite',
+							'Shopper','Giver','Sports Fan');
+
+if(!empty($_SESSION['signup']['interests'])){
+	$interests = json_decode($_SESSION['signup']['interests']);
+}
+
 ?>
 
 <p class='text' id='describe_yourself'>
-	How would you describe yourself?
+	What are you and what would you like to become?
 </p>
 <p class='text' id='picknchoose'>
 	(Pick and choose)
 </p>
 
-<div class='preference'>
-	<p class='text preference_title preference_toggle'>
-    	Gamer
-    </p>
-    <div class='preference_back preference_toggle'>
-    </div>
-    <img src='/images/signup/preferences/gamer.png' class='preference_img'/>
-</div>
-
-<div class='preference'>
-	<p class='text preference_title preference_toggle'>
-    	Outdoorsman
-    </p>
-    <div class='preference_back preference_toggle'>
-    </div>
-    <img src='/images/signup/preferences/outdoorsman.png' class='preference_img'/>
-</div>
-
-<div class='preference'>
-	<p class='text preference_title preference_toggle'>
-    	Romantic
-    </p>
-    <div class='preference_back preference_toggle'>
-    </div>
-    <img src='/images/signup/preferences/romantic.png' class='preference_img'/>
-</div>
-
-<div class='preference'>
-	<p class='text preference_title preference_toggle'>
-    	Party Animal
-    </p>
-    <div class='preference_back preference_toggle'>
-    </div>
-    <img src='/images/signup/preferences/party_animal.png' class='preference_img'/>
-</div>
-
-<div class='preference'>
-	<p class='text preference_title preference_toggle'>
-    	Athlete
-    </p>
-    <div class='preference_back preference_toggle'>
-    </div>
-    <img src='/images/signup/preferences/jock.png' class='preference_img'/>
-</div>
-
-<div class='preference'>
-	<p class='text preference_title preference_toggle'>
-    	Artist
-    </p>
-    <div class='preference_back preference_toggle'>
-    </div>
-    <img src='/images/signup/preferences/artist.png' class='preference_img'/>
-</div>
-
-<div class='preference'>
-	<p class='text preference_title preference_toggle'>
-    	Food Critic
-    </p>
-    <div class='preference_back preference_toggle'>
-    </div>
-    <img src='/images/signup/preferences/food_critic.png' class='preference_img'/>
-</div>
-
-<div class='preference'>
-	<p class='text preference_title preference_toggle'>
-    	Introvert
-    </p>
-    <div class='preference_back preference_toggle'>
-    </div>
-    <img src='/images/signup/preferences/introvert.png' class='preference_img'/>
-</div>
-
-<div class='preference'>
-	<p class='text preference_title preference_toggle'>
-    	Socialite
-    </p>
-    <div class='preference_back preference_toggle'>
-    </div>
-    <img src='/images/signup/preferences/socialite.png' class='preference_img'/>
-</div>
-
-<div class='preference'>
-	<p class='text preference_title preference_toggle'>
-    	Shopper
-    </p>
-    <div class='preference_back preference_toggle'>
-    </div>
-    <img src='/images/signup/preferences/shopper.png' class='preference_img'/>
-</div>
-
-<div class='preference'>
-	<p class='text preference_title preference_toggle'>
-    	Giver
-    </p>
-    <div class='preference_back preference_toggle'>
-    </div>
-    <img src='/images/signup/preferences/giver.png' class='preference_img'/>
-</div>
-
-<div class='preference'>
-	<p class='text preference_title preference_toggle'>
-    	Sports Fan
-    </p>
-    <div class='preference_back preference_toggle'>
-    </div>
-    <img src='/images/signup/preferences/sports_fanatic.png' class='preference_img'/>
-</div>
-
 <?php
-$form->back();
-$form->next_button();
-$form->close();
+	//populate field with interests and pics
+	signup_interests($interests_list);
+
+	//hidden interests input
+	echo $form->input(array('type'=>'hidden',
+						'id'=>'interests_hidden',
+						'name'=>'interests'
+						));
+	
+	$form->back();
+	$form->next_button();
+	$form->close();
 

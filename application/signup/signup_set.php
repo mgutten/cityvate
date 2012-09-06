@@ -15,11 +15,9 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/db_functions.php');
 		$_SESSION['signup'][$key]=$value;
 	}
 	
-
-	
-	//if checkbox for auto renew is unchecked, create "no"
+	//if checkbox for auto renew is unchecked, create false
 	if(!isset($_POST['auto_renew']) && isset($_POST['package']))
-			$_SESSION['signup']['auto_renew']='No';
+			$_SESSION['signup']['auto_renew'] = 0;
 				
 	//if username/password has been submitted
 	//send to check against database

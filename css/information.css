@@ -100,3 +100,27 @@
 	margin-left:auto;
 	margin-right:auto;
 }
+
+.text_block_left,.text_block_right {
+	float:left;
+	clear:left;
+	width:250px;
+	text-align:justify;
+	margin:5px 0px 0px 0px;
+}
+
+.text_block_right {
+	clear:none;
+	margin: 0px 0px 0px 50px;
+}
+
+.img_right,.img_left {
+	float:left;
+	margin:65px 0px 0px 50px;
+	border:1px #ccc solid;
+}
+
+.img_left {
+	margin: 60px 0px 0px 0px;
+	clear:both;
+}

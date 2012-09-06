@@ -261,12 +261,10 @@ class Header extends General{
 				echo $my_activities.$calendar;
 				
 				//check to see if new activities should be displayed
-				if($login == 'in'){
-					$user = new User();	
-					if($user->check_subscription() == true ||
-							$_SESSION['user']['tokens_balance'] > 0)
+				$user = new User();	
+				if($user->check_subscription() == true ||
+						$_SESSION['user']['tokens_balance'] > 0)
 								echo $new_activities;
-				}
 							
 				echo "</div></div>";
 				
@@ -274,10 +272,10 @@ class Header extends General{
 				
 				$account_info = "<a href='" . $this->url['account'] . "' alt='My Account'><p class='my_account text'>Account Info</p></a>";
 				//$calendar = "<a href='" . $this->url['calendar'] . "' alt='My calendar'><p class='my_account text'>Calendar</p></a>";
-				$preferences = "<a href='" . $this->url['preferences'] . "' alt='Prefences'><p class='my_account text'>Preferences</p></a>";
+				$interests = "<a href='" . $this->url['interests'] . "' alt='Interests'><p class='my_account text'>Interests</p></a>";
 				$subscription = "<a href='" . $this->url['subscription'] . "' alt='Subscription'><p class='my_account text'>Subscription</p></a>";
 				$logout = "<a href='" . $this->url['logout'] . "' alt='Logout'><p class='my_account text logout'>Logout</p></a>";
-				echo $account_info.$subscription.$preferences.$logout;
+				echo $account_info.$subscription.$interests.$logout;
 			}
 			echo "</div></div>\n";
 			
@@ -584,7 +582,7 @@ class Body_signup extends Body {
 			
 			//if at last page for signup,
 			//load large background
-			if($position==4) {
+			if($position==4 || $position ==5) {
 				$smallorbig = 'big';
 				$id = 'review';
 			}

@@ -47,7 +47,7 @@ $(function(){
 			change_month(new_month_id);
 	})
 	
-	$('.reserve_required').toggle();
+	$('.reserve_required').hide();
 			
 		
 	ready_fns();
@@ -271,7 +271,7 @@ function reserve_needed(dropping_tag) {
 	//case when no reservation required
 	if(parent_id==0) {
 			//toggle writing within alert box
-			$('.alert_toggle').toggle();
+			$('.alert_toggle').show();
 			
 			$('#input_aid').val(dragging_aid);
 			$('#input_date').val(date_formatted);
@@ -281,7 +281,7 @@ function reserve_needed(dropping_tag) {
 			$('#alert_date').html(date_conc)
 			$('#input_alert_button').attr('src','../images/calendar/plan_button.png');
 			//toggle alert box
-			$('.reserve_required').toggle();
+			$('.reserve_required').show();
 	}
 	//case when reservation required
 	else {
@@ -299,7 +299,7 @@ function reserve_needed(dropping_tag) {
 		
 			
 			//toggle writing within alert box
-				$('.alert_toggle').toggle();
+				$('.alert_toggle').show();
 			
 			//populate hidden input values with dragging aID
 			//and the date
@@ -312,7 +312,7 @@ function reserve_needed(dropping_tag) {
 			$('#alert_date').html(date_conc)
 			$('#input_alert_button').attr('src','../images/calendar/reserve_button.png');
 			//toggle alert box
-			$('.reserve_required').toggle();
+			$('.reserve_required').show();
 		
 		
 	}

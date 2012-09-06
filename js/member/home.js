@@ -108,9 +108,9 @@ function ready_functions() {
 	//pagination page clicks
 	$('#pag_nums').on('click','.pag_nums',function() {
 		
-		var start = (parseInt($(this).text()) - 1) * 5 + 1;
+		var start = (parseInt($(this).text()) - 1,10) * 5 + 1;
 		//run pagination function to determine which page was selected
-		selected_pag = parseInt($(this).text());
+		selected_pag = parseInt($(this).text(),10);
 		
 		change_month(cur_month,start);
 		
@@ -137,7 +137,7 @@ function ready_functions() {
 			change_month(cur_month,1)
 		}
 		
-		selected_pag_done = parseInt($(this).text());
+		selected_pag_done = parseInt($(this).text(),10);
 		
 		//let ajax run completely before looping new text
 		timeout[5] = setTimeout(function() {
@@ -326,7 +326,7 @@ function change_picture() {
 		if(empty == 1) {
 			
 			clearTimeout(timeout[0]);
-			$('.picture_toggle').css('display','none');
+			$('.picture_toggle').hide();
 			$('#picture_shown').stop().css('opacity',1);
 			
 			//if returned value from change_month shows that valid subscription and
@@ -353,7 +353,7 @@ function change_picture() {
 			//enable linking when clicking on picture
 			$('#picture_link').attr('onclick','return true');
 			
-			$('.picture_toggle').css('display','block');
+			$('.picture_toggle').show();
 			
 			//change url of image
 			$('#picture_link').attr('href','/member/activity/'+a_array[3]['aID']);
@@ -396,8 +396,8 @@ function looping_act() {
 		}
 	}
 	else {
-		
-	//start at 2 because 0 is reserved for done and pag_num
+
+	//start at 3 because 0 is reserved for done and pag_num
 	for(i=3;i<array.length;i++) {
 		//if first bar, then give it selected class
 		if(i==3) {
@@ -406,6 +406,7 @@ function looping_act() {
 		else {
 			classy = 'text activity';
 		}
+			
 		//if no reserve_date, create plus
 		if(array[i]['reserve_date'] == null){
 			reserve = '<a href="/member/calendar"><img src="/images/member/plus.png" title="Add to Calendar" class="activity_reserve plus"/></a>'
@@ -414,9 +415,10 @@ function looping_act() {
 		//and day, then compare vs month_array for month name
 		else {
 			//pull month from reserve_date
-			var month_temp = parseInt(array[i]['reserve_date'].substring(5,7));
+			var month_temp = parseInt(array[i]['reserve_date'].substring(5,7),10);
 			//pull first 3 letters of month name
 			month_temp = month_array[month_temp].substring(0,3);
+			
 			//pull day from reserve_date
 			var day_temp = array[i]['reserve_date'].substring(8,10);
 			reserve = "<a href='/member/calendar'><p class='activity_reserve' title='Change Reservation'>"+month_temp+' '+day_temp+"</p></a>";
@@ -428,10 +430,12 @@ function looping_act() {
 		}
 		
 		
-		text = text+"<div class='"+classy+"' id='"+array[i]['aID']+"'>\
+		text += "<div class='"+classy+"' id='"+array[i]['aID']+"'>\
 						<p class='activity_name'>"+array[i]['name']+"</p>\
 						<p class='activity_type'>"+array[i]['type']+"</p>\
 						"+reserve+"</div>";
+		
+				
 		
 	}
 	

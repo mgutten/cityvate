@@ -206,7 +206,7 @@ function signup_review($textarray) {
 					$class .= ' total yellow';
 				if($key == 'Package')
 					$value = ucwords($value);
-				
+									
 				$block = "<p class='key text'>$key:</p>";
 				$block .= "<p id='$key' class='$class'>$value</p>";
 				
@@ -216,7 +216,8 @@ function signup_review($textarray) {
 					$block .= "<p class='text green tooltip_question' tooltip ='$tooltip'>?</p>";
 				}
 				elseif($key == 'End Date'){
-					$tooltip = 'After this date you will not receive new tokens, but you will still be able to access your account.  You can always renew your subscription.'; 
+					$tooltip = ($value == 'TBD' ? 'Your subscription will automatically renew at the beginning of each month.  You may cancel at any time.' 
+								: 'After this date you will not receive new tokens, but you will still be able to access your account.  You can always renew your subscription.'); 
 					$block .= "<p class='text green tooltip_question' tooltip ='$tooltip'>?</p>";
 				}
 
@@ -245,3 +246,38 @@ function signup_date_options($num_months) {
 			echo '<option '.$select.'>'.$month.'</option>';
 		}
 }
+
+//display images and titles for step4 interests
+function signup_interests($interests_list) {
+	
+		if(!empty($_SESSION['signup']['interests']))
+			$saved_interests = json_decode($_SESSION['signup']['interests']);
+		
+		foreach($interests_list as $val) {
+			
+				//if val is stored in signup session, it has been chosen before,
+				//so select it outright
+				if(!empty($saved_interests) && in_array($val,$saved_interests)){
+						$class_title = 'preference_title_up';
+						$class_img = 'preference_img_down';
+						$img_src = '_color';
+				}
+				else{
+						$class_title = '';
+						$class_img = '';
+						$img_src = '';
+				}
+				
+				echo "<div class='preference'>
+							<p class='text preference_title preference_toggle $class_title'>"
+								. $val . 
+							"</p>
+							<div class='preference_back preference_toggle'>
+							</div>
+							<img src='/images/signup/preferences/" 
+								. strtolower(str_replace(' ','_',$val)) . $img_src . 
+							".png' class='preference_img $class_img'/>
+						</div>";
+		}
+}
+
