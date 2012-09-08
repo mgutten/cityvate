@@ -102,9 +102,7 @@ charities = '<?php echo CHARITIES;?>';
 		echo $form->input(array('type'=>'image',
 							'id'=>'submitter',
 							'class'=>'button',
-							'src'=>'/images/new/accept_button.png'
-							//,'onclick'=>'return validate()'  in case "accept" button stops working revert
-							));
+							'src'=>'/images/new/accept_button.png'));
 							
 		echo $form->input(array('type'=>'hidden',
 							'id'=>'leftover'));

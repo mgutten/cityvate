@@ -99,14 +99,18 @@ a img{
 	width:250px;
 }
 
-#logo {
-	background:url(../images/logo.png) no-repeat;
+#logo,#preview_logo {
+	background:url(/images/logo.png) no-repeat;
 	width:300px;
 	height:84px;
 	float:left;
 	clear:both;
 	margin-left:22px;
 	padding-bottom:20px;
+}
+
+#preview_logo {
+	background:url(/images/logo_preview.png) no-repeat;
 }
 
 #arrow {
@@ -414,4 +418,17 @@ a img{
 	background:#222;
 	z-index:10000;
 	display:none;
+}
+
+#preview_header {
+	width:200px;
+	height:27px;
+	padding-top:3px;
+	background:#F00;
+	position:absolute;
+	top:0px;
+	left:150px;
+	font-size:18px;
+	color:#000;
+	text-align:center;	
 }

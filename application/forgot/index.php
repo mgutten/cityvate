@@ -12,7 +12,7 @@ $array = array('Username'=>array('type'=>'text',
 									'lower'=>'Enter your username/email'
 								)
 				);
-$body->create_input($array, $url['mail_from'], 'submit', '','forgot');
+$body->create_input($array, $url['mail_from_forgot'], 'submit', '','forgot');
 $body->close();
 
 $alert = new Alert_w_txt('confirmation');

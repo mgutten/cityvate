@@ -132,6 +132,11 @@ $(function() {
 		$('#tooltip').hide();
 		submit_form();
 	})
+	
+	//return validate function when click "accept"
+	$('#input_submitter').unbind().click(function() {
+		return validate();
+	})
 		
 	
 })

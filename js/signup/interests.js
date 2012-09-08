@@ -20,8 +20,8 @@ $(function() {
 				.removeClass('preference_img_down');
 			$(this).children('.preference_title')
 				.removeClass('preference_title_up');
-			$(this).children('.checkmark_interest')
-				.hide();
+			/*$(this).children('.checkmark_interest')
+				.hide();*/
 		}
 		//else hide title bar and change to color pic
 		else{
@@ -30,8 +30,8 @@ $(function() {
 				.addClass('preference_img_down');
 			$(this).children('.preference_title')
 				.addClass('preference_title_up');
-			$(this).children('.checkmark_interest')
-				.show();
+			/*$(this).children('.checkmark_interest')
+				.show();*/
 		}
 	})
 	

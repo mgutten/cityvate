@@ -141,7 +141,7 @@ function fade(div) {
 
 //sliding effect for next month's activities
 function sliding(prevOrNext) {
-	/*value of prevOrNext = 1 or -1
+	/*value of prevOrNext = +1 or -1
 		prev = -1
 		next = +1
 	
@@ -200,7 +200,7 @@ function sliding(prevOrNext) {
 	else{
 		if(prevOrNext > 0){
 			margin_second = inner_separation + 'px';
-			margin_third = ((3 * div_width) + window_div_width + inner_separation) * -1 + 'px';
+			margin_third = ((2 * div_width) + window_div_width) * -1 + 'px';
 			offscreen_div = second_div;
 		}
 		else{
@@ -212,7 +212,6 @@ function sliding(prevOrNext) {
 			
 		}
 	}
-		
 	//animate first sliding container
 	first_div.animate({'margin-left': animation + 'px'},1200);
 	
@@ -244,45 +243,6 @@ function sliding(prevOrNext) {
 			
 	}, 1300)
 				
-			
-	/*
-	if(cur_slide == 1){
-		setTimeout(function() {
-				//"reload" image back to beginning for continuous animation effect
-				$('#activities_slide1').css('margin-left',margin_first);
-				$('#activities_slide2').css('margin-left',margin_second);
-				
-				//change name of offscreen activity
-				$('#activity_name1').html(activity_name)
-				$('#activity_img1').attr('src','/images/activities/mini/' + activity_name.replace(/ /g,'_') + '.png')
-				
-				//if at end of activities slide, restart at first
-				if(activities_next == (activities.length-1))
-					activities_next = 0
-				else
-					activities_next++
-				cur_slide++;
-		},1300)
-	}
-	else{
-		setTimeout(function() {
-			
-				$('#activities_slide2').css('margin-left',margin_second);
-				
-				//change name of offscreen activity
-				$('#activity_name2').html(activity_name)
-				$('#activity_img2').attr('src','/images/activities/mini/' + activity_name.replace(/ /g,'_') + '.png')
-				
-				//if at end of activities array, restart at beginning
-				if(activities_next == (activities.length-1))
-					activities_next = 0
-				else
-					activities_next++
-				//change cur_slide to first
-				cur_slide = 1;
-		},1300)
-	}
-	*/
 	
 }
 

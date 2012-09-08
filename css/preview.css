@@ -1,0 +1,33 @@
+@charset "utf-8";
+/* CSS Document */
+
+#tooltip {
+
+	cursor:default;
+}
+
+#tooltip.tooltip_large {
+	width:220px;
+	border:#fff 1px solid;
+	font-size:14px;
+	padding-right:4px;
+	text-align:justify;
+}
+
+.darken {
+	opacity: .5;
+	filter:alpha(opacity=50);
+}
+
+#tooltip_next,#tooltip_close {
+	text-decoration:underline;
+	color:#0C3;
+	cursor:pointer;
+	float:left;
+	margin:3px 0px 0px 160px;
+}
+
+.tooltip_active {
+	position:relative;
+	z-index:100;
+}

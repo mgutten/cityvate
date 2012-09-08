@@ -1,0 +1,3 @@
+<?php
+
+$preview = new Preview();

@@ -128,10 +128,10 @@
 #preview {
 	float:right;
 	clear:both;
-	margin-right:10px;
 	opacity:0;
 	filter:alpha(opacity=0);
 	display:none;
+	margin:-8px 10px 0px 0px;
 }
 
 #preview:hover {

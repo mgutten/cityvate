@@ -306,6 +306,7 @@ select.when {
 	margin-top: 0px;
 }
 
+/*checkmarks in bottom right of interest img
 .checkmark_interest {
 	float:right;
 	clear:both;
@@ -314,6 +315,7 @@ select.when {
 	z-index:5;
 	display:none;
 }
+*/
 
 #picknchoose {
 	margin-bottom:-20px;

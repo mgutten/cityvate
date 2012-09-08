@@ -277,8 +277,25 @@ function signup_interests($interests_list) {
 							<img src='/images/signup/preferences/" 
 								. strtolower(str_replace(' ','_',$val)) . $img_src . 
 							".png' class='preference_img $class_img'/>
-							<img src='/images/signup/checkmark.png' class='checkmark_interest'/>
-						</div>";
+							" .  //<img src='/images/signup/checkmark.png' class='checkmark_interest'/>
+						"</div>";
 		}
 }
+
+//generate random password
+function genPassword($length=8)
+{
+	$pass = '';
+    for($i=0; $i<$length; $i++) {
+		
+		$probab = mt_rand(1,10); 
+    
+        if($probab <= 8)   // a-z probability is 80%
+            $pass .= chr(mt_rand(65,90));
+        else            // 0-9 probability is 20%
+            $pass .= chr(mt_rand(48, 57));
+	}
+    return $pass;
+}
+
 

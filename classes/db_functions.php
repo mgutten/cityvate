@@ -555,16 +555,18 @@ class Activities extends User {
 	//find new activities for this user
 	function new_activities($month) {
 		
+		$check_subscription = $this->check_subscription();
+		
 		//if package type is not stored and subscription 
 		//check fails (ie no valid subscription) redirect to homepage
 		if(empty($_SESSION['user']['package']) && 
-			$this->check_subscription() === false &&
+			$check_subscription === false &&
 			empty($_SESSION['user']['tokens_balance'])){
 				
 				header('location:' . $this->url['member']);
 			}
 		
-		if($this->check_subscription() == false)
+		if($check_subscription == false)
 			$package = false;
 		else
 			$package = $_SESSION['user']['package'];
@@ -582,7 +584,7 @@ class Activities extends User {
 			
 		
 		$query = "SELECT a.aID as aID, 
-							GROUP_CONCAT(a_p.preference) as preference,
+							GROUP_CONCAT(a_p.interest) as interest,
 							a.name as name,
 							a.tokens as tokens,
 							a.save as save,
@@ -778,5 +780,40 @@ class Activities extends User {
 			
 			
 	}
-				
+	
+	//cronjob operation to convert temporarily stored activity reservations to permanent
+	//additions on the first of the month
+	function commit_reservations() {
+		
+			$query = "INSERT INTO u_activities (uID, aID, qty) 
+						(SELECT a_t.uID,a_t.aID,a_t.qty 
+							FROM a_transactions as a_t 
+							WHERE MONTH(a_t.date_processed) = (MONTH(CURDATE()) - 1)
+						)";
+						
+			$this->con->query($query);
+	}
+	
+	function commit_tokens() {
+			
+			//change carryover calls
+			$query = "UPDATE users u
+						SET u.tokens_balance = (SELECT t.amount 
+							FROM transactions t
+							WHERE type = 'carryover' AND
+							MONTH(date_processed) = (MONTH(CURDATE())-1) AND
+							u.uID = t.uID
+							);";
+			
+			//change tokens_left to 0 for cash refund and donation users
+			$query .= "UPDATE users u,transactions t
+						SET u.tokens_balance = 0
+						WHERE t.uID = u.uID
+						AND (t.type = 'refund'
+						OR t.type = 'donate')
+						AND MONTH(t.date_processed) = (MONTH(CURDATE())-1);";
+			
+			$this->con->multi_query($query);
+	}
+					
 }

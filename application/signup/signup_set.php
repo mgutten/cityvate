@@ -36,13 +36,13 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/db_functions.php');
 		}
 		//check if username is already taken
 		elseif($user->check_username($_POST['usernameemail']) !== false){
+			unset($_SESSION['user']['username_fail']);
 			$_SESSION['signup']['username_fail'] = true;
 			header('location:/signup/step2');
 			exit;
 		}
+		unset($_SESSION['user']['username_fail']);
 		
-		$user->login($_POST['usernameemail'],'',1);
-
 	}
 	
 header('location:' . $url['signup'] . '/step'.$next.'');

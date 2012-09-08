@@ -32,10 +32,11 @@ $text=array('what'=>array(
 						Just show up with an ID and you\'re set.',
 				"No commitment."
 					=>"At the beginning of each month you are given a variety of local activities that you can reserve. 
-						 If you don't like any, then you get a full refund, no questions asked.  Your money remains your money.",
+						 If you don't like any, then you get a full refund, no questions asked.",
 				"It's not about the money."
 					=>"Life's a game, and it's time to treat it as such.  Your money is converted into \"tokens\" which can be used to reserve monthly deals.  
-						You work too hard and don't play enough.  Let us help you get out and try something new."
+						Any leftover tokens can be redeemed for a full cash refund, donated to charity, or carried over to next month.
+						Let us help you get out and try something new."
 				)
 			);
 

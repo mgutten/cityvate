@@ -15,6 +15,58 @@ class General {
 								'premium'=>100);
 }
 
+class Preview {
+	
+	function __construct() {
+		
+		$_SESSION['user'] = $_SESSION['preview'];
+		
+	}
+	
+	function __destruct() {
+		
+		unset($_SESSION['user']);
+	}
+}
+
+class Tooltip {
+	
+	var $tooltip_array;
+	
+	//tooltip_array expected to be in order of showing
+	//and contain text for each tooltip as well as id
+	//of item it applies to
+	/*
+	ex: $tooltip_array = array([0]=>array('#month,.day',
+											'This is the tooltip text.',
+											'#body_left_activity')));
+	*/
+	function create() {
+		
+		$tooltip_array = $this->tooltip_array;
+		
+		echo "<script type='text/javascript'>";
+		
+		for($i = 0; $i < count($tooltip_array); $i++){
+			
+			echo "tooltip[$i] = new Array('" . $tooltip_array[$i][0] . "', '" . $tooltip_array[$i][1] . "'";
+			
+			//if this tooltip requires interactive part from user
+			//then display response id/class in tooltip array
+			if(!empty($tooltip_array[$i][2]))
+				echo ",'" . $tooltip_array[$i][2] . "'";
+				
+			echo ");";
+			
+		}
+		
+		echo "</script>";
+		
+		echo "<div class='darken tooltip' id='tooltip_darken'></div>";
+	}
+	
+}
+
 //declare common classes between logged in vs. logged out
 class Head extends General {
 //class to create the head section of a page (including 
@@ -29,28 +81,19 @@ class Head extends General {
 		function __construct($title, $default_js = 0) {
 				date_default_timezone_set('America/Los_Angeles');
 				
-				global $login;
-				global $url;
+				global $login; //defined in bootstrap
+				global $url;  //defined in bootstrap
 				
 				//set url paths from boostrap.php
 				$this->url = $url;
 				
-				//if login status "in" then check to see if sessione
+
+				//if login status "in" then check to see if session
 				//vars are set.  If no, send to login page
-				if($login=='in' && empty($_SESSION['user']))
+				if($login=='in' && empty($_SESSION['user']) && empty($_SESSION['preview']))
 						header('location:' . $this->url['login']);
 
-				
-				//make paths relative to current file location
-				/*
-				$file_loc = $_SERVER['PHP_SELF'];
-				$file_loc = explode('cityvate',$file_loc);
-				$count = substr_count($file_loc[1],'/');
-				for($i=1;$i<$count;$i++){
-					$this->file_adj .= '../';
-				}
-				*/
-				
+						
 				//set title for page
 				$this->title = $title;
 				
@@ -95,6 +138,7 @@ class Head extends General {
 					array_push($this->script,$this->title_css);
 					array_push($this->style,$this->title_css);
 				}
+				
 					
 				//echo base <meta>, styles, scripts
 				echo "<meta http-equiv='Content-Type' name='description' content='".$meta_desc."'  />\n<meta http-equiv='Content-Type' name='keywords' content='".$meta_key."'  />\n";
@@ -175,7 +219,13 @@ class Head extends General {
 		
 		
 		function close() {
-			
+				
+				//if in preview, add preview js and css
+				if(!empty($_SESSION['preview'])){
+					$this->script('preview');
+					$this->style('preview');
+				}
+				
 				//show title
 				echo "<title>Cityvate | $this->title</title>\n";
 				
@@ -197,6 +247,7 @@ class Header extends General{
 			
 			global $login;
 			global $url;
+			global $preview; //defined in bootstrap; if true then in preview mode
 			
 			$this->url = $url;
 			
@@ -224,8 +275,12 @@ class Header extends General{
 			//create links
 			$this->link();
 			
+			$id = 'logo';
+			//if in preview mode, show preview logo
+			if($preview !== false)
+				$id = 'preview_logo';
 			//display logo
-			echo "<a href='".$this->links['Home']."' alt='Home'><div id='logo'></div></a>";
+			echo "<a href='".$this->links['Home']."' alt='Home'><div id='$id'></div></a>";
 			
 			//display dropdown
 			
@@ -278,9 +333,7 @@ class Header extends General{
 				echo $account_info.$subscription.$interests.$logout;
 			}
 			echo "</div></div>\n";
-			
-				
-			
+						
 	//end __construct()
 	}
 	
@@ -353,8 +406,24 @@ class Body extends General{
 		//create body_bottom div which connects main body to
 		//bottom of window
 		echo "</div><div id='body_bottom'></div></div>
-				<div id='tooltip' class='text'></div>
-				</body></html>";
+				<div id='tooltip' class='text tooltip'></div>";
+				
+		//if in preview, create tooltips in js
+		if(!empty($_SESSION['preview'])){
+
+			$tooltip = new Tooltip();
+			$tooltip->tooltip_array = array(array('#top_left_balance','This is your wallet, showing how many tokens you have left to spend.'),
+									array('.body_left_bar','And these are the activities you can spend your tokens on.  You may reserve as many of these as you\
+															would like, so long as you do not overspend your budget. Try clicking on one of the activities that interests you.',
+															'.body_left_bar'),
+									array('#bottom_right',"Voila! A brief description and details as to what your deal is good for."),
+									array('#input_submitter',"It\'s as simple as that!  When you are done choosing your activities, accept these\
+															selections and choose how to spend your leftover tokens.  Click \"Close\" to try it out!")
+									);
+			$tooltip->create();
+		}
+									
+		echo	"</body></html>";
 	
 	//end __destruct	
 	}

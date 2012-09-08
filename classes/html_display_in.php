@@ -2,9 +2,9 @@
 
 class Body_member extends Body {
 	
-	var $links = array("My Activities"=> '/member',
-						"Calendar"=>'/member/calendar',
-						"History"=>'/member/past');
+	var $links = array("My Activities"=>"url['member']",
+						"Calendar"=>"url['calendar']",
+						"History"=>"url['past']");
 	var $done = array();
 	var $activities=array();
 	var $user;
@@ -15,13 +15,18 @@ class Body_member extends Body {
 			global $url;
 			$this->url = $url;
 			
+			
 			echo "<div id='header2_back'>";
 			
 			$tabs = '';
 			$cur_tab=1;
 			
 			foreach($this->links as $key=>$value) {
-				
+					
+					//change links value into global $url array from bootstrap
+					//in order to keep urls consistent
+					$value = eval('return $'. $value . ';');
+					
 					//make selected tab darker and longer
 					($selected_tab==$cur_tab ? $class = 'header_dark' : $class = 'header_light');
 					
@@ -385,9 +390,9 @@ class Body_member_past extends Body_member {
 
 //class to use template from Body_member class in account/subscription.php
 class Body_account extends Body_member {
-	var $links = array("My Account"=>'/member/account',
-						"Subscription"=>'/member/subscription',
-						"Interests"=>'/member/interests'
+	var $links = array("My Account"=>"url['account']",
+						"Subscription"=>"url['subscription']",
+						"Interests"=>"url['interests']"
 						);
 						
 	var $title_array = array("Account Info"=>array(
